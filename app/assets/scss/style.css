@@ -267,7 +267,7 @@ used with preprocessors and contain font, colors definitions, etc
 }
 
 .bg-primary {
-  background-color: #007bff !important;
+  background-color: #244b81 !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus,
@@ -395,7 +395,7 @@ button.bg-dark:focus {
 }
 
 .border-primary {
-  border-color: #007bff !important;
+  border-color: #244b81 !important;
 }
 
 .border-secondary {
@@ -4891,11 +4891,11 @@ button.bg-dark:focus {
 }
 
 .text-primary {
-  color: #007bff !important;
+  color: #244b81 !important;
 }
 
 a.text-primary:hover, a.text-primary:focus {
-  color: #0056b3 !important;
+  color: #244b81 !important;
 }
 
 .text-secondary {
@@ -5236,14 +5236,14 @@ sup {
 }
 
 a {
-  color: #007bff;
+  color: #244b81;
   text-decoration: none;
   background-color: transparent;
 }
 
 a:hover {
-  color: #0056b3;
-  text-decoration: underline;
+  color: #244b81;
+  /* text-decoration: underline; */
 }
 
 a:not([href]):not([class]) {
@@ -5534,8 +5534,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #ffffff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #244b81;
+  border-color: #244b81;
 }
 
 .btn-primary:hover {
@@ -5554,8 +5554,8 @@ fieldset:disabled a.btn {
 
 .btn-primary.disabled, .btn-primary:disabled {
   color: #ffffff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #244b81;
+  border-color: #244b81;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
@@ -5845,14 +5845,14 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-primary {
-  color: #007bff;
-  border-color: #007bff;
+  color: #244b81;
+  border-color: #244b81;
 }
 
 .btn-outline-primary:hover {
   color: #ffffff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #244b81;
+  border-color: #244b81;
 }
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
@@ -5861,15 +5861,15 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-primary.disabled, .btn-outline-primary:disabled {
-  color: #007bff;
+  color: #244b81;
   background-color: transparent;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
 .show > .btn-outline-primary.dropdown-toggle {
   color: #ffffff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #244b81;
+  border-color: #244b81;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
@@ -6118,12 +6118,12 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #007bff;
+  color: #244b81;
   text-decoration: none;
 }
 
 .btn-link:hover {
-  color: #0056b3;
+  color: #244b81;
   text-decoration: underline;
 }
 
@@ -6210,11 +6210,13 @@ input[type="button"].btn-block {
 }
 
 .card-body {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
   min-height: 1px;
   padding: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .card-title {
@@ -6662,7 +6664,7 @@ input[type="button"].btn-block {
 .dropdown-item.active, .dropdown-item:active {
   color: #ffffff;
   text-decoration: none;
-  background-color: #007bff;
+  background-color: #244b81;
 }
 
 .dropdown-item.disabled, .dropdown-item:disabled {
@@ -7769,7 +7771,7 @@ textarea.form-control {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #ffffff;
-  background-color: #007bff;
+  background-color: #244b81;
 }
 
 .nav-fill > .nav-link,
@@ -8381,14 +8383,14 @@ textarea.form-control {
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #007bff;
+  color: #244b81;
   background-color: #ffffff;
   border: 1px solid #dee2e6;
 }
 
 .page-link:hover {
   z-index: 2;
-  color: #0056b3;
+  color: #244b81;
   text-decoration: none;
   background-color: #e9ecef;
   border-color: #dee2e6;
@@ -8415,8 +8417,8 @@ textarea.form-control {
 .page-item.active .page-link {
   z-index: 3;
   color: #ffffff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #244b81;
+  border-color: #244b81;
 }
 
 .page-item.disabled .page-link {
@@ -8688,7 +8690,8 @@ mark,
 }
 
 body {
-  font-family: "Fira Sans", sans-serif;
+  /* font-family: "Fira Sans", sans-serif; */
+  font-family: "Open Sans", sans-serif;
   font-size: 14px;
   color: #808080;
   background-color: #f3f3f3;
@@ -8701,8 +8704,8 @@ button,
   font-weight: 600;
   border-radius: 8px;
   color: #fff;
-  border-color: #247DFE;
-  background-color: #247DFE;
+  border-color: #3F6CAB;
+  background-color: #3F6CAB;
   padding: 4px 20px;
 }
 
@@ -8713,8 +8716,8 @@ button:hover, button:focus,
 .btn.btn-primary.btn-primary.active:focus {
   -webkit-box-shadow: none;
           box-shadow: none;
-  border-color: #739DFF;
-  background-color: #739DFF;
+  border-color: #244b81;
+  background-color: #244b81;
 }
 
 button:active, button:active:focus,
@@ -8724,8 +8727,8 @@ button:active, button:active:focus,
 .btn.btn-primary.btn-primary.active:active:focus {
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
-  border-color: #739DFF !important;
-  background-color: #739DFF !important;
+  border-color: #244b81 !important;
+  background-color: #244b81 !important;
 }
 
 button:disabled,
@@ -8755,13 +8758,13 @@ button.btn-secondary:hover, button.btn-secondary:focus,
 
 .btn-outline-success {
   color: #aca9c4;
-  border-color: #247DFE;
+  border-color: #3F6CAB;
   background-color: transparent;
 }
 
 .btn-outline-success:hover, .btn-outline-success:focus {
-  border-color: #739DFF;
-  background-color: #739DFF;
+  border-color: #244b81;
+  background-color: #244b81;
 }
 
 input[type="text"],
@@ -8813,12 +8816,12 @@ input[type="password"]:-ms-input-placeholder {
 }
 
 a {
-  color: #678be0;
+  color: #3F6CAB;
 }
 
 a:hover {
-  text-decoration: none;
-  color: #007bff;
+  /* text-decoration: none; */
+  color: #244b81;
 }
 
 a:focus {
@@ -11042,10 +11045,9 @@ This is where majority of our work takes place and our UI components are often c
 }
 
 .XDC-card .XDC-card__title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   color: #808080;
-  margin-bottom: 25px;
 }
 
 .XDC-card .XDC-card__title--big {
@@ -11063,9 +11065,10 @@ This is where majority of our work takes place and our UI components are often c
 
 .XDC-card .XDC-card__text,
 .XDC-card .XDC-card__text a {
-  font-size: 22px;
-  color: #000000;
+  font-size: 20px;
+  color: #0F1729;
   margin-bottom: 0;
+  font-weight: 600;
 }
 
 .XDC-card .card-footer {
@@ -11223,8 +11226,6 @@ This is where majority of our work takes place and our UI components are often c
 
 .XDC-footer {
   padding: 20px 0;
-  background-color: #080e1e;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .XDC-footer a {
@@ -11738,12 +11739,12 @@ This is where majority of our work takes place and our UI components are often c
 }
 
 #btn-become-candidate {
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 100px;
-  background-color: #247DFE;
-  height: 40px;
-  min-width: 104px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 5px;
+  background-color: #3F6CAB;
+  min-width: 65px;
+  padding: 3px 14px;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -11758,8 +11759,8 @@ This is where majority of our work takes place and our UI components are often c
 #btn-become-candidate.btn:hover, #btn-become-candidate.btn:focus {
   -webkit-box-shadow: none;
           box-shadow: none;
-  border-color: #739DFF;
-  background-color: #739DFF;
+  border-color: #244b81;
+  background-color: #244b81;
 }
 
 .btn-menu-sp {
@@ -11787,11 +11788,11 @@ This is where majority of our work takes place and our UI components are often c
 #btn-setting i {
   display: inline-block;
   font-size: 18px;
-  color: #678be0;
+  color: #3F6CAB;
 }
 
 #btn-setting:hover i {
-  color: #678be0 !important;
+  color: #3F6CAB !important;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
 }
@@ -11799,11 +11800,11 @@ This is where majority of our work takes place and our UI components are often c
 .dd-setting i {
   display: inline-block;
   font-size: 18px;
-  color: #678be0;
+  color: #3F6CAB;
 }
 
 .dd-setting:hover i {
-  color: #678be0 !important;
+  color: #3F6CAB !important;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
 }
@@ -11918,10 +11919,6 @@ This is where majority of our work takes place and our UI components are often c
 }
 
 .XDC-pagination {
-  -webkit-box-pack: end !important;
-      -ms-flex-pack: end !important;
-          justify-content: flex-end !important;
-  margin: 0 16px 16px;
 }
 
 .XDC-pagination .page-item {
@@ -11930,11 +11927,15 @@ This is where majority of our work takes place and our UI components are often c
 
 .XDC-pagination .page-item.active .page-link {
   color: #cfcde1;
-  background-color: #247DFE;
+  background-color: #3F6CAB;
 }
 
 .XDC-pagination .page-item:first-child, .XDC-pagination .page-item:nth-child(2), .XDC-pagination .page-item:nth-last-child(2), .XDC-pagination .page-item:last-child {
   font-size: 0;
+}
+
+.XDC-pagination .page-item:last-child{
+  margin: 0;
 }
 
 .XDC-pagination .page-item:first-child span:before,
@@ -11993,19 +11994,24 @@ This is where majority of our work takes place and our UI components are often c
 }
 
 .search-form input.form-control {
-  border-radius: 100px;
-  padding: 4px 40px 4px 20px;
+  border-radius: 5px;
+  padding: 4px 40px 4px 40px;
+  background: #F4F4F5;
+  border: none;
+  color:#717179;
+  font-size: 13px;
 }
 
 .search-form .btn {
   position: absolute;
-  right: 15px;
+  right: auto;
+  left: 15px;
   top: 0;
   font-size: 0;
   font-weight: 400;
   height: 100%;
   border-radius: 100px;
-  color: #7573a6;
+  color: #3C3C4399;
   border-color: transparent;
   background-color: transparent;
   padding: 0;
@@ -12127,7 +12133,7 @@ This is where majority of our work takes place and our UI components are often c
 }
 
 .section--candidate .section-title .edit-link {
-  color: #678be0;
+  color: #3F6CAB;
 }
 
 .section--candidate .section-title .edit-link i {
@@ -12257,7 +12263,7 @@ This is where majority of our work takes place and our UI components are often c
 }
 
 .XDC-status-dot--cyan:before {
-  background-color: #678be0;
+  background-color: #3F6CAB;
   -webkit-animation: glowingColor1 3s infinite;
           animation: glowingColor1 3s infinite;
 }
@@ -12289,7 +12295,7 @@ This is where majority of our work takes place and our UI components are often c
 }
 
 .XDC-tab .nav-item .nav-link.active {
-  background-color: #247DFE;
+  background-color: #3F6CAB;
   color: #ffffff;
 }
 
@@ -12324,7 +12330,7 @@ This is where majority of our work takes place and our UI components are often c
 }
 
 .XDC-custom-tab ul li.active {
-  background-color: #247DFE;
+  background-color: #3F6CAB;
   color: #ffffff;
 }
 
@@ -12342,9 +12348,9 @@ This is where majority of our work takes place and our UI components are often c
   width: 100%;
   overflow: hidden;
   margin-bottom: 50px;
-  color: #7573a6;
+  color: #293141;
   background-color: #ffffff;
-  border-radius: 12px;
+  border-radius: 12px 12px 0 0;
 }
 
 .XDC-table thead {
@@ -12363,7 +12369,8 @@ This is where majority of our work takes place and our UI components are often c
 
 .XDC-table thead tr th {
   border: none;
-  font-weight: 400;
+  font-weight: 600;
+  text-transform: uppercase;
   font-size: 12px;
 }
 
@@ -12859,7 +12866,7 @@ This is where majority of our work takes place and our UI components are often c
   }
   .XDC-table--transactions th[aria-colindex="5"] a:hover,
   .XDC-table--transactions td[aria-colindex="5"] a:hover {
-    color: #678be0 !important;
+    color: #3F6CAB !important;
   }
 }
 
@@ -12919,7 +12926,7 @@ This is where majority of our work takes place and our UI components are often c
   }
   .XDC-table--transactions-voter th[aria-colindex="7"] a:hover,
   .XDC-table--transactions-voter td[aria-colindex="7"] a:hover {
-    color: #678be0 !important;
+    color: #3F6CAB !important;
   }
 }
 
@@ -13013,7 +13020,7 @@ This is where majority of our work takes place and our UI components are often c
   }
   .XDC-table--signed th[aria-colindex="4"] a:hover,
   .XDC-table--signed td[aria-colindex="4"] a:hover {
-    color: #678be0 !important;
+    color: #3F6CAB !important;
   }
 }
 
@@ -13140,7 +13147,7 @@ This is where majority of our work takes place and our UI components are often c
 
 .proposed,
 .withdraw {
-  background: #678be0;
+  background: #3F6CAB;
 }
 
 .outtop {
@@ -13171,7 +13178,7 @@ utilities and helper classes with ability to override anything which goes before
 }
 
 .color-cyan {
-  color: #678be0 !important;
+  color: #3F6CAB !important;
 }
 
 .color-white {
@@ -13179,7 +13186,7 @@ utilities and helper classes with ability to override anything which goes before
 }
 
 .color-black {
-  color: #000000 !important;
+  color: #0F1729 !important;
 }
 
 .color-pink {
@@ -13199,7 +13206,7 @@ utilities and helper classes with ability to override anything which goes before
 }
 
 .color-btn-bg {
-  color: #247DFE !important;
+  color: #3F6CAB !important;
 }
 
 .text-muted {
@@ -13237,17 +13244,17 @@ utilities and helper classes with ability to override anything which goes before
 
 *::-moz-selection {
   color: #fff;
-  background-color: #247DFE;
+  background-color: #3F6CAB;
 }
 
 *::selection {
   color: #fff;
-  background-color: #247DFE;
+  background-color: #3F6CAB;
 }
 
 *::-moz-selection {
   color: #fff;
-  background-color: #247DFE;
+  background-color: #3F6CAB;
 }
 
 .row.row-grid {

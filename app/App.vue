@@ -26,6 +26,32 @@
                                     @click="searchCandidate">Search</b-button>
                             </b-nav-form>
                         </b-navbar-nav>
+                        <b-navbar-nav class="ml-3">
+                            <li class="nav-item">
+                                <router-link
+                                    to="/dashboard"
+                                    class="nav-link">Dashboard</router-link>
+                            </li>
+                            <li class="nav-item">
+                                <router-link
+                                    to="/setup-masternode"
+                                    class="nav-link"
+                                >Setup Masternode</router-link
+                                >
+                            </li>
+                            <li class="nav-item">
+                                <router-link
+                                    to="/delegators"
+                                    class="nav-link"
+                                >Delegators</router-link
+                                >
+                            </li>
+                            <li class="nav-item">
+                                <router-link
+                                    to="/help"
+                                    class="nav-link">Help</router-link>
+                            </li>
+                        </b-navbar-nav>
                         <b-navbar-nav class="ml-auto navbar-buttons">
                             <b-button
                                 v-if="!isXDCnet"
@@ -64,6 +90,13 @@
                                     href="/"
                                     @click="signOut">Sign out</b-dropdown-item>
                             </b-dropdown>
+                            <b-button
+                                id="btn-darkmode"
+                                to="/setting"
+                                variant="transparent"
+                                class="p-0 bg-transparent border-0 ml-3"><img
+                                    src="/app/assets/img/darkmode.svg"
+                                    alt=""></b-button>
                         </b-navbar-nav>
                     </b-collapse>
                 </div>
@@ -75,8 +108,101 @@
                 class="XDC-footer">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-8">
-                            <!-- <div class="XDC-footer__links">
+                        <div class="col-lg-4">
+                            <b-navbar-brand
+                                to="/"
+                                class="mb-2">
+                                <img src="/app/assets/img/logo.svg" >
+                            </b-navbar-brand>
+                            <p class="mb-5">Success Depends on Your Network</p>
+
+                            <ul class="list-inline mb-2">
+                                <li class="list-inline-item">
+                                    <a
+                                        href="https://twitter.com/XinFin_Official"
+                                        target="_blank">
+                                        <i class="tm-twitter" />
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a
+                                        href="https://t.me/xinfintalk"
+                                        target="_blank">
+                                        <i class="tm-telegram" />
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a
+                                        href="https://www.facebook.com/XinFinHybridBlockchain/"
+                                        target="_blank">
+                                        <i class="tm-facebook" />
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a
+                                        href="https://github.com/XinFinOrg"
+                                        target="_blank">
+                                        <i class="tm-github" />
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a
+                                        href="https://www.reddit.com/r/xinfin"
+                                        target="_blank">
+                                        <i class="tm-reddit" />
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="XDC-footer__copyright">
+                                &copy; {{ (new Date()).getFullYear() }} XDC.Network All rights reserved.
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <h6 class="h6">Community</h6>
+                            <ul class="footer-links">
+                                <li class="mb-1"><a href="#">Developers Ecosystem Partners</a></li>
+                                <li class="mb-1"><a href="#">Join Community</a></li>
+                                <li class="mb-1"><a href="#">Join Accelerator</a></li>
+                                <li class="mb-1"><a href="#">Community Bounty</a></li>
+                                <li class="mb-1"><a href="#">XDC Forum</a></li>
+                                <li class="mb-1"><a href="#">Events</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2">
+                            <h6 class="h6">Use XDC</h6>
+                            <ul class="footer-links">
+                                <li class="mb-1"><a href="#">Ecosystem dApps</a></li>
+                                <li class="mb-1"><a href="#">Setup Masternode</a></li>
+                                <li class="mb-1"><a href="#">Get XDC</a></li>
+                                <li class="mb-1"><a href="#">XDC Wallets</a></li>
+                                <li class="mb-1"><a href="#">XDC Subnet</a></li>
+                                <li class="mb-1"><a href="#">About XDC Network</a></li>
+                                <li class="mb-1"><a href="#">XDC 2.0</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2">
+                            <h6 class="h6">XDC Tools</h6>
+                            <ul class="footer-links">
+                                <li class="mb-1"><a href="#">XDC Explorer</a></li>
+                                <li class="mb-1"><a href="#">XDC Network Status</a></li>
+                                <li class="mb-1"><a href="#">XDC Faucet</a></li>
+                                <li class="mb-1"><a href="#">XDC Network Remix</a></li>
+                                <li class="mb-1"><a href="#">Quick Tools Guide</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2">
+                            <h6 class="h6">Developers</h6>
+                            <ul class="footer-links">
+                                <li class="mb-1"><a href="#">Documentation</a></li>
+                                <li class="mb-1"><a href="#">XDC Developers Forum</a></li>
+                                <li class="mb-1"><a href="#">XDC AI Developer Tools</a></li>
+                                <li class="mb-1"><a href="#">Technical White Paper</a></li>
+                                <li class="mb-1"><a href="#">Business White Paper</a></li>
+                                <li class="mb-1"><a href="#">Github</a></li>
+                            </ul>
+                        </div>
+                        <!-- <div class="col-md-8">
+                            <div class="XDC-footer__links">
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <a
@@ -99,7 +225,7 @@
                                             href="/api-docs">API Documentation</a>
                                     </li>
                                 </ul>
-                            </div> -->
+                            </div>
                             <div class="XDC-footer__copyright">
                                 &copy; {{ (new Date()).getFullYear() }} XDC.Network All rights reserved.
                             </div>
@@ -142,7 +268,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </footer>

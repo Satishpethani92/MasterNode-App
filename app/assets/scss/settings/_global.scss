@@ -13,25 +13,28 @@ $grid-breakpoints: (
 /* Fonts
    ========================================================================== */
 //$global-font: 'SFProText', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif !default;
-$global-font: 'Fira Sans', sans-serif !default;
+// $global-font: 'Fira Sans', sans-serif !default;
+$global-font: 'Open Sans', sans-serif !default;
 $global-font-size: 16px;
 
 /* Colors
    ========================================================================== */
-$color-body-bg: #f3f3f3;
+$color-body-bg: #F7F9FB;
 $color-body-dark-bg: #080e1e;
 $color-primary: #373658;
 $color-input-bg: #f8f9fa;
 $color-input-focus-bg: #ced4da;
-$color-btn-bg: #247DFE;
-$color-btn-hover-bg: #739DFF;
+$color-btn-bg: #3F6CAB;
+$color-btn-hover-bg: #244b81;
+$color-btn-bg-2: #4D81CC;
 
 $color-text: #808080;
 $color-text-2: #303030;
+$color-text-3: #293141;
 $color-text-muted: #8b8492;
 $color-text-highlight: #3169a5;
-$color-link: #678be0;
-$color-link-hover: #007bff;
+$color-link: #3F6CAB;
+$color-link-hover: #244b81;
 
 $color-white: #cfcde1;
 $color-pink: #fb6d9c;
@@ -41,9 +44,10 @@ $color-orange: #e68a86;
 $color-success: #30ddd8;
 $color-error: #dc3545;
 
-$tab-color: #E9E7E7;
+$tab-color: #F2F6F8;
+$tab-color-2: #E2E8F0E8;
 
 $white: #ffffff;
-$black: #000000;
+$black: #0F1729;
 
 $card-shadow: 0 0 20px 10px rgba(0,0,0,.01);

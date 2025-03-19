@@ -1,3 +1,14 @@
+.navbar-dark {
+  .navbar-nav{
+    .nav-link{
+      color: $color-text;
+      &.active, &:hover {
+        color: $black;
+      }
+    }   
+  }
+}
+
 .XDC-tab {
   .card-header {
     padding: 0 12px;
@@ -40,24 +51,27 @@
     margin-bottom: 0;
     list-style: none;
     li {
-      border-radius: 0;
-      background-color: $tab-color;
-      color: $color-text-2;
+      border-radius: 5px;
+      background-color: $tab-color-2;
+      border: 1px solid transparent;
+      color: $color-text-3;
       display: block;
-      padding: 0.5rem 1rem;
+      padding: 0.3rem 1rem;
       cursor: pointer;
+      margin-right: 7px;
       &.active{
-        background-color: $color-btn-bg;
-        color: $white;
+        background-color: $white;
+        color: $color-btn-bg-2;
+        border-color: $color-btn-bg-2;
       }
-      &:first-child{
+      /* &:first-child{
         border-top-left-radius: 12px;
         border-bottom-left-radius: 12px;
       }
       &:last-child{
         border-top-right-radius: 12px;
         border-bottom-right-radius: 12px;
-      }
+      } */
     }
   }
 }

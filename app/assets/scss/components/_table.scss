@@ -2,21 +2,22 @@
     width: 100%;
     overflow: hidden;
     margin-bottom: 50px;
-    color: #7573a6;
+    color: $color-text-3;
     background-color: $white;
-    border-radius: 12px;
+    border-radius: 12px 12px 0 0;
 
     thead {
         display: none;
         tr {
-            height: 60px;
-            align-items: center;
-            padding-top: 0;
-            padding-bottom: 0;
-            padding-right: 0;
+            padding: 15px 20px !important;
+            margin: 15px 20px 0;
+            background-color: #F2F5F7;
+            border-radius: 5px;
+            align-items: center;            
             th {
                 border: none;
-                font-weight: 400;
+                font-weight: 600;
+                text-transform: uppercase;
                 font-size: 12px;
 
                 &:focus {
@@ -50,13 +51,6 @@
                 grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
                 padding: 0 30px;
                 position: relative;
-                &:after{
-                  content: '';
-                  position: absolute;
-                  border-bottom: 1px solid #eee;
-                  width: 100%;
-                  bottom: 0;
-                }
             }
 
             th {
@@ -132,6 +126,15 @@
         hyphens: auto;
         margin-bottom: 5px;
 
+        div{
+            a{
+                color: $color-text-3;
+                &:hover{
+                    color: $color-link;
+                }
+            }
+        }
+
         &:first-child {
             border-top: none;
         }
@@ -140,6 +143,7 @@
             border-bottom: none;
         }
 
+        
       @include media-breakpoint-up(lg) {
         display: inline-block;
         border: none;

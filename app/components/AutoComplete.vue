@@ -5,7 +5,7 @@
             v-model="search"
             type="text"
             class="form-control"
-            placeholder="Search Candidate / Voter"
+            placeholder="Search Masternode, owner, or voter address"
             @input="onChange"
             @focus="onChange"
             @keydown.enter="onEnter"

@@ -4,29 +4,114 @@
             class="container">
             <div class="row">
                 <div class="col-12">
-                    <h4 class="h4 text-center mb-4">XDC Staking</h4>
+                    <h6 class="h6 text-black fw-600 mb-4">By staking XDC, you can contribute to XDC Network & earn rewards. <b-link href="#">Setup Masternode Now!</b-link></h6>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <b-card class="XDC-card">
-                        <h6 class="XDC-card__title">MasterNode / Total Nodes</h6>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card custom-card">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Core Validators / Protector Nodes
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
                         <p class="XDC-card__text">
                             {{ activeCandidates }}/{{ activeCandidates + totalProposedNodes + slashedMN }}
                         </p>
                     </b-card>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <b-card class="XDC-card XDC-card">
-                        <h6 class="XDC-card__title">Staked Amount</h6>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Total Reward Distributed
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
                         <p class="XDC-card__text">
                             {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }}
                         </p>
                     </b-card>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <b-card class="XDC-card XDC-card">
-                        <h6 class="XDC-card__title">Epoch / Block Number</h6>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Total Value Locked
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
                         <p class="XDC-card__text">
-                            {{ Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1 }} / {{ candidates[0].latestSignedBlock }}</p>
+                            {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }}
+                        </p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Total Transactions
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }}
+                        </p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Epoch / Block Height
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }}</p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Last Checkpoint
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }}</p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Checkpoint Interval
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }}</p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            XDC Wallets / Multisig Wallets
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }}</p>
                     </b-card>
                 </div>
                 <!--<div
@@ -55,8 +140,9 @@
         <div
             v-else
             class="container">
-            <b-card class="XDC-card xdc-p-none">
-                <div class="XDC-custom-tab p-4">
+            <b-card class="XDC-card pagination xdc-p-none">
+                <h5 class="h5 text-black fw-600">XDC Masternodes</h5>
+                <div class="XDC-custom-tab mb-3">
                     <ul>
                         <li
                             v-if="activeCandidates !== 0"
@@ -97,6 +183,7 @@
                     <template
                         slot="address"
                         slot-scope="data">
+                        <img src="/app/assets/img/verify.svg">
                         <router-link
                             :to="'/candidate/' + data.item.address">
                             {{ truncate(data.item.address, 18) }}
@@ -165,7 +252,7 @@
                     :per-page="perPage"
                     v-model="currentPage"
                     align="center"
-                    class="XDC-pagination"
+                    class="XDC-pagination bg-white py-4 mb-0"
                     @change="pageChange"/>
             </b-card>
         </div>
@@ -184,8 +271,8 @@ export default {
         return {
             chainConfig: {},
             fields: [
-                // { key: 'rank', label: 'Rank' },
-                { key: 'address', label: 'Address', sortable: false },
+                { key: 'rank', label: '#', sortable: false },
+                { key: 'address', label: 'Validator Address', sortable: false },
                 { key: 'name', label: 'Name', sortable: false },
                 { key: 'capacity', label: 'Capacity', sortable: true },
                 { key: 'latestSignedBlock', label: 'Latest Signed Block', sortable: true },

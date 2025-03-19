@@ -35,14 +35,14 @@ export default {
                     borderRadius: 8,
                     resetZoomButton: {
                         theme: {
-                            fill: '#678be0',
-                            stroke: '#678be0',
+                            fill: '#3F6CAB',
+                            stroke: '#3F6CAB',
                             style: {
                                 color: '#fff'
                             },
                             states: {
                                 hover: {
-                                    fill: '#739dff'
+                                    fill: '#244b81'
                                 }
                             }
                         },

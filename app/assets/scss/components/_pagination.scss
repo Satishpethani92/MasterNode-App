@@ -1,8 +1,8 @@
 .XDC-pagination {
-  justify-content: flex-end !important;
-  margin: 0 16px 16px;
+  border-radius: 0 0 12px 12px;
+  width: 100%;
   .page-item {
-    margin-right: 5px;
+    margin-right: 10px;
 
     &.active .page-link {
       color: $color-white;
@@ -18,12 +18,16 @@
       span:before,
       a:before {
         font-size: 16px;
-        line-height: 25px;
+        line-height: 31px;
         display: inline-block;
         vertical-align: middle;
 
         @extend %tm-icon;
       }
+    }
+
+    &:last-child  {
+      margin: 0;
     }
 
     &:first-child span:before,
@@ -49,9 +53,9 @@
     .page-link {
       color: $color-text;
       background-color: $tab-color;
-      height: 25px;
-      min-width: 25px;
-      line-height: 25px;
+      height: 31px;
+      min-width: 31px;
+      line-height: 31px;
       border-radius: 5px;
       text-align: center;
       border: 0px;
