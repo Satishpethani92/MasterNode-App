@@ -7,10 +7,12 @@
                 <div class="XDC-header-block">
                     <div class="XDC-header-block-left">
                         <div>
-                            <i class="tm-wallet XDC-header__icon" />
+                            <img
+                                src="/app/assets/img/owner-name-icon.svg"
+                                alt="Owner-icon">
                         </div>
                         <div>
-                            <h4 class="h4 color-black">{{ candidate.name }}
+                            <h4 class="h6 color-black">{{ candidate.name }}
                                 <router-link
                                     v-if="account === candidate.owner"
                                     :to="'/candidate/' + candidate.address + '/update'"
@@ -24,7 +26,7 @@
                                     class="text-truncate">
                                     {{ candidate.owner }}
                                 </router-link>
-                                <ul class="list-inline social-links">
+                                <ul class="list-inline social-links mb-0">
                                     <li
                                         v-for="(value, key) in candidate.socials"
                                         :key="key"
@@ -42,6 +44,81 @@
 
                         </div>
                     </div>
+                    <div class="XDC-header-block-right">
+
+                        <b-link
+                            href="#"
+                            class="d-flex align-items-center">
+                            <img
+                                class="mr-2"
+                                src="/app/assets/img/backarrow.svg"
+                                alt="Back-arrow img">
+                            Back to all Validators</b-link>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card custom-card mb-0 h-100">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Total Rewards Earned
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            14,825.25 XDC
+                        <!-- {{ activeCandidates }}/{{ activeCandidates + totalProposedNodes + slashedMN }} -->
+                        </p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Voting Power
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            3.42%
+                        <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
+                        </p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Health Status
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            Healthy
+                        <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
+                        </p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Validator Uptime
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            99.4%
+                        <!-- {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }} -->
+                        </p>
+                    </b-card>
                 </div>
             </div>
         </div>
@@ -58,14 +135,17 @@
             <div
                 v-else>
                 <b-row
-                    class="m-0">
+                    class="">
                     <div
-                        class="col-12 col-md-4 col-lg-4">
+                        class="col-12 col-md-6">
                         <b-card
                             :class="'XDC-card XDC-card--lighter XDC-card--candidate'
                             + (loading ? ' XDC-loading' : '')">
                             <div class="XDC-detail">
-                                <div class="XDC-detail-section">
+                                <h6 class="h6 fw-400 color-text-3 mb-4">Validator Overview</h6>
+
+                                <!-- My comments start -->
+                                <!-- <div class="XDC-detail-section">
                                     <div class="XDC-detail-label">Capacity</div>
                                     <div class="XDC-detail-value-big">{{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }}</div>
                                 </div>
@@ -96,8 +176,73 @@
                                             {{ candidate.status }}
                                         </p>
                                     </div>
-                                </div>
+                                </div> -->
+                                <!-- My comments end -->
+
                                 <div class="XDC-detail-section d-flex justify-content-between">
+                                    <div class="XDC-detail-label">Capacity</div>
+                                    <div class="XDC-detail-value-small">
+                                        <span
+                                            :class="XDC-info__description">
+                                            {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="XDC-detail-section d-flex justify-content-between">
+                                    <div class="XDC-detail-label">Checkpoints</div>
+                                    <div class="XDC-detail-value-small">
+                                        <span
+                                            :class="XDC-info__description">
+                                            99.4%
+                                            <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="XDC-detail-section d-flex justify-content-between">
+                                    <div class="XDC-detail-label d-flex align-items-center">Est. Staking ROI
+                                        <img
+                                            src="/app/assets/img/info.svg"
+                                            alt="info-icon"
+                                            class="ml-2"></div>
+                                    <div class="XDC-detail-value-small">
+                                        <span
+                                            :class="XDC-info__description">
+                                            7.98%
+                                            <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="XDC-detail-section d-flex justify-content-between">
+                                    <div class="XDC-detail-label align-items-center">Est. Owner ROI
+                                        <img
+                                            src="/app/assets/img/info.svg"
+                                            alt="info-icon"
+                                            class="ml-2">
+                                    </div>
+                                    <div class="XDC-detail-value-small">
+                                        <span
+                                            :class="XDC-info__description">
+                                            {{ mnROI ? mnROI + '%' : '---' }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="XDC-detail-section d-flex justify-content-between mb-0">
+                                    <div class="XDC-detail-label">Commission</div>
+                                    <div class="XDC-detail-value-small">
+                                        <span
+                                            :class="XDC-info__description">
+                                            82,700,070
+                                            <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- My comments start -->
+                                <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Hardware</div>
                                     <div class="XDC-detail-value-small">
                                         <span
@@ -110,9 +255,8 @@
                                     v-for="(value, key) in candidate.dataCenterInfo"
                                     :key="key"
                                     class="XDC-detail-section d-flex justify-content-between XDC-info">
-                                    <div class="XDC-info__title">
-                                        <span class="XDC-info__text XDC-detail-label">{{ key }}</span>
-                                    </div>
+
+                                    <div class="XDC-info__text XDC-detail-label">{{ key }}</div>
                                     <div class="XDC-detail-value-small">
                                         <span
                                             :class="XDC-info__description">
@@ -132,7 +276,9 @@
                                             <template v-else><a href="/setting">Login to Get KYC</a></template>
                                         </span>
                                     </div>
-                                </div>
+                                </div> -->
+                                <!-- My comments end -->
+
                                 <!-- <div
                                     v-for="(value, key) in candidate.dataCenterInfo"
                                     :key="key"
@@ -155,7 +301,9 @@
                                         {{ value }}
                                     </p>
                                 </div> -->
-                                <div class="XDC-detail-section d-flex justify-content-between">
+
+                                <!-- My comments start -->
+                                <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Latest Signed Block</div>
                                     <div class="XDC-detail-value-small">
                                         <span
@@ -164,7 +312,9 @@
                                             {{ formatNumber(candidate.latestSignedBlock) }}
                                         </span>
                                     </div>
-                                </div>
+                                </div> -->
+                                <!-- My comments end -->
+
                                 <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Voters</div>
                                     <div class="XDC-detail-value-small">000</div>
@@ -177,7 +327,9 @@
                                     <div class="XDC-detail-label">Since time</div>
                                     <div class="XDC-detail-value-small">2020-09-12</div>
                                 </div> -->
-                                <div class="XDC-detail-section">
+
+                                <!-- My comments start -->
+                                <!-- <div class="XDC-detail-section">
                                     <div class="XDC-detail-label">Owner Address</div>
                                     <div class="XDC-detail-value-small">
                                         <router-link
@@ -196,12 +348,14 @@
                                             {{ candidate.address }}
                                         </router-link>
                                     </div>
-                                </div>
+                                </div> -->
+                                <!-- My comments end -->
                                 <div
                                     class="buttons text-right">
                                     <b-button
                                         v-if="candidate.owner === account && candidate.status !== 'RESIGNED'"
                                         :to="`/resign/${candidate.address}`"
+                                        class="mt-3"
                                         variant="secondary">Resign</b-button>
                                 <!-- <b-button
                                     v-if="candidate.voted > 0"
@@ -380,15 +534,101 @@
                         </b-card>
                     </div>
                     <div
-                        class="col-12 col-md-8 col-lg-8">
+                        class="col-12 col-md-6">
                         <b-card
                             :class="'XDC-card XDC-card--lighter'
                             + (loading ? ' XDC-loading' : '')">
-                            <b-tabs
+                            <div class="XDC-custom-tab mb-3">
+                                <ul>
+                                    <li>Validator Info</li>
+                                    <li>Health Check</li>
+                                </ul>
+                            </div>
+                            <div class="XDC-detail-section d-flex justify-content-between">
+                                <div class="XDC-detail-label">Owner Address</div>
+                                <div class="XDC-detail-value-small">
+                                    <div
+                                        :class="XDC-info__description"
+                                        class="d-flex align-items-center">
+                                        {{ candidate.owner }}
+                                        <button
+                                            class="btn btn-transparent ml-2"
+                                            @click="copyToClipboard(candidate.owner)">
+                                            <img
+                                                src="/app/assets/img/copy-icon.svg"
+                                                alt="copy-icon" >
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="XDC-detail-section d-flex justify-content-between">
+                                <div class="XDC-detail-label">Voter Address</div>
+                                <div class="XDC-detail-value-small">
+                                    <div
+                                        :class="XDC-info__description"
+                                        class="d-flex align-items-center">
+                                        {{ candidate.address }}
+                                        <button
+                                            class="btn btn-transparent ml-2"
+                                            @click="copyToClipboard(candidate.address)">
+                                            <img
+                                                src="/app/assets/img/copy-icon.svg"
+                                                alt="copy-icon" >
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="XDC-detail-section d-flex justify-content-between">
+                                <div class="XDC-detail-label d-flex align-items-center">Active From
+                                    <img
+                                        src="/app/assets/img/info.svg"
+                                        alt="info-icon"
+                                        class="ml-2"></div>
+                                <div class="XDC-detail-value-small">
+                                    <span
+                                        :class="XDC-info__description">
+                                        Jan, 13, 2021
+                                        <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="XDC-detail-section d-flex justify-content-between">
+                                <div class="XDC-detail-label align-items-center">Location
+                                    <img
+                                        src="/app/assets/img/info.svg"
+                                        alt="info-icon"
+                                        class="ml-2">
+                                </div>
+                                <div class="XDC-detail-value-small">
+                                    <span
+                                        :class="XDC-info__description">
+                                        Burlingston, USA
+                                        <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="XDC-detail-section d-flex justify-content-between">
+                                <div class="XDC-detail-label">Hardware</div>
+                                <div class="XDC-detail-value-small">
+                                    <span
+                                        :class="XDC-info__description">
+                                        {{ candidate.hardwareInfo }}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- My comments start--->
+                            <!-- <b-tabs
                                 pills
                                 card
-                                class="XDC-tab">
-                                <b-tab
+                                class="XDC-tab"> -->
+                            <!-- My comments end--->
+
+                            <!-- My comments start--->
+                            <!-- <b-tab
                                     title="Staking"
                                     active>
                                     <div
@@ -463,8 +703,10 @@
                                             class="XDC-pagination"
                                             @change="txPageChange"/>
                                     </div>
-                                </b-tab>
-                                <!-- <b-tab title="Voters">
+                                </b-tab> -->
+                            <!-- My comments end--->
+
+                            <!-- <b-tab title="Voters">
                                     <div
                                         :class="'section section-voters'
                                         + (voterLoading ? ' XDC-loading' : '')">
@@ -509,7 +751,9 @@
                                             @change="voterPageChange" />
                                     </div>
                                 </b-tab> -->
-                                <b-tab title="Rewards">
+
+                            <!-- My comments start--->
+                            <!-- <b-tab title="Rewards">
                                     <div
                                         :class="'section section--mnrewards'
                                         + (rewardLoading ? ' XDC-loading' : '')">
@@ -582,8 +826,13 @@
                                             class="XDC-pagination"
                                             @change="rewardPageChange" />
                                     </div>
-                                </b-tab>
-                            </b-tabs>
+                                </b-tab> -->
+                            <!-- My comments end--->
+
+                            <!-- My comments start--->
+                            <!-- </b-tabs> -->
+                            <!-- My comments end--->
+
                             <!-- <div
                                 v-if="candidate.status !== 'RESIGNED' && candidate.nodeId"
                                 class="container section section--hardware">
@@ -834,6 +1083,15 @@ export default {
             }
 
             return clazz
+        },
+        copyToClipboard (text) {
+            if (navigator.clipboard) {
+                navigator.clipboard
+                    .writeText(text)
+                    .catch((err) => {
+                        console.error('Failed to copy text: ', err)
+                    })
+            }
         },
         getDate (date) {
             return date

@@ -121,35 +121,45 @@
                                     <a
                                         href="https://twitter.com/XinFin_Official"
                                         target="_blank">
-                                        <i class="tm-twitter" />
+                                        <img
+                                            src="/app/assets//img/twitter.svg"
+                                            alt="X-icon">
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
                                         href="https://t.me/xinfintalk"
                                         target="_blank">
-                                        <i class="tm-telegram" />
+                                        <img
+                                            src="/app/assets//img/telegram.svg"
+                                            alt="Telegram-icon">
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
                                         href="https://www.facebook.com/XinFinHybridBlockchain/"
                                         target="_blank">
-                                        <i class="tm-facebook" />
+                                        <img
+                                            src="/app/assets//img/facebook.svg"
+                                            alt="Facebook-icon">
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
                                         href="https://github.com/XinFinOrg"
                                         target="_blank">
-                                        <i class="tm-github" />
+                                        <img
+                                            src="/app/assets//img/github.svg"
+                                            alt="Github-icon">
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
                                         href="https://www.reddit.com/r/xinfin"
                                         target="_blank">
-                                        <i class="tm-reddit" />
+                                        <img
+                                            src="/app/assets//img/reddit.svg"
+                                            alt="Reddit-icon">
                                     </a>
                                 </li>
                             </ul>
