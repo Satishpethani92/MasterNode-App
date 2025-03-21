@@ -6,25 +6,166 @@
                 <div class="XDC-header-block">
                     <div class="XDC-header-block-left">
                         <div>
-                            <i class="tm-wallet XDC-header__icon" />
+                            <img
+                                src="/app/assets/img/owner-name-icon.svg"
+                                alt="Owner-icon">
                         </div>
                         <div>
-                            <h4 class="h4 color-black">Voter</h4>
+                            <h6 class="h6 color-black mb-1">Voter</h6>
                             <p>{{ voter }}</p>
                         </div>
+                    </div>
+                    <div class="XDC-header-block-right">
+                        <b-link
+                            href="#"
+                            class="d-flex align-items-center">
+                            <img
+                                class="mr-2"
+                                src="/app/assets/img/backarrow.svg"
+                                alt="Back-arrow img">
+                            Back to all Validators</b-link>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0">
+                    <b-card class="XDC-card custom-card mb-0 h-100">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Total Rewards Earned
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            14,825.25 XDC
+                        <!-- {{ activeCandidates }}/{{ activeCandidates + totalProposedNodes + slashedMN }} -->
+                        </p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0">
+                    <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Voting Power
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            3.42%
+                        <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
+                        </p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3 mb-4 mb-sm-0">
+                    <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Health Status
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            Healthy
+                        <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
+                        </p>
+                    </b-card>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
+                        <h6 class="XDC-card__title d-flex align-items-center">
+                            Validator Uptime
+                            <img
+                                src="/app/assets/img/info.svg"
+                                alt="info-icon"
+                                class="ml-2">
+                        </h6>
+                        <p class="XDC-card__text">
+                            99.4%
+                        <!-- {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }} -->
+                        </p>
+                    </b-card>
+                </div>
+            </div>
+        </div>
         <div class="main-content container">
-            <b-row
-                class="m-0">
+            <b-row>
                 <div
-                    class="col-12 col-md-4 col-lg-4">
+                    class="col-12 col-lg-6 mb-lg-4">
                     <b-card
                         :class="'XDC-card XDC-card--lighter XDC-card--candidate'
                         + (loading ? ' XDC-loading' : '')">
                         <div class="XDC-detail">
+                            <h6 class="h6 fw-400 color-text-3 mb-4">Validator Overview</h6>
+                            <div class="XDC-detail-section d-flex justify-content-between">
+                                <div class="XDC-detail-label">Capacity</div>
+                                <div class="XDC-detail-value-small">
+                                    <span
+                                        :class="'XDC-info__description'">
+                                        7.98%
+                                        <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="XDC-detail-section d-flex justify-content-between">
+                                <div class="XDC-detail-label">Checkpoints</div>
+                                <div class="XDC-detail-value-small">
+                                    <span
+                                        :class="'XDC-info__description'">
+                                        99.4%
+                                        <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="XDC-detail-section d-flex justify-content-between">
+                                <div class="XDC-detail-label d-flex align-items-center">Est. Staking ROI
+                                    <img
+                                        src="/app/assets/img/info.svg"
+                                        alt="info-icon"
+                                        class="ml-2"></div>
+                                <div class="XDC-detail-value-small">
+                                    <span
+                                        :class="'XDC-info__description'">
+                                        7.98%
+                                        <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="XDC-detail-section d-flex justify-content-between">
+                                <div class="XDC-detail-label align-items-center">Est. Owner ROI
+                                    <img
+                                        src="/app/assets/img/info.svg"
+                                        alt="info-icon"
+                                        class="ml-2">
+                                </div>
+                                <div class="XDC-detail-value-small">
+                                    <span
+                                        :class="'XDC-info__description'">
+                                        <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="XDC-detail-section d-flex justify-content-between mb-0">
+                                <div class="XDC-detail-label">Commission</div>
+                                <div class="XDC-detail-value-small">
+                                    <span
+                                        :class="'XDC-info__description'">
+                                        82,700,070
+                                        <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- My comments start -->
+                        <!-- <div class="XDC-detail">
                             <div
                                 class="XDC-detail-section">
                                 <div class="XDC-detail-label">Voter</div>
@@ -41,7 +182,8 @@
                                 <div class="XDC-detail-label">Total voted</div>
                                 <div class="XDC-detail-value-big">{{ formatCurrencySymbol(formatNumber(totalVoted)) }}</div>
                             </div>
-                        </div>
+                        </div> -->
+                        <!-- My comments end -->
 
                         <!--<div class="section section&#45;&#45;candidate">
                             <div class="section-title">
@@ -91,7 +233,7 @@
                                     <p class="XDC-info__title">
                                         <span class="XDC-info__text">Latest Signed Block</span>
                                     </p>
-                                    <p class="XDC-info__description">
+                                    <p class="'XDC-info__description'">
                                         <span
                                             :class="`float-left mr-2 XDC-status-dot&#45;&#45;${getColor(
                                             candidate.latestSignedBlock || 0, currentBlock)}`">
@@ -105,7 +247,7 @@
                                     </p>
                                     <p
                                         id="XDC-info__description&#45;&#45;cap"
-                                        class="XDC-info__description">
+                                        class="'XDC-info__description'">
                                         {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }}
                                         <b-tooltip
                                             v-if="checkLongNumber(candidate.cap)"
@@ -124,7 +266,7 @@
                                     </p>
                                     <p
                                         id="XDC-info__description&#45;&#45;you-voted"
-                                        class="XDC-info__description">
+                                        class="'XDC-info__description'">
                                         {{ formatCurrencySymbol(formatNumber(candidate.voted)) }}
                                         <b-tooltip
                                             v-if="checkLongNumber(candidate.voted)"
@@ -146,7 +288,7 @@
                                         :class="{ 'color-cyan': candidate.status === 'MASTERNODE',
                                                   'color-pink': candidate.status === 'SLASHED',
                                                   'color-pink': candidate.status === 'RESIGNED' }"
-                                        class="XDC-info__description">
+                                        class="'XDC-info__description'">
                                         {{ candidate.status }}
                                     </p>
                                 </div>
@@ -154,7 +296,7 @@
                                     <p class="XDC-info__title">
                                         <span class="XDC-info__text">Hardware</span>
                                     </p>
-                                    <p class="XDC-info__description">
+                                    <p class="'XDC-info__description'">
                                         {{ candidate.hardwareInfo }}
                                     </p>
                                 </div>
@@ -165,7 +307,7 @@
                                     <p class="XDC-info__title">
                                         <span class="XDC-info__text">{{ key }}</span>
                                     </p>
-                                    <p class="XDC-info__description">
+                                    <p class="'XDC-info__description'">
                                         {{ value }}
                                     </p>
                                 </div>
@@ -175,7 +317,7 @@
                                     </p>
                                     <p
                                         id="XDC-info__description&#45;&#45;balance"
-                                        class="XDC-info__description">
+                                        class="'XDC-info__description'">
                                         {{ voterROI ? voterROI + '%' : '-&#45;&#45;' }}
                                     </p>
                                 </div>
@@ -185,7 +327,7 @@
                                     </p>
                                     <p
                                         id="XDC-info__description&#45;&#45;balance"
-                                        class="XDC-info__description">
+                                        class="'XDC-info__description'">
                                         {{ mnROI ? mnROI + '%' : '-&#45;&#45;' }}
                                     </p>
                                 </div>
@@ -206,14 +348,104 @@
                                     variant="primary">Vote</b-button>
                             </div>
                         </div>-->
+
                     </b-card>
                 </div>
                 <div
-                    class="col-12 col-md-8 col-lg-8">
+                    class="col-12 col-lg-6 mb-lg-4">
                     <b-card
                         :class="'XDC-card XDC-card--lighter'
                         + (loading ? ' XDC-loading' : '')">
-                        <b-tabs
+                        <div class="XDC-custom-tab mb-3">
+                            <ul>
+                                <li>Validator Info</li>
+                                <li>Health Check</li>
+                            </ul>
+                        </div>
+                        <div class="XDC-detail-section d-flex justify-content-between">
+                            <div class="XDC-detail-label">Owner Address</div>
+                            <div class="XDC-detail-value-small">
+                                <div
+                                    :class="'XDC-info__description'"
+                                    class="d-flex align-items-center">
+                                    <!-- {{ candidate.owner }} -->
+                                    <button
+                                        v-b-tooltip.hover
+                                        ref="copyButton"
+                                        :title="tooltipText"
+                                        class="btn btn-transparent ml-2"
+                                        @click="copyToClipboard(candidate.owner, $event.target)">
+                                        <img
+                                            src="/app/assets/img/copy-icon.svg"
+                                            alt="copy-icon" >
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="XDC-detail-section d-flex justify-content-between">
+                            <div class="XDC-detail-label">Voter Address</div>
+                            <div class="XDC-detail-value-small">
+                                <div
+                                    :class="'XDC-info__description'"
+                                    class="d-flex align-items-center">
+                                    <!-- {{ candidate.address }} -->
+                                    <button
+                                        v-b-tooltip.hover
+                                        ref="copyButton"
+                                        :title="tooltipText"
+                                        class="btn btn-transparent ml-2"
+                                        @click="copyToClipboard(candidate.address, $event.target)">
+                                        <img
+                                            src="/app/assets/img/copy-icon.svg"
+                                            alt="copy-icon" >
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="XDC-detail-section d-flex justify-content-between">
+                            <div class="XDC-detail-label d-flex align-items-center">Active From
+                                <img
+                                    src="/app/assets/img/info.svg"
+                                    alt="info-icon"
+                                    class="ml-2"></div>
+                            <div class="XDC-detail-value-small">
+                                <span
+                                    :class="'XDC-info__description'">
+                                    Jan, 13, 2021
+                                    <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                </span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="XDC-detail-section d-flex justify-content-between">
+                            <div class="XDC-detail-label align-items-center">Location
+                                <img
+                                    src="/app/assets/img/info.svg"
+                                    alt="info-icon"
+                                    class="ml-2">
+                            </div>
+                            <div class="XDC-detail-value-small">
+                                <span
+                                    :class="'XDC-info__description'">
+                                    Burlingston, USA
+                                    <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
+                                </span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="XDC-detail-section d-flex justify-content-between mb-0">
+                            <div class="XDC-detail-label">Hardware</div>
+                            <div class="XDC-detail-value-small">
+                                <span
+                                    :class="'XDC-info__description'">
+                                    <!-- {{ candidate.hardwareInfo }} -->
+                                </span>
+                            </div>
+                        </div>
+                        <!-- My comments start--->
+                        <!-- <b-tabs
                             pills
                             card
                             class="XDC-tab">
@@ -277,8 +509,10 @@
                                         class="XDC-pagination"
                                         @change="candidatePageChange" />
                                 </div>
-                            </b-tab>
-                            <!-- <b-tab
+                            </b-tab> -->
+                        <!-- My comments end--->
+
+                        <!-- <b-tab
                                 title="Voter Rewards">
                                 <div
                                     :class="'container section section--voterrewards'
@@ -341,7 +575,9 @@
                                         @change="rewardPageChange" />
                                 </div>
                             </b-tab> -->
-                            <b-tab
+
+                        <!-- My comments start--->
+                        <!-- <b-tab
                                 title="Transactions">
                                 <div
                                     :class="'container section section--txs'
@@ -412,10 +648,103 @@
                                         @change="txPageChange" />
                                 </div>
                             </b-tab>
-                        </b-tabs>
+                        </b-tabs> -->
+                        <!-- My comments end--->
                     </b-card>
                 </div>
-                <!--<div class="section section&#45;&#45;voter">
+
+                <div class="col-12">
+                    <b-card class="XDC-card pagination xdc-p-none">
+                        <div class="XDC-custom-tab mb-3">
+                            <ul>
+                                <li>Voters</li>
+                                <li>Rewards</li>
+                                <li>Transactions</li>
+                                <li>Reward Metrics</li>
+                            </ul>
+                        </div>
+
+                        <div
+                            :class="'section section--txs'
+                            + (txLoading ? ' XDC-loading' : '')">
+                            <div class="table-wrapper">
+                                <div class="d-flex align-items-center justify-content-between px-4">
+                                    <h6 class="h6 color-text-3 fw-400 mb-0">People who voted for this candidate</h6>
+                                    <div class="XDC-custom-tab">
+                                        <ul>
+                                            <li>Week</li>
+                                            <li>Month</li>
+                                            <li>Year</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <b-table
+                                    :items="transactions"
+                                    :fields="txFields"
+                                    :per-page="txPerPage"
+                                    :show-empty="true"
+                                    :class="`XDC-table XDC-table--transactions-voter${txLoading ? ' loading' : ''}`"
+                                    empty-text="There are no transactions to show"
+                                    stacked="md"
+                                    @sort-changed="sortingChangeTxes" >
+
+                                    <template
+                                        slot="id"
+                                        slot-scope="data">{{ data.item.id }}
+                                    </template>
+
+                                    <template
+                                        slot="candidate"
+                                        slot-scope="data">
+                                        <router-link
+                                            :to="'/candidate/' + data.item.candidate">
+                                            {{ truncate(data.item.candidate, 20) }}
+                                        </router-link>
+                                    </template>
+
+                                    <template
+                                        slot="event"
+                                        slot-scope="data">
+                                        <span :class="'fw-600 ' + getEventClass(data.item.event)">{{ data.item.event }}</span>
+                                    </template>
+
+                                    <template
+                                        slot="capacity"
+                                        slot-scope="data">
+                                        {{ isNaN(data.item.cap) ? '---' : formatCurrencySymbol(data.item.cap) }}
+                                    </template>
+
+                                    <template
+                                        slot="candidateCap"
+                                        slot-scope="data">
+                                        {{ isNaN(data.item.candidateCap) ? '---' : formatCurrencySymbol(data.item.candidateCap) }}
+                                    </template>
+
+                                    <template
+                                        slot="tx"
+                                        slot-scope="data">
+                                        <a
+                                            v-b-tooltip.hover.right
+                                            :href="`${config.explorerUrl}/txs/${data.item.tx}`"
+                                            title="View on XDCScan"
+                                            target="_blank">
+                                            <i class="tm-eye" />
+                                            <span>View on XDCScan</span>
+                                        </a>
+                                    </template>
+                                </b-table>
+
+                                <b-pagination
+                                    v-if="txTotalRows > 0 && txTotalRows > txPerPage"
+                                    :total-rows="txTotalRows"
+                                    :per-page="txPerPage"
+                                    v-model="txCurrentPage"
+                                    align="center"
+                                    class="XDC-pagination"
+                                    @change="txPageChange" />
+                            </div>
+                        </div>
+                        <!--<div class="section section&#45;&#45;voter">
                     <div class="row">
                         <div class="col-12">
                             <div class="section-title">
@@ -435,7 +764,7 @@
                             </p>
                             <p
                                 id="XDC-info__description&#45;&#45;balance"
-                                class="XDC-info__description">
+                                class="'XDC-info__description'">
                                 {{ formatCurrencySymbol(formatBigNumber(balance, 3)) }}
                                 <b-tooltip
                                     v-if="checkLongNumber(balance)"
@@ -452,7 +781,7 @@
                             </p>
                             <p
                                 id="XDC-info__description&#45;&#45;voted"
-                                class="XDC-info__description">
+                                class="'XDC-info__description'">
                                 {{ formatCurrencySymbol(formatNumber(totalVoted)) }}
                                 <b-tooltip
                                     v-if="checkLongNumber(totalVoted)"
@@ -464,7 +793,7 @@
                         </div>
                     </div>
                 </div>-->
-            </b-row>
+            </b-card></div></b-row>
         </div>
     </div>
 </template>
@@ -519,6 +848,7 @@ export default {
             sortBy: 'capacity',
             sortDesc: true,
             isReady: !!this.web3,
+            tooltipText: 'Copy to clipboard',
             voter: this.$route.params.address.toLowerCase(),
             candidates: [],
             balance: 0,
@@ -633,6 +963,25 @@ export default {
             }
 
             return clazz
+        },
+        async copyToClipboard (text, button) {
+            try {
+                await navigator.clipboard.writeText(text)
+                this.tooltipText = 'Copied!'
+
+                // Force tooltip to show immediately
+                this.$root.$emit('bv::disable::tooltip', button)
+                this.$root.$emit('bv::enable::tooltip', button)
+                this.$root.$emit('bv::show::tooltip', button)
+
+                // Reset tooltip text after 2 seconds
+                setTimeout(() => {
+                    this.tooltipText = 'Copy to clipboard'
+                    this.$root.$emit('bv::hide::tooltip', button)
+                }, 2000)
+            } catch (err) {
+                console.error('Failed to copy text: ', err)
+            }
         },
         async getCandidates () {
             let self = this

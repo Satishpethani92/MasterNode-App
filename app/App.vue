@@ -1,6 +1,17 @@
 <template>
-    <div id="app">
+    <div
+        id="app">
         <div class="page-layout">
+            <b-modal
+                v-model="showLoginModal"
+                hide-footer
+                hide-header
+                centered
+                @hidden="resetForm">
+                <Setting
+                    ref="settingRef"
+                    @close-modal="showLoginModal = false" />
+            </b-modal>
             <b-navbar
                 toggleable="lg"
                 type="dark">
@@ -56,8 +67,8 @@
                             <b-button
                                 v-if="!isXDCnet"
                                 id="btn-become-candidate"
-                                to="/setting"
-                                variant="primary">Login</b-button>
+                                variant="primary"
+                                @click="showLoginModal = true">Login</b-button>
                             <b-button
                                 v-else
                                 id="btn-become-candidate"
@@ -92,11 +103,14 @@
                             </b-dropdown>
                             <b-button
                                 id="btn-darkmode"
-                                to="/setting"
                                 variant="transparent"
-                                class="p-0 bg-transparent border-0 ml-3"><img
+                                class="p-0 bg-transparent border-0 ml-3"
+                                @click="toggleDarkMode"
+                            >
+                                <img
                                     src="/app/assets/img/darkmode.svg"
-                                    alt=""></b-button>
+                                    alt="dark-mode-icon">
+                            </b-button>
                         </b-navbar-nav>
                     </b-collapse>
                 </div>
@@ -292,6 +306,7 @@ import store from 'store'
 import moment from 'moment'
 import pkg from '../package.json'
 import AutoComplete from './components/AutoComplete.vue'
+import Setting from './components/Setting.vue'
 export default {
     name: 'App',
     metaInfo: {
@@ -301,10 +316,13 @@ export default {
         ]
     },
     components: {
-        AutoComplete
+        AutoComplete,
+        Setting
     },
     data () {
         return {
+            darkMode: false,
+            showLoginModal: false,
             isReady: !!this.web3,
             showProgressBar: false,
             selectedCandidate: null,
@@ -394,6 +412,19 @@ export default {
                         return this.$router.push(to)
                     }).catch(e => console.log(e))
             }
+        },
+        toggleDarkMode () {
+            this.darkMode = !this.darkMode
+            if (this.darkMode) {
+                document.documentElement.setAttribute('data-theme', 'dark')
+            } else {
+                document.documentElement.removeAttribute('data-theme')
+            }
+            // Optionally, save the state to localStorage
+            // localStorage.setItem('darkMode', this.darkMode);
+        },
+        resetForm () {
+            this.$refs.settingRef.resetForm()
         },
         goPage: function (s) {
             this.$router.push({ path: `/candidate/${s}` })

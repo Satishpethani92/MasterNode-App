@@ -23,53 +23,60 @@
                 </div>
             </div>
         </div>
-        <div class="main-content container">
-            <div
-                v-if="!address">
-                <b-row
-                    class="m-0">
-                    <div class="col-12 col-md-2 col-lg-2"/>
-                    <b-card
-                        v-if="!address"
-                        :class="'col-12 col-md-8 col-lg-8 XDC-card XDC-card--lighter'
-                        + (loading ? ' XDC-loading' : '')">
-                        <h4 class="color-white XDC-card__title XDC-card__title--big">Login</h4>
-                        <b-form
-                            class="XDC-form XDC-form--setting"
-                            novalidate
-                            @submit.prevent="validate()">
-                            <b-form-group
-                                class="mb-4"
-                                label="Network Provider"
-                                label-for="provider">
-                                <b-input-group>
-                                    <b-form-select
-                                        id="provider"
-                                        v-model="provider"
-                                        class="form-control"
-                                        @change="onChangeSelect">
-                                        <option
-                                            v-if="!isElectron"
-                                            value="metamask">XDCPay</option>
-                                        <option value="connect-wallet">WalletConnect v2</option>
-                                        <!-- <option
+        <!-- My comment start -->
+        <!-- <div class="main-content container"> -->
+        <!-- My comment end -->
+        <div
+            v-if="!address">
+            <!-- My comment start -->
+            <!-- <b-row
+                class="m-0">
+
+                 <div class="col-12 col-md-2 col-lg-2"/> -->
+            <!-- My comment end -->
+            <b-card
+                v-if="!address"
+                :class="'XDC-card XDC-card--lighter'
+
+                + (loading ? ' XDC-loading' : '')"
+                class="mb-0">
+                <h3 class="text-uppercase text-center fw-600 text-black mb-4">Login</h3>
+                <b-form
+                    class="XDC-form XDC-form--setting"
+                    novalidate
+                    @submit.prevent="validate()">
+                    <b-form-group
+                        class="mb-4"
+                        label="Network Provider"
+                        label-for="provider">
+                        <b-input-group>
+                            <b-form-select
+                                id="provider"
+                                v-model="provider"
+                                class="form-control"
+                                @change="onChangeSelect">
+                                <option
+                                    v-if="!isElectron"
+                                    value="metamask">XDCPay</option>
+                                <option value="connect-wallet">WalletConnect v2</option>
+                                <!-- <option
                                             value="XDCwallet">XDCWallet (Recommended)</option> -->
-                                        <option
-                                            value="custom">PrivateKey/MNEMONIC</option>
-                                        <option
-                                            value="ledger">Ledger Wallet</option>
-                                        <option
-                                            value="trezor">Trezor Wallet</option>
-                                            <!-- <option
+                                <option
+                                    value="custom">PrivateKey/MNEMONIC</option>
+                                <option
+                                    value="ledger">Ledger Wallet</option>
+                                <option
+                                    value="trezor">Trezor Wallet</option>
+                                    <!-- <option
                                                 v-if="!isElectron"
                                                 value="xinpay">XinPay</option> -->
-                                    </b-form-select>
-                                    <small
-                                        v-if="provider !== 'metamask' && provider !== 'xinpay'"
-                                        class="form-text text-muted">Using node at {{ chainConfig.rpc }}.</small>
-                                </b-input-group>
-                            </b-form-group>
-                            <!-- <b-form-group
+                            </b-form-select>
+                            <small
+                                v-if="provider !== 'metamask' && provider !== 'xinpay'"
+                                class="form-text text-muted">Using node at {{ chainConfig.rpc }}.</small>
+                        </b-input-group>
+                    </b-form-group>
+                    <!-- <b-form-group
                                 v-if="provider === 'custom'"
                                 class="mb-4"
                                 label="Network URL"
@@ -85,352 +92,358 @@
                                     v-else-if="$v.networks.custom.$dirty && !$v.networks.custom.localhostUrl"
                                     class="text-danger">Wrong URL format</span>
                             </b-form-group> -->
-                            <b-form-group
-                                v-if="provider === 'custom'"
-                                class="mb-4"
-                                label="Privatekey/MNEMONIC"
-                                label-for="mnemonic">
-                                <b-form-input
-                                    :class="getValidationClass('mnemonic')"
-                                    v-model="mnemonic"
-                                    autocomplete="off"
-                                    type="text" />
-                                <span
-                                    v-if="$v.mnemonic.$dirty && !$v.mnemonic.required"
-                                    class="text-danger">Required field</span>
-                            </b-form-group>
-                            <b-form-group
-                                v-if="provider === 'custom'"
-                                class="mb-4"
-                                label="Select HD derivation path(MNEMONIC)"
-                                label-for="hdPath">
-                                <b-form-input
-                                    :class="getValidationClass('hdPath')"
-                                    :value="hdPath"
-                                    v-model="hdPath"
-                                    type="text" />
-                                <span
-                                    v-if="$v.hdPath.$dirty && !$v.hdPath.required"
-                                    class="text-danger">Required field</span>
-                                <small
-                                    class="form-text text-muted">To unlock the wallet, try paths
-                                    <code
-                                        class="hd-path"
-                                        @click="changePath(`m/44'/60'/0'/0`)">m/44'/60'/0'/0</code> or
-                                    <code
-                                        class="hd-path"
-                                        @click="changePath(`m/44'/60'/0'`)">m/44'/60'/0'</code> or
-                                    <code
-                                        class="hd-path"
-                                        @click="changePath(`m/44'/551'/0'/0`)">m/44'/551'/0'/0</code></small>
-                            </b-form-group>
+                    <b-form-group
+                        v-if="provider === 'custom'"
+                        class="mb-4"
+                        label="Privatekey/MNEMONIC"
+                        label-for="mnemonic">
+                        <b-form-input
+                            :class="getValidationClass('mnemonic')"
+                            v-model="mnemonic"
+                            autocomplete="off"
+                            type="text" />
+                        <span
+                            v-if="$v.mnemonic.$dirty && !$v.mnemonic.required"
+                            class="text-danger">Required field</span>
+                    </b-form-group>
+                    <b-form-group
+                        v-if="provider === 'custom'"
+                        class="mb-4"
+                        label="Select HD derivation path(MNEMONIC)"
+                        label-for="hdPath">
+                        <b-form-input
+                            :class="getValidationClass('hdPath')"
+                            :value="hdPath"
+                            v-model="hdPath"
+                            type="text" />
+                        <span
+                            v-if="$v.hdPath.$dirty && !$v.hdPath.required"
+                            class="text-danger">Required field</span>
+                        <small
+                            class="form-text text-muted">To unlock the wallet, try paths
+                            <code
+                                class="hd-path"
+                                @click="changePath(`m/44'/60'/0'/0`)">m/44'/60'/0'/0</code> or
+                            <code
+                                class="hd-path"
+                                @click="changePath(`m/44'/60'/0'`)">m/44'/60'/0'</code> or
+                            <code
+                                class="hd-path"
+                                @click="changePath(`m/44'/551'/0'/0`)">m/44'/551'/0'/0</code></small>
+                    </b-form-group>
 
-                            <b-form-group
-                                v-if="provider === 'XDCwallet'"
-                                class="mb-4"
-                                style="text-align: center">
-                                <vue-qrcode
-                                    :options="{size: 250 }"
-                                    :value="qrCode"
-                                    class="img-fluid text-center text-lg-right"/>
-                                <div
-                                    v-if="mobileCheck">
-                                    <b-button
-                                        :href="qrCodeApp"
-                                        variant="primary">
-                                        Open in App
-                                    </b-button>
-                                </div>
-                                <div>
-                                    <b>In case you do not have XDCWallet, download here</b>
-                                </div>
-                                <div
-                                    style="margin-top: 5px">
-                                    <a
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href="https://goo.gl/MvE1GV"
-                                        class="social-links__link">
-                                        <img src="/app/assets/img/appstore.png" >
-                                    </a>
-                                    <a
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href="https://goo.gl/4tFQzY"
-                                        class="social-links__link">
-                                        <img src="/app/assets/img/googleplay.png" >
-                                    </a>
-                                </div>
-                            </b-form-group>
-                            <b-form-group
-                                v-if="provider === 'ledger'"
-                                class="mb-4"
-                                label="Select HD derivation path"
-                                label-for="hdPath">
-                                <b-form-input
-                                    :class="getValidationClass('hdPath')"
-                                    :value="hdPath"
-                                    v-model="hdPath"
-                                    type="text" />
-                                <span
-                                    v-if="$v.hdPath.$dirty && !$v.hdPath.required"
-                                    class="text-danger">Required field</span>
-                                <small
-                                    class="form-text text-muted">To unlock the wallet, try paths
-                                    <code
-                                        class="hd-path"
-                                        @click="changePath(`m/44'/60'/0'`)">m/44'/60'/0'</code>
-                                    or <code
-                                        class="hd-path"
-                                        @click="changePath(`m/44'/60'/0'/0`)">m/44'/60'/0'/0</code>
-                                    with Ethereum App,<br>
-                                    or try path <code
-                                        class="hd-path"
-                                        @click="changePath(`m/44'/551'/0'/0`)">m/44'/551'/0'/0</code>
-                                    with XDC Network App (on Ledger).</small>
-                            </b-form-group>
+                    <b-form-group
+                        v-if="provider === 'XDCwallet'"
+                        class="mb-4"
+                        style="text-align: center">
+                        <vue-qrcode
+                            :options="{size: 250 }"
+                            :value="qrCode"
+                            class="img-fluid text-center text-lg-right"/>
+                        <div
+                            v-if="mobileCheck">
+                            <b-button
+                                :href="qrCodeApp"
+                                variant="primary">
+                                Open in App
+                            </b-button>
+                        </div>
+                        <div>
+                            <b>In case you do not have XDCWallet, download here</b>
+                        </div>
+                        <div
+                            style="margin-top: 5px">
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href="https://goo.gl/MvE1GV"
+                                class="social-links__link">
+                                <img src="/app/assets/img/appstore.png" >
+                            </a>
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href="https://goo.gl/4tFQzY"
+                                class="social-links__link">
+                                <img src="/app/assets/img/googleplay.png" >
+                            </a>
+                        </div>
+                    </b-form-group>
+                    <b-form-group
+                        v-if="provider === 'ledger'"
+                        class="mb-4"
+                        label="Select HD derivation path"
+                        label-for="hdPath">
+                        <b-form-input
+                            :class="getValidationClass('hdPath')"
+                            :value="hdPath"
+                            v-model="hdPath"
+                            type="text" />
+                        <span
+                            v-if="$v.hdPath.$dirty && !$v.hdPath.required"
+                            class="text-danger">Required field</span>
+                        <small
+                            class="form-text text-muted">To unlock the wallet, try paths
+                            <code
+                                class="hd-path"
+                                @click="changePath(`m/44'/60'/0'`)">m/44'/60'/0'</code>
+                            or <code
+                                class="hd-path"
+                                @click="changePath(`m/44'/60'/0'/0`)">m/44'/60'/0'/0</code>
+                            with Ethereum App,<br>
+                            or try path <code
+                                class="hd-path"
+                                @click="changePath(`m/44'/551'/0'/0`)">m/44'/551'/0'/0</code>
+                            with XDC Network App (on Ledger).</small>
+                    </b-form-group>
 
-                            <b-form-group
-                                v-if="provider === 'trezor'"
-                                class="mb-4"
-                                label-for="hdPath">
-                                <span>HD derivation path: </span>
-                                <label class="ml-1"><b>m/44'/60'/0'/0</b></label>
-                                <!-- <b-form-input
+                    <b-form-group
+                        v-if="provider === 'trezor'"
+                        class="mb-4"
+                        label-for="hdPath">
+                        <span>HD derivation path: </span>
+                        <label class="ml-1"><b>m/44'/60'/0'/0</b></label>
+                        <!-- <b-form-input
                                     :class="getValidationClass('hdPath')"
                                     :value="hdPath"
                                     v-model="hdPath"
                                     readonly
                                     type="text" /> -->
-                                <!-- <span
+                        <!-- <span
                                     v-if="$v.hdPath.$dirty && !$v.hdPath.required"
                                     class="text-danger">Required field</span> -->
-                            </b-form-group>
+                    </b-form-group>
 
-                            <div
-                                v-if="!isReady && provider === 'metamask'">
-                                <p>Please install &amp; login
-                                    <a
-                                        href="https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo/"
-                                        target="_blank">XDCPay Extension</a>
-                                    then connect it to XDC Network Mainnet or Apothem Testnet.</p>
-                            </div>
-                            <div
-                                v-if="!isReady && provider === 'xinpay'">
-                                <p>Please install &amp; login
-                                    <a
-                                        href="https://xinpay.io/"
-                                        target="_blank">XinPay Extension</a>
-                                    then connect it to XDC Network Mainnet or Testnet.</p>
-                            </div>
-                            <div class="buttons text-right">
-                                <b-button
-                                    v-if="provider !== 'XDCwallet'"
-                                    type="submit"
-                                    variant="primary">Save</b-button>
-                            </div>
-                        </b-form>
-                    </b-card>
-                    <div class="col-12 col-md-2 col-lg-2"/>
-                </b-row>
-            </div>
-            <div
-                v-if="address">
-                <b-row
-                    class="m-0">
                     <div
-                        class="col-12 col-md-6 col-lg-6">
-                        <b-card
-                            v-if="address"
-                            :class="'XDC-card XDC-card--lighter'
-                            + (loading ? ' XDC-loading' : '')">
-                            <h4 class="h4 XDC-card__title color-black">
-                                Account Information</h4>
-                            <ul class="XDC-list list-unstyled">
-                                <li class="XDC-list__item">
-                                    <i class="tm-wallet XDC-list__icon" />
-                                    <p class="XDC-list__text">
-                                        <router-link
-                                            :to="`/voter/xdc${address.substring(2)}`"
-                                            class="text-truncate">
-                                            {{ 'xdc' + address.substring(2) }}
-                                        </router-link>
-                                        <span>Address</span>
-                                    </p>
-                                </li>
-                                <li class="XDC-list__item">
-                                    <i class="tm-XDC2 XDC-list__icon" />
-                                    <div class="XDC-list__text">
-                                        <p class="color-white mb-0">{{ formatNumber(balance) }}
-                                        <span class="text-muted">{{ getCurrencySymbol() }}</span></p>
-                                        <span>Balance</span>
-                                    </div>
-                                </li>
-                                <li class="XDC-list__item">
-                                    <i class="tm-XDC XDC-list__icon" />
-                                    <div class="XDC-list__text">
-                                        <p class="color-white mb-0">
-                                        <span class="text-muted">{{ Boolean(KYCStatus) }}</span></p>
-                                        <span>KYC</span>
-                                    </div>
-                                </li>
-                                <li
-                                    v-if="KYCStatus"
-                                    class="XDC-list__item">
-                                    <i class="tm-XDC XDC-list__icon" />
-                                    <div class="XDC-list__text">
-                                        <p class="color-white mb-0">
-                                            <span class="text-muted">
-                                                <a
-                                                    :href="`https://kycdocs.xinfin.network/${KYCStatus}`"
-                                                    target="_blank">
-                                                    Check here
-                                                </a>
-                                            </span>
-                                        </p>
-                                        <span>KYC</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </b-card>
+                        v-if="!isReady && provider === 'metamask'">
+                        <p class="mb-4">Please install &amp; login
+                            <a
+                                href="https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo/"
+                                target="_blank">XDCPay Extension</a>
+                            then connect it to XDC Network Mainnet or Apothem Testnet.</p>
                     </div>
                     <div
-                        class="col-12 col-md-6 col-lg-6">
-                        <b-card
-                            v-if="isReady && (aw || (wh.length > 0))"
-                            :class="'XDC-card XDC-card--lighter'
-                            + (loading ? ' XDC-loading' : '')">
-                            <h4 class="h4 XDC-card__title color-black">
-                                Withdrawals</h4>
-                            <ul
-                                v-for="(w, k, index) in withdraws"
-                                :key="index"
-                                class="XDC-list list-unstyled">
-                                <li
-                                    v-if="w.blockNumber !== '0' && w.cap !== '0'"
-                                    class="XDC-list__item">
-                                    <p class="XDC-list__text">
-                                        <a :href="`${config.explorerUrl}/blocks/${w.blockNumber}`">
-                                            {{ w.blockNumber }}</a>
-                                        <span>Withdrawal Block Number</span>
+                        v-if="!isReady && provider === 'xinpay'">
+                        <p>Please install &amp; login
+                            <a
+                                href="https://xinpay.io/"
+                                target="_blank">XinPay Extension</a>
+                            then connect it to XDC Network Mainnet or Testnet.</p>
+                    </div>
+                    <div class="buttons text-center">
+                        <b-button
+                            v-if="provider !== 'XDCwallet'"
+                            type="submit"
+                            class="custom-primary-btn m-0"
+                            variant="primary">Save</b-button>
+                    </div>
+                </b-form>
+            </b-card>
+            <!-- My comment start -->
+            <!-- <div class="col-12 col-md-2 col-lg-2"/>
+
+            </b-row>  -->
+            <!-- My comment end -->
+        </div>
+        <div
+            v-if="address">
+            <b-row
+                class="m-0">
+                <div
+                    class="col-12 col-md-6 col-lg-6">
+                    <b-card
+                        v-if="address"
+                        :class="'XDC-card XDC-card--lighter'
+                        + (loading ? ' XDC-loading' : '')">
+                        <h4 class="h4 XDC-card__title color-black">
+                            Account Information</h4>
+                        <ul class="XDC-list list-unstyled">
+                            <li class="XDC-list__item">
+                                <i class="tm-wallet XDC-list__icon" />
+                                <p class="XDC-list__text">
+                                    <router-link
+                                        :to="`/voter/xdc${address.substring(2)}`"
+                                        class="text-truncate">
+                                        {{ 'xdc' + address.substring(2) }}
+                                    </router-link>
+                                    <span>Address</span>
+                                </p>
+                            </li>
+                            <li class="XDC-list__item">
+                                <i class="tm-XDC2 XDC-list__icon" />
+                                <div class="XDC-list__text">
+                                    <p class="color-white mb-0">{{ formatNumber(balance) }}
+                                    <span class="text-muted">{{ getCurrencySymbol() }}</span></p>
+                                    <span>Balance</span>
+                                </div>
+                            </li>
+                            <li class="XDC-list__item">
+                                <i class="tm-XDC XDC-list__icon" />
+                                <div class="XDC-list__text">
+                                    <p class="color-white mb-0">
+                                    <span class="text-muted">{{ Boolean(KYCStatus) }}</span></p>
+                                    <span>KYC</span>
+                                </div>
+                            </li>
+                            <li
+                                v-if="KYCStatus"
+                                class="XDC-list__item">
+                                <i class="tm-XDC XDC-list__icon" />
+                                <div class="XDC-list__text">
+                                    <p class="color-white mb-0">
+                                        <span class="text-muted">
+                                            <a
+                                                :href="`https://kycdocs.xinfin.network/${KYCStatus}`"
+                                                target="_blank">
+                                                Check here
+                                            </a>
+                                        </span>
                                     </p>
-                                    <!-- <div class="XDC-list__text">
+                                    <span>KYC</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </b-card>
+                </div>
+                <div
+                    class="col-12 col-md-6 col-lg-6">
+                    <b-card
+                        v-if="isReady && (aw || (wh.length > 0))"
+                        :class="'XDC-card XDC-card--lighter'
+                        + (loading ? ' XDC-loading' : '')">
+                        <h4 class="h4 XDC-card__title color-black">
+                            Withdrawals</h4>
+                        <ul
+                            v-for="(w, k, index) in withdraws"
+                            :key="index"
+                            class="XDC-list list-unstyled">
+                            <li
+                                v-if="w.blockNumber !== '0' && w.cap !== '0'"
+                                class="XDC-list__item">
+                                <p class="XDC-list__text">
+                                    <a :href="`${config.explorerUrl}/blocks/${w.blockNumber}`">
+                                        {{ w.blockNumber }}</a>
+                                    <span>Withdrawal Block Number</span>
+                                </p>
+                                <!-- <div class="XDC-list__text">
                                         <p class="color-white mb-0">
                                             {{ w.estimatedTime }}</p>
                                         <span>Estimated Time</span>
                                     </div> -->
-                                    <div class="XDC-list__text">
-                                        <p class="color-white mb-0">{{ w.cap }}
-                                        <span class="text-muted">{{ getCurrencySymbol() }}</span></p>
-                                        <span>Capacity</span>
-                                    </div>
-                                    <!-- <b-button
+                                <div class="XDC-list__text">
+                                    <p class="color-white mb-0">{{ w.cap }}
+                                    <span class="text-muted">{{ getCurrencySymbol() }}</span></p>
+                                    <span>Capacity</span>
+                                </div>
+                                <!-- <b-button
                                         :disabled="w.blockNumber > chainConfig.blockNumber"
                                         variant="primary"
                                         @click="withdraw(w.blockNumber, k)">Withdraw</b-button> -->
-                                    <div class="XDC-list__text">
-                                        <b-button
-                                            :disabled="w.blockNumber > chainConfig.blockNumber"
-                                            class="float-right"
-                                            variant="primary"
-                                            @click="changeView(w, k)">Withdraw</b-button>
-                                    </div>
-                                </li>
-                            </ul>
-                            <ul
-                                v-for="(w, k, index) in wh"
-                                :key="index"
-                                class="XDC-list list-unstyled">
-                                <li
-                                    class="XDC-list__item">
-                                    <p class="XDC-list__text">
-                                        <a :href="`${config.explorerUrl}/txs/${w.tx}`">
-                                            {{ (w.tx || '').substring(0,8) }}</a>
-                                        <span>Transaction</span>
-                                    </p>
-                                    <div class="XDC-list__text">
-                                        <p class="color-white mb-0">{{ w.cap }}
-                                        <span class="text-muted">{{ getCurrencySymbol() }}</span></p>
-                                        <span>Capacity</span>
-                                    </div>
-                                    <p class="XDC-list__text"/>
-                                </li>
-                            </ul>
-                        </b-card>
-                    </div>
-                </b-row>
-            </div>
+                                <div class="XDC-list__text">
+                                    <b-button
+                                        :disabled="w.blockNumber > chainConfig.blockNumber"
+                                        class="float-right"
+                                        variant="primary"
+                                        @click="changeView(w, k)">Withdraw</b-button>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul
+                            v-for="(w, k, index) in wh"
+                            :key="index"
+                            class="XDC-list list-unstyled">
+                            <li
+                                class="XDC-list__item">
+                                <p class="XDC-list__text">
+                                    <a :href="`${config.explorerUrl}/txs/${w.tx}`">
+                                        {{ (w.tx || '').substring(0,8) }}</a>
+                                    <span>Transaction</span>
+                                </p>
+                                <div class="XDC-list__text">
+                                    <p class="color-white mb-0">{{ w.cap }}
+                                    <span class="text-muted">{{ getCurrencySymbol() }}</span></p>
+                                    <span>Capacity</span>
+                                </div>
+                                <p class="XDC-list__text"/>
+                            </li>
+                        </ul>
+                    </b-card>
+                </div>
+            </b-row>
+        </div>
+        <div
+            id="hdwalletModal"
+            class="XDC-modal-light"
+            style="display: none;">
             <div
-                id="hdwalletModal"
-                class="XDC-modal-light"
-                style="display: none;">
-                <div
-                    class="modal-backdrop">
-                    <div class="modal" >
-                        <header class="modal-header">
-                            <slot name="header">
-                                Please select the address you would like to interact with
-                                <button
-                                    type="button"
-                                    class="close"
-                                    @click="closeModal"
-                                >
-                                    x
-                                </button>
-                            </slot>
-                        </header>
-                        <section class="modal-body">
-                            <slot name="hdAddress">
-                                <div
-                                    v-for="(hdwallet, index) in hdWallets"
-                                    :key="index">
-                                    <label style="width: 100%; margin-bottom: 5px; line-height: 16px; cursor: pointer">
-                                        <input
-                                            :value="index"
-                                            name="hdWallet"
-                                            type="radio"
-                                            autocomplete="off"
-                                            style="width: 5%; float: left" >
-                                        <div style="width: 70%; float: left">
-                                            {{ hdwallet.address }}
-                                        </div>
-                                        <div style="width: 20%; margin-left: 2%; float: left">
-                                            {{ hdwallet.balance }} {{ getCurrencySymbol() }}
-                                        </div>
-                                    </label>
-                                </div>
-                                <div
-                                    id="moreHdAddresses"
-                                    style="margin-top: 10px; cursor: pointer"
-                                    @click="moreHdAddresses">
-                                    More Addresses
-                                </div>
-                            </slot>
-                        </section>
-                        <footer class="modal-footer">
-                            <slot name="footer">
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary"
-                                    @click="closeModal"
-                                >
-                                    Cancel
-                                </button>
+                class="modal-backdrop">
+                <div class="modal" >
+                    <header class="modal-header">
+                        <slot name="header">
+                            Please select the address you would like to interact with
+                            <button
+                                type="button"
+                                class="close"
+                                @click="closeModal"
+                            >
+                                x
+                            </button>
+                        </slot>
+                    </header>
+                    <section class="modal-body">
+                        <slot name="hdAddress">
+                            <div
+                                v-for="(hdwallet, index) in hdWallets"
+                                :key="index">
+                                <label style="width: 100%; margin-bottom: 5px; line-height: 16px; cursor: pointer">
+                                    <input
+                                        :value="index"
+                                        name="hdWallet"
+                                        type="radio"
+                                        autocomplete="off"
+                                        style="width: 5%; float: left" >
+                                    <div style="width: 70%; float: left">
+                                        {{ hdwallet.address }}
+                                    </div>
+                                    <div style="width: 20%; margin-left: 2%; float: left">
+                                        {{ hdwallet.balance }} {{ getCurrencySymbol() }}
+                                    </div>
+                                </label>
+                            </div>
+                            <div
+                                id="moreHdAddresses"
+                                style="margin-top: 10px; cursor: pointer"
+                                @click="moreHdAddresses">
+                                More Addresses
+                            </div>
+                        </slot>
+                    </section>
+                    <footer class="modal-footer">
+                        <slot name="footer">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                @click="closeModal"
+                            >
+                                Cancel
+                            </button>
 
-                                <button
-                                    type="button"
-                                    class="btn btn-primary"
-                                    @click="setHdPath"
-                                >
-                                    Unlock your wallet
-                                </button>
-                            </slot>
-                        </footer>
-                    </div>
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                @click="setHdPath"
+                            >
+                                Unlock your wallet
+                            </button>
+                        </slot>
+                    </footer>
                 </div>
             </div>
         </div>
     </div>
+    <!-- My comment start -->
+    <!-- </div> -->
+    <!-- My comment end -->
 </template>
 <script>
 import Web3 from 'xdc3'
@@ -632,6 +645,11 @@ export default {
                     'is-invalid': field.$error
                 }
             }
+        },
+        resetForm () {
+            this.provider = 'metamask'
+            this.mnemonic = ''
+            this.hdPath = "m/44'/551'/0'/0"
         },
         validate: function () {
             if (this.provider === 'connect-wallet') {

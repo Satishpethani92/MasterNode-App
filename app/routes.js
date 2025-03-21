@@ -4,11 +4,11 @@ import CandidateApply from './components/candidates/Apply.vue'
 import CandidateResign from './components/candidates/Resign.vue'
 import CandidateWithdraw from './components/candidates/Withdraw.vue'
 import CandidateUpdate from './components/candidates/Update.vue'
-import VoterView from './components/voters/View'
-import VotingView from './components/voters/Voting'
-import UnvotingView from './components/voters/Unvoting'
-import ConfirmView from './components/voters/Confirm'
-import Setting from './components/Setting.vue'
+import VoterView from './components/voters/View.vue'
+import VotingView from './components/voters/Voting.vue'
+import UnvotingView from './components/voters/Unvoting.vue'
+import ConfirmView from './components/voters/Confirm.vue'
+// import Setting from './components/Setting.vue'
 import PrivacyPolicy from './components/PrivacyPolicy.vue'
 import TermsOfService from './components/TermsOfService.vue'
 
@@ -52,9 +52,9 @@ const routes = [
     {
         path: '/confirm/:transaction', component: ConfirmView
     },
-    {
+    /* {
         path: '/setting', component: Setting
-    },
+    }, */
     {
         path: '/privacyPolicy', component: PrivacyPolicy
     },
