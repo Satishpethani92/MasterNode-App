@@ -1,9 +1,9 @@
 .navbar-dark {
   .navbar-nav{
     .nav-link{
-      color: $color-text;
-      &.active, &:hover {
-        color: $black;
+      color: var(--color-text);
+      &.active, &:hover, &:focus {
+        color: var(--black);
       }
     }   
   }
@@ -22,11 +22,11 @@
   .nav-item{
     .nav-link{
       border-radius: 0;
-      background-color: $tab-color;
-      color: $color-text-2;
+      background-color: var(--tab-color);
+      color: var(--color-text-2);
       &.active {
-        background-color: $color-btn-bg;
-        color: $white;
+        background-color: var(--color-btn-bg);
+        color: var(--btn-white-text);
       }
     }
     &:first-child{
@@ -52,17 +52,17 @@
     list-style: none;
     li {
       border-radius: 5px;
-      background-color: $tab-color-2;
+      background-color: var(--tab-color-2);
       border: 1px solid transparent;
-      color: $color-text-3;
+      color: var(--color-text-3);
       display: block;
       padding: 0.3rem 1rem;
       cursor: pointer;
       margin-right: 7px;
       &.active{
-        background-color: $white;
-        color: $color-btn-bg-2;
-        border-color: $color-btn-bg-2;
+        background-color: var(--white);
+        color: var(--color-btn-bg-2);
+        border-color: var(--color-btn-bg-2);
       }
       /* &:first-child{
         border-top-left-radius: 12px;

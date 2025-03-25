@@ -51,15 +51,15 @@
     }
     &-value {
         font-size: 18px;
-        color: $black;
+        color: var(--black);
     }
     &-value-small {
         font-size: 12px;
-        color: $black;
+        color: var(--black);
     }
     &-value-big {
         font-size: 18px;
         font-weight: 600;
-        color: $black;
+        color: var(--black);
     }
 }

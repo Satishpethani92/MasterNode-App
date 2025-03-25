@@ -14,16 +14,16 @@
     }
 
     &--cyan:before {
-        background-color: $color-link;
+        background-color: var(--color-link);
         animation: glowingColor1 3s infinite;
     }
 
     &--pink:before {
-        background-color: $color-pink;
+        background-color: var(--color-pink);
     }
 
     &--yellow:before {
-        background-color: $color-yellow;
+        background-color: var(--color-yellow);
         animation: glowingColor2 3s infinite;
     }
 }

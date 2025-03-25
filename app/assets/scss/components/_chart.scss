@@ -1,6 +1,6 @@
 .highcharts-legend text {
-    color: $color-text !important;
-    fill: $color-text !important;
+    color: var(--color-text) !important;
+    fill: var(--color-text) !important;
 }
 
 .highcharts-button-box {

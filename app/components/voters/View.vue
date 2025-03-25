@@ -11,7 +11,7 @@
                                 alt="Owner-icon">
                         </div>
                         <div>
-                            <h6 class="h6 color-black mb-1">Voter</h6>
+                            <h6 class="h6 color-text-3 mb-1">Voter</h6>
                             <p>{{ voter }}</p>
                         </div>
                     </div>
@@ -665,7 +665,7 @@
                         </div>
 
                         <div
-                            :class="'section section--txs'
+                            :class="
                             + (txLoading ? ' XDC-loading' : '')">
                             <div class="table-wrapper">
                                 <div class="d-flex align-items-center justify-content-between px-4">
@@ -684,6 +684,7 @@
                                     :per-page="txPerPage"
                                     :show-empty="true"
                                     :class="`XDC-table XDC-table--transactions-voter${txLoading ? ' loading' : ''}`"
+                                    :style="(txTotalRows > 0 && txTotalRows < txPerPage) ? { borderRadius: '12px', marginBottom:'0' } : {}"
                                     empty-text="There are no transactions to show"
                                     stacked="md"
                                     @sort-changed="sortingChangeTxes" >

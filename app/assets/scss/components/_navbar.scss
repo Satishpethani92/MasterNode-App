@@ -1,6 +1,6 @@
 .navbar {
-    background-color: $white;
-    box-shadow: $card-shadow;
+    background-color: var(--white);
+    box-shadow: var(--card-shadow);
     border-bottom-right-radius: 12px;
     border-bottom-left-radius: 12px;
     &.navbar-light {
@@ -51,7 +51,7 @@
     font-size: 14px;
     font-weight:400;
     border-radius: 5px;
-    background-color: $color-btn-bg;
+    background-color: var(--color-btn-bg);
     min-width: 65px;
     padding: 3px 14px;
     align-items: center;
@@ -61,8 +61,8 @@
     &.btn:hover,
     &.btn:focus {
         box-shadow: none;
-        border-color: $color-btn-hover-bg;
-        background-color: $color-btn-hover-bg;
+        border-color: var(--color-btn-hover-bg);
+        background-color: var(--color-btn-hover-bg);
     }
     
 }
@@ -94,7 +94,7 @@
     }
 
     &:hover i {
-        color: $color-link !important;
+        color: var(--color-link) !important;
         transform: rotate(45deg);
     }
 }
@@ -103,19 +103,18 @@
     i {
         display: inline-block;
         font-size: 18px;
-        color: #3F6CAB;
+        color: var(--black);
 
         @extend %transit;
     }
 
     &:hover i {
-        color: $color-link !important;
+        // color: var(--color-link) !important;
         transform: rotate(45deg);
     }
     button {
         border: none;
         padding: 0;
-        padding-right: 0.75rem !important;
         background: none!important;
         &:hover {
             background: none!important;
@@ -174,4 +173,17 @@
 // add more to vue dropdown bootstrap
 .dropdown-menu {
     margin-top: 17px;
+    background-color: var(--white);
+    font-size: 14px;
+}
+
+.dropdown-item {
+    color: var(--color-text);
+}
+.dropdown-divider{
+    border-color: var(--border-color);
+}
+.dropdown-item:hover, .dropdown-item:focus{
+    background-color: var(--tab-color-2);
+    color: var(--color-text-3);
 }

@@ -1,12 +1,13 @@
 .XDC-pagination {
   border-radius: 0 0 12px 12px;
   width: 100%;
+  background-color: var(--white);
   .page-item {
     margin-right: 10px;
 
     &.active .page-link {
-      color: $color-white;
-      background-color: $color-btn-bg;
+      color: var(--btn-white-text);
+      background-color: var(--color-btn-bg);
     }
 
     &:first-child,
@@ -51,8 +52,8 @@
     }
 
     .page-link {
-      color: $color-text;
-      background-color: $tab-color;
+      color: var(--color-text);
+      background-color: var(--tr-bg);
       height: 31px;
       min-width: 31px;
       line-height: 31px;
@@ -62,8 +63,8 @@
       padding: 0 5px;
 
       &:hover {
-        color: $color-white;
-        background-color: $color-primary;
+        color: var(--color-white);
+        background-color: var(--color-primary);
       }
     }
   }

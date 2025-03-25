@@ -2,8 +2,9 @@
     width: 100%;
     overflow: hidden;
     margin-bottom: 50px;
-    color: $color-text-3;
-    background-color: $white;
+    color: var(--color-text-3);
+    background-color: var(--white);
+    box-shadow: var(--card-shadow);
     border-radius: 12px 12px 0 0;
 
     thead {
@@ -11,7 +12,7 @@
         tr {
             padding: 15px 20px !important;
             margin: 15px 20px 0;
-            background-color: #F2F5F7;
+            background-color: var(--tr-bg);
             border-radius: 5px;
             align-items: center;            
             th {
@@ -63,14 +64,14 @@
         padding: 0 20px;
         tr {
             display: block;
-            background-image: linear-gradient(-135deg, #FFFFFF 0%, #FFFFFF 100%);
+            // background-image: linear-gradient(-135deg, #FFFFFF 0%, #FFFFFF 100%);
             padding: 17px 20px 16px;
             margin: 16px 0 32px;
             position: relative;
             &:after{
                 content: '';
                 position: absolute;
-                border-bottom: 1px solid #eee;
+                border-bottom: 1px solid var(--border-color);
                 width: 100%;
                 bottom: -16px;
             }
@@ -78,7 +79,7 @@
             @extend %transit;
 
             &:hover {
-                background-image: linear-gradient(-135deg, #feffff 0%, #feffff 100%);
+                // background-image: linear-gradient(-135deg, #feffff 0%, #feffff 100%);
             }
 
             @include media-breakpoint-up(lg) {
@@ -128,9 +129,9 @@
 
         div{
             a{
-                color: $color-text-3;
+                color: var(--color-text-3);
                 &:hover{
-                    color: $color-link;
+                    color: var(--color-link);
                 }
             }
         }
@@ -282,7 +283,7 @@
             font-size: 12px;
         }
 
-        td[aria-colindex="6"] > div {
+        /* td[aria-colindex="6"] > div {
             position: relative;
             z-index: 1;
 
@@ -302,12 +303,12 @@
             }
 
             &:after {
-                background-color: $color-body-bg;
+                background-color: var(--color-body-bg);
                 z-index: 0;
             }
-        }
+        } */
 
-        td[aria-colindex="6"] > div > div {
+        /* td[aria-colindex="6"] > div > div {
 
             &:before,
             &:after {
@@ -325,10 +326,10 @@
             }
 
             &:after {
-                background-color: $color-body-bg;
+                background-color: var(--color-body-bg);
                 z-index: 0;
             }
-        }
+        } */
 
         td[aria-colindex="6"],
         th[aria-colindex="6"] {
@@ -370,7 +371,7 @@
                 top: 0;
                 left: 0;
                 z-index: 0;
-                background-color: $color-body-bg;
+                background-color: var(--color-body-bg);
             }
         }
 
@@ -410,7 +411,7 @@
             padding-left: 20px;
         }
 
-        td[aria-colindex="6"] > div {
+       /*  td[aria-colindex="6"] > div {
 
             &:before,
             &:after {
@@ -424,7 +425,7 @@
             &:after {
                 left: calc(-20px - 10px);
             }
-        }
+        } */
     }
 }
 
@@ -496,7 +497,7 @@
         }
 
         a {
-            color: $color-text;
+            color: var(--color-text);
         }
 
         i {
@@ -539,7 +540,7 @@
             }
 
             a:hover {
-                color: $color-link !important;
+                color: var(--color-link) !important;
             }
         }
     }
@@ -562,7 +563,7 @@
         }
 
         a {
-            color: $color-text;
+            color: var(--color-text);
         }
 
         i {
@@ -605,7 +606,7 @@
             }
 
             a:hover {
-                color: $color-link !important;
+                color: var(--color-link) !important;
             }
         }
     }
@@ -671,7 +672,7 @@
         }
 
         a {
-            color: $color-text;
+            color: var(--color-text);
         }
 
         i {
@@ -708,7 +709,7 @@
             }
 
             a:hover {
-                color: $color-link !important;
+                color: var(--color-link) !important;
             }
         }
     }
@@ -765,7 +766,7 @@
 }
 
 .table-wrapper{
-    background-color: $white;
+    background-color: var(--white);
     padding: 20px 0;
     border-radius: 12px;
 }

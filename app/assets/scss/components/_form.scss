@@ -1,7 +1,7 @@
 .XDC-form {
 
     .input-group-append {
-        background-color: $color-input-focus-bg;
+        background-color: var(--color-input-focus-bg);
         border-top-right-radius: 8px;
         border-bottom-right-radius: 8px;
     }
@@ -9,12 +9,14 @@
     .input-group-append .tm-XDC {
         height: 35px;
         width: 35px;
-        font-size: 20px;
-        border-left: 1px solid #5050785c;
-        padding-left: 8px;
+        font-size: 0;
+        border-left: 1px solid rgba(80, 80, 120, 0.3607843137);
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:before {
-            line-height: 35px;
+            // line-height: 35px;
         }
     }
 
@@ -39,10 +41,10 @@
 }
 
 .form-control.is-invalid {
-    border-color: $color-pink;
+    border-color: var(--color-pink);
 
     &:focus {
-        border-color: $color-pink;
+        border-color: var(--color-pink);
         box-shadow: none;
     }
 }

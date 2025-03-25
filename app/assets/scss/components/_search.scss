@@ -7,10 +7,13 @@
     input.form-control {
         border-radius: 5px;
         padding: 4px 40px 4px 40px;
-        background: #F4F4F5;
+        background-color: var(--tab-color-2);
+        color: var(--color-text-3);
         border: none;
-        color:#717179;
         font-size: 13px;
+        &::placeholder{
+            color: var(--color-text-2);
+        }
     }
 
     .btn {
@@ -22,7 +25,7 @@
         font-weight: 400;
         height: 100%;
         border-radius: 100px;
-        color: #3C3C4399;
+        color: var(--color-text-2);
         border-color: transparent;
         background-color: transparent;
         padding: 0;
@@ -64,7 +67,7 @@
   }
   
   .autocomplete-results {
-    background-image: linear-gradient(-135deg, #373658 0%, #40406a 100%);
+    // background-image: linear-gradient(-135deg, #373658 0%, #40406a 100%);
     border-radius: 5px;
     box-shadow: 0px 5px 20px #1d1e31;
     list-style: none;
@@ -104,11 +107,11 @@
   .autocomplete-result.is-active,
   .autocomplete-result:hover {
     background-color: #7573a6;
-    color: $color-white;
+    color: var(--color-white);
 
     .XDC-list__text small,
     .XDC-list__text mark {
-        color: $color-white !important;
+        color: var(--color-white) !important;
     }
   }
   

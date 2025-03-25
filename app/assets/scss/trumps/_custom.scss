@@ -1,41 +1,63 @@
 .color-highlight {
-    color: $color-text-highlight !important;
+    color: var(--color-text-highlight) !important;
 }
 
 .color-cyan {
-    color: $color-link !important;
+    color: var(--color-link) !important;
 }
 
 .color-white {
-    color: $color-white !important;
+    color: var(--color-white) !important;
+}
+
+.page-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.form-control, input[type=text], input[type=number], input[type=email], input[type=phone], input[type=password]{
+    background-color: var(--form-input-color);
+    color: var(--color-text-2);
+    border-color: var(--border-color);
+    &::placeholder{
+        color: var(--color-text-3);
+    }
+}
+.flex-grow {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
 }
 
 .color-black {
     color: $black !important;
 }
 
+.modal-content {
+    background-color: var(--white);
+}
 .color-pink {
-    color: $color-pink !important;
+    color: var(--color-pink) !important;
 }
 
 .color-yellow {
-    color: $color-yellow !important;
+    color: var(--color-yellow) !important;
 }
 
 .color-purple {
-    color: $color-purple !important;
+    color: var(--color-purple) !important;
 }
 
 .color-orange {
-    color: $color-orange !important;
+    color: var(--color-orange) !important;
 }
 
 .color-btn-bg {
-    color: $color-btn-bg !important;
+    color: var(--color-btn-bg) !important;
 }
 
 .text-muted {
-    color: $color-text-muted !important;
+    color: var(--color-text-muted) !important;
 }
 
 .text-black {
@@ -44,7 +66,7 @@
 
 .text-danger {
     font-size: 12px;
-    color: $color-pink !important;
+    color: var(--color-pink) !important;
 }
 
 .text-warning {
@@ -62,21 +84,21 @@
 }
 
 .toasted.bubble.error {
-    background-color: $color-pink;
+    background-color: var(--color-pink);
 }
 
 .toasted.bubble .action {
-    color: $color-body-bg;
+    color: var(--color-body-bg);
 }
 
 *::selection {
     color: #fff;
-    background-color: $color-btn-bg;
+    background-color: var(--color-btn-bg);
 }
 
 *::-moz-selection {
     color: #fff;
-    background-color: $color-btn-bg;
+    background-color: var(--color-btn-bg);
 }
 
 .row.row-grid {
@@ -93,7 +115,10 @@
 }
 
 .color-text-3{
-    color:$color-text-3
+    color:var(--color-text-3)
+}
+.color-text{
+    color:var(--color-text)
 }
 
 .btn-transparent, .btn-transparent:active, .btn-transparent:active:focus {
@@ -117,15 +142,15 @@
 
 .custom-primary-btn{
     font-size: 16px;
-    background-color: $color-btn-bg;
-    color: $white;
+    background-color: var(--color-btn-bg);
+    color: var(--btn-white-text);
     width: 100%;
     text-transform: uppercase;
     padding: 10px;
 }
 
 .tooltip-inner {
-    color: $color-body-bg;
+    color: var(--color-body-bg);
     background-color: #aca9C4;
 }
 
@@ -158,20 +183,20 @@
 }
 
 .sign-message {
-    border-color: $color-input-bg;
-    background-color: $color-input-bg;
+    border-color: var(--color-input-bg);
+    background-color: var(--color-input-bg);
     border-radius: 8px;
     font-size: 14px;
     text-align: left;
-    color: $color-text-highlight;
+    color: var(--color-text-highlight);
 
     @extend %transit;
 
     &:focus {
-        color: $color-text-highlight;
+        color: var(--color-text-highlight);
         box-shadow: none;
-        border-color: $color-input-focus-bg;
-        background-color: $color-input-focus-bg;
+        border-color: var(--color-input-focus-bg);
+        background-color: var(--color-input-focus-bg);
     }
 
     &::-webkit-input-placeholder {

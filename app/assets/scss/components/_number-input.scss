@@ -22,9 +22,9 @@
         user-select: none;
         border-radius: 0;
         width: 30px;
-        border-color: $color-input-focus-bg;
+        border-color: var(--color-input-focus-bg);
         border-left-color: #5050785c;
-        background-color: $color-input-focus-bg;
+        background-color: var(--color-input-focus-bg);
         padding: 6px 10px;
 
         &:hover,

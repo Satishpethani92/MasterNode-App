@@ -8,7 +8,7 @@ import VoterView from './components/voters/View.vue'
 import VotingView from './components/voters/Voting.vue'
 import UnvotingView from './components/voters/Unvoting.vue'
 import ConfirmView from './components/voters/Confirm.vue'
-// import Setting from './components/Setting.vue'
+import Setting from './components/Setting.vue'
 import PrivacyPolicy from './components/PrivacyPolicy.vue'
 import TermsOfService from './components/TermsOfService.vue'
 
@@ -52,9 +52,9 @@ const routes = [
     {
         path: '/confirm/:transaction', component: ConfirmView
     },
-    /* {
+    {
         path: '/setting', component: Setting
-    }, */
+    },
     {
         path: '/privacyPolicy', component: PrivacyPolicy
     },

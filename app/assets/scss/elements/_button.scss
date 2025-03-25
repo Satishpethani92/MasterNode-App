@@ -5,8 +5,8 @@ button,
     font-weight: 600;
     border-radius: 8px;
     color: #fff;
-    border-color: $color-btn-bg;
-    background-color: $color-btn-bg;
+    border-color: var(--color-btn-bg);
+    background-color: var(--color-btn-bg);
     padding: 4px 20px;
 
     @extend %transit;
@@ -14,19 +14,19 @@ button,
     &:hover,
     &:focus {
         box-shadow: none;
-        border-color: $color-btn-hover-bg;
-        background-color: $color-btn-hover-bg;
+        border-color: var(--color-btn-hover-bg);
+        background-color: var(--color-btn-hover-bg);
     }
 
     &:active,
     &:active:focus {
         box-shadow: none !important;
-        border-color: $color-btn-hover-bg !important;
-        background-color: $color-btn-hover-bg !important;
+        border-color: var(--color-btn-hover-bg) !important;
+        background-color: var(--color-btn-hover-bg) !important;
     }
 
     &:disabled {
-        color: $color-text !important;
+        color: var(--color-text) !important;
         border-color: #373658 !important;
         background-color: #373658 !important;
     }
@@ -36,8 +36,8 @@ button.btn-secondary,
 .btn.btn-secondary,
 .btn.btn-secondary.btn-secondary.active {
     color: #fff;
-    border-color: $color-pink ;
-    background-color: $color-pink;
+    border-color: var(--color-pink) ;
+    background-color: var(--color-pink);
 
     &:hover,
     &:focus {
@@ -48,12 +48,12 @@ button.btn-secondary,
 
 .btn-outline-success {
     color: #aca9c4;
-    border-color: $color-btn-bg;
+    border-color: var(--color-btn-bg);
     background-color: transparent;
 
     &:hover,
     &:focus {
-        border-color: $color-btn-hover-bg;
-        background-color: $color-btn-hover-bg;
+        border-color: var(--color-btn-hover-bg);
+        background-color: var(--color-btn-hover-bg);
     }
 }

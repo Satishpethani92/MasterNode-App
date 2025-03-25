@@ -4,7 +4,7 @@
             class="container">
             <div class="row">
                 <div class="col-12">
-                    <h6 class="h6 text-black fw-600 mb-4">By staking XDC, you can contribute to XDC Network & earn rewards. <b-link href="#">Setup Masternode Now!</b-link></h6>
+                    <h6 class="h6 color-text-3 fw-600 mb-4">By staking XDC, you can contribute to XDC Network & earn rewards. <b-link to="/setting">Setup Masternode Now!</b-link></h6>
                 </div>
                 <div class="col-sm-6 col-lg-3">
                     <b-card class="XDC-card custom-card">
@@ -141,7 +141,7 @@
             v-else
             class="container">
             <b-card class="XDC-card pagination xdc-p-none">
-                <h5 class="h5 text-black fw-600">XDC Masternodes</h5>
+                <h5 class="h5 color-text-3 fw-600">XDC Masternodes</h5>
                 <div class="XDC-custom-tab mb-3">
                     <ul>
                         <li
@@ -176,6 +176,7 @@
                     :fields="fields"
                     :per-page="perPage"
                     :class="'XDC-table XDC-table--candidates ' + tableCssClass"
+                    :style="(totalRows > 0 && totalRows < perPage) ? { borderRadius: '12px', marginBottom:'0' } : {}"
                     empty-text="There are no candidates to show"
                     stacked="lg"
                     @sort-changed="sortingChange" >
@@ -252,7 +253,7 @@
                     :per-page="perPage"
                     v-model="currentPage"
                     align="center"
-                    class="XDC-pagination bg-white py-4 mb-0"
+                    class="XDC-pagination py-4 mb-0"
                     @change="pageChange"/>
             </b-card>
         </div>

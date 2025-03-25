@@ -10,16 +10,16 @@
   .footer-links{
     li{
       a{
-        color: $color-text;
+        color: var(--color-text);
         &:hover{
-          color: $color-btn-bg;
+          color: var(--color-btn-bg);
         }
       }
     }
   }
 
   h6{
-    color: $black;
+    color: var(--black);
   }
 
   .list-inline-item{

@@ -1,11 +1,11 @@
 a {
-    color: $color-link;
+    color: var(--color-link);
     
     @extend %transit;
   
     &:hover {
       // text-decoration: none;
-      color: $color-link-hover;
+      color: var(--color-link-hover);
     }
   
     &:focus {

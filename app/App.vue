@@ -8,16 +8,22 @@
                 hide-header
                 centered
                 @hidden="resetForm">
-                <Setting
+                <LoginForm
                     ref="settingRef"
-                    @close-modal="showLoginModal = false" />
+                    @close-modal="handleCloseModal" />
             </b-modal>
             <b-navbar
                 toggleable="lg"
                 type="dark">
                 <div class="container">
                     <b-navbar-brand to="/">
-                        <img src="/app/assets/img/logo.svg" >
+                        <img
+                            v-if="!darkMode"
+                            src="/app/assets/img/light-mode-logo.svg" >
+                        <img
+                            v-if="darkMode"
+                            src="/app/assets/img/dark-mode-logo.svg"
+                            style="width:106px" >
                     </b-navbar-brand>
                     <b-navbar-toggle
                         target="nav-collapse"
@@ -40,12 +46,12 @@
                         <b-navbar-nav class="ml-3">
                             <li class="nav-item">
                                 <router-link
-                                    to="/dashboard"
+                                    to="/"
                                     class="nav-link">Dashboard</router-link>
                             </li>
                             <li class="nav-item">
                                 <router-link
-                                    to="/setup-masternode"
+                                    to="/apply"
                                     class="nav-link"
                                 >Setup Masternode</router-link
                                 >
@@ -58,25 +64,28 @@
                                 >
                             </li>
                             <li class="nav-item">
-                                <router-link
-                                    to="/help"
-                                    class="nav-link">Help</router-link>
+                                <a
+                                    href="https://howto.xinfin.org/"
+                                    target="_blank"
+                                    class="nav-link">Help</a>
                             </li>
                         </b-navbar-nav>
-                        <b-navbar-nav class="ml-auto navbar-buttons">
+                        <b-navbar-nav class="ml-3 navbar-buttons">
                             <b-button
                                 v-if="!isXDCnet"
                                 id="btn-become-candidate"
                                 variant="primary"
                                 @click="showLoginModal = true">Login</b-button>
-                            <b-button
+                            <!-- My comment start -->
+                            <!-- <b-button
                                 v-else
                                 id="btn-become-candidate"
                                 to="/apply"
-                                variant="primary">Become a candidate</b-button>
+                                variant="primary">Become a candidate</b-button> -->
+                            <!-- My comment end -->
                             <b-dropdown
                                 v-if="isXDCnet"
-                                class="dd-setting ml-1"
+                                class="dd-setting"
                                 right
                                 offset="25"
                                 no-caret
@@ -90,10 +99,12 @@
                                     class="dd-address">
                                     {{ truncate(account, 20) }}
                                 </b-dropdown-item>
-                                <b-dropdown-divider />
+                                <!-- My comment start -->
+                                <!-- <b-dropdown-divider />
                                 <b-dropdown-item
                                     target="_bank"
-                                    href="https://howto.xinfin.org/">Help</b-dropdown-item>
+                                    href="https://howto.xinfin.org/">Help</b-dropdown-item> -->
+                                <!-- My comment end -->
                                 <b-dropdown-item to="/setting">Settings/Withdraws</b-dropdown-item>
                                 <b-dropdown-divider />
                                 <b-dropdown-item
@@ -115,7 +126,7 @@
                     </b-collapse>
                 </div>
             </b-navbar>
-            <div>
+            <div class="flex-grow">
                 <router-view/>
             </div>
             <footer
@@ -126,7 +137,13 @@
                             <b-navbar-brand
                                 to="/"
                                 class="mb-2">
-                                <img src="/app/assets/img/logo.svg" >
+                                <img
+                                    v-if="!darkMode"
+                                    src="/app/assets/img/light-mode-logo.svg" >
+                                <img
+                                    v-if="darkMode"
+                                    src="/app/assets/img/dark-mode-logo.svg"
+                                    style="width:106px" >
                             </b-navbar-brand>
                             <p class="mb-5">Success Depends on Your Network</p>
 
@@ -307,6 +324,7 @@ import moment from 'moment'
 import pkg from '../package.json'
 import AutoComplete from './components/AutoComplete.vue'
 import Setting from './components/Setting.vue'
+import LoginForm from './components/LoginForm.vue'
 export default {
     name: 'App',
     metaInfo: {
@@ -317,7 +335,8 @@ export default {
     },
     components: {
         AutoComplete,
-        Setting
+        Setting,
+        LoginForm
     },
     data () {
         return {
@@ -412,6 +431,9 @@ export default {
                         return this.$router.push(to)
                     }).catch(e => console.log(e))
             }
+        },
+        handleCloseModal () {
+            this.showLoginModal = false // Close the modal
         },
         toggleDarkMode () {
             this.darkMode = !this.darkMode

@@ -9,7 +9,7 @@
                             <i class="tm-wallet XDC-header__icon" />
                         </div>
                         <div>
-                            <h4 class="h4 color-black">Become a MasterNode</h4>
+                            <h4 class="h4 color-text-3">Become a MasterNode</h4>
                             <p>
                                 Become a MasterNode and upload the Know Your Community (KYC) certificate in PDF format.
                             </p>
@@ -18,14 +18,13 @@
                 </div>
             </div>
         </div>
-        <div class="main-content container">
-            <b-row
-                class="m-0">
+        <div class="container">
+            <b-row>
                 <div class="col-12 col-md-6 col-lg-6">
                     <b-card
                         :class="'XDC-card XDC-card--lighter'
                         + (loading ? ' XDC-loading' : '')">
-                        <h4 class="h4 color-black XDC-card__title"><strong>Become a MasterNode</strong></h4>
+                        <h4 class="h4 color-text-3 XDC-card__title"><strong>Become a MasterNode</strong></h4>
                         <template v-if="!KYC.status">
                             <ul class="XDC-list list-unstyled">
                                 <li class="XDC-list__item">
@@ -151,7 +150,7 @@
                     <b-card
                         :class="'XDC-card XDC-card--lighter'
                         + (loading ? ' XDC-loading' : '')">
-                        <h4 class="h4 color-black XDC-card__title"><strong>Upload KYC Document</strong></h4>
+                        <h4 class="h4 color-text-3 XDC-card__title"><strong>Upload KYC Document</strong></h4>
                         <template>
                             <b-form
                                 class="XDC-form XDC-form--apply"

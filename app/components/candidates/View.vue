@@ -12,7 +12,7 @@
                                 alt="Owner-icon">
                         </div>
                         <div>
-                            <h6 class="h6 color-black mb-1">{{ candidate.name }}
+                            <h6 class="h6 color-text-3 mb-1">{{ candidate.name }}
                                 <router-link
                                     v-if="account === candidate.owner"
                                     :to="'/candidate/' + candidate.address + '/update'"
@@ -880,7 +880,7 @@
                             </div>
 
                             <div
-                                :class="'section section--txs'
+                                :class="
                                 + (txLoading ? ' XDC-loading' : '')">
                                 <div class="table-wrapper">
                                     <div class="d-flex align-items-center justify-content-between px-4">
@@ -901,6 +901,7 @@
                                         :per-page="mnRewardsPerPage"
                                         :show-empty="true"
                                         :class="`XDC-table XDC-table--mnrewards${rewardLoading ? ' loading' : ''}`"
+                                        :style="(mnRewardsTotalRows > 0 && mnRewardsTotalRows < mnRewardsPerPage) ? { borderRadius: '12px', marginBottom:'0' } : {}"
                                         :empty-text="`There are no ${(currentTab !== '' ? 'records' : 'rewards')} to show`"
                                         stacked="md" >
 
