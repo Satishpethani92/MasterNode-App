@@ -5,12 +5,16 @@ const config = require('config')
 
 const web3Ws = {
     Web3Ws: function () {
-        let provider = new Web3.providers.WebsocketProvider(config.get('blockchain.ws'))
+        let provider = new Web3.providers.WebsocketProvider(config.get('blockchain.ws'), {
+            headers: [{ name: 'User-Agent', value: 'Node.js' }]
+        })
         let web3 = new Web3(provider)
         return web3
     },
     Web3WsInternal: function () {
-        let provider = new Web3.providers.WebsocketProvider(config.get('blockchain.internalWs'))
+        let provider = new Web3.providers.WebsocketProvider(config.get('blockchain.internalWs'), {
+            headers: [{ name: 'User-Agent', value: 'Node.js' }]
+        })
         let web3 = new Web3(provider)
         return web3
     }
