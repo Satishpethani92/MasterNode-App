@@ -22,8 +22,8 @@
                             src="/app/assets/img/light-mode-logo.svg" >
                         <img
                             v-if="darkMode"
-                            src="/app/assets/img/dark-mode-logo.svg"
-                            style="width:106px" >
+                            :style="{ width: '106px', height: '34px' }"
+                            src="/app/assets/img/dark-mode-logo.svg" >
                     </b-navbar-brand>
                     <b-navbar-toggle
                         target="nav-collapse"
@@ -142,8 +142,8 @@
                                     src="/app/assets/img/light-mode-logo.svg" >
                                 <img
                                     v-if="darkMode"
-                                    src="/app/assets/img/dark-mode-logo.svg"
-                                    style="width:106px" >
+                                    :style="{ width: '106px', height: '34px' }"
+                                    src="/app/assets/img/dark-mode-logo.svg" >
                             </b-navbar-brand>
                             <p class="mb-5">Success Depends on Your Network</p>
 
@@ -323,7 +323,6 @@ import store from 'store'
 import moment from 'moment'
 import pkg from '../package.json'
 import AutoComplete from './components/AutoComplete.vue'
-import Setting from './components/Setting.vue'
 import LoginForm from './components/LoginForm.vue'
 export default {
     name: 'App',
@@ -335,7 +334,6 @@ export default {
     },
     components: {
         AutoComplete,
-        Setting,
         LoginForm
     },
     data () {

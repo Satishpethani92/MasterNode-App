@@ -1,5 +1,15 @@
 <template>
     <div>
+        <b-modal
+            v-model="showLoginModal"
+            hide-footer
+            hide-header
+            centered
+            @hidden="resetForm">
+            <LoginForm
+                ref="settingRef"
+                @close-modal="handleCloseModal" />
+        </b-modal>
         <div
             class="XDC-header">
             <div class="container">
@@ -219,17 +229,20 @@ import store from 'store'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 import axios from 'axios'
 import vue2Dropzone from 'vue2-dropzone'
+import LoginForm from '../LoginForm.vue'
 
 export default {
     name: 'App',
     components: {
         NumberInput,
         VueQrcode,
-        vueDropzone: vue2Dropzone
+        vueDropzone: vue2Dropzone,
+        LoginForm
     },
     mixins: [validationMixin],
     data () {
         return {
+            showLoginModal: false,
             account: '',
             isReady: !!this.web3,
             applyValue: '10000000',
@@ -308,12 +321,13 @@ export default {
                         {
                             text : 'Login',
                             onClick : (e, toastObject) => {
-                                self.$router.push({ path: '/setting' })
+                                this.showLoginModal = true
+                                // self.$router.push({ path: '/setting' })
                             }
                         }
                     ]
                 })
-            self.$router.push({ path: '/setting' })
+            // self.$router.push({ path: '/setting' })
             console.log(e)
         }
     },
@@ -328,6 +342,12 @@ export default {
                     'is-invalid': field.$error
                 }
             }
+        },
+        resetForm () {
+            this.$refs.settingRef.resetForm()
+        },
+        handleCloseModal () {
+            this.showLoginModal = false // Close the modal
         },
         validate: async function () {
             this.$v.$touch()

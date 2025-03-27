@@ -1,5 +1,15 @@
 <template>
     <div class="container">
+        <b-modal
+            v-model="showLoginModal"
+            hide-footer
+            hide-header
+            centered
+            @hidden="resetForm">
+            <LoginForm
+                ref="settingRef"
+                @close-modal="handleCloseModal" />
+        </b-modal>
         <div
             v-if="step === 1">
             <b-row
@@ -172,17 +182,20 @@ import BigNumber from 'bignumber.js'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 import store from 'store'
 import EstimateReward from './EstimateReward.vue'
+import LoginForm from '../LoginForm.vue'
 
 export default {
     name: 'App',
     components: {
         NumberInput,
         VueQrcode,
-        EstimateReward
+        EstimateReward,
+        LoginForm
     },
     mixins: [validationMixin],
     data () {
         return {
+            showLoginModal: false,
             isReady: !!this.web3,
             voter: 'Unknown',
             candidate: this.$route.params.candidate,
@@ -245,7 +258,10 @@ export default {
                         {
                             text : 'Login',
                             onClick : (e, toastObject) => {
-                                self.$router.push({ path: '/setting' })
+                                console.log('clicked')
+
+                                this.showLoginModal = true
+                                // self.$router.push({ path: '/setting' })
                             }
                         }
                     ]
@@ -269,6 +285,12 @@ export default {
                     'is-invalid': field.$error
                 }
             }
+        },
+        resetForm () {
+            this.$refs.settingRef.resetForm()
+        },
+        handleCloseModal () {
+            this.showLoginModal = false // Close the modal
         },
         validate: function () {
             this.voteValue = this.voteValue.replace(/,/g, '')
