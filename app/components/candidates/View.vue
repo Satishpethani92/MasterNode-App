@@ -97,10 +97,13 @@
                                 alt="info-icon"
                                 class="ml-2">
                         </h6>
-                        <p class="XDC-card__text">
-                            Healthy
-                        <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
-                        </p>
+                        <div class="d-flex align-items-center">
+                            <div class="health-status"/>
+                            <p class="XDC-card__text ml-2">
+                                Healthy
+                                <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
+                            </p>
+                        </div>
                     </b-card>
                 </div>
                 <div class="col-sm-6 col-lg-3">
@@ -112,7 +115,7 @@
                                 alt="info-icon"
                                 class="ml-2">
                         </h6>
-                        <p class="XDC-card__text">
+                        <p class="XDC-card__text color-green">
                             99.4%
                         <!-- {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }} -->
                         </p>

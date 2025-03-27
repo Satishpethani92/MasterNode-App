@@ -85,7 +85,9 @@
                                 class="ml-2">
                         </h6>
                         <p class="XDC-card__text">
-                            {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }}</p>
+                            25,317
+                            <!-- {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }} -->
+                        </p>
                     </b-card>
                 </div>
                 <div class="col-sm-6 col-lg-3">
@@ -98,7 +100,9 @@
                                 class="ml-2">
                         </h6>
                         <p class="XDC-card__text">
-                            {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }}</p>
+                            25 Minutes
+                            <!-- {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }} -->
+                        </p>
                     </b-card>
                 </div>
                 <div class="col-sm-6 col-lg-3">
@@ -111,7 +115,9 @@
                                 class="ml-2">
                         </h6>
                         <p class="XDC-card__text">
-                            {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }}</p>
+                            28 / 3
+                            <!-- {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }} -->
+                        </p>
                     </b-card>
                 </div>
                 <!--<div

@@ -15,6 +15,18 @@
     flex-direction: column;
     min-height: 100vh;
 }
+
+.health-status {
+    width: 26px;
+    height: 12px;
+    background-color: $color-green;
+    border-radius: 5px;
+}
+
+.color-green{
+    color: $color-green
+}
+
 .form-control, input[type=text], input[type=number], input[type=email], input[type=phone], input[type=password]{
     background-color: var(--form-input-color);
     color: var(--color-text-2);
