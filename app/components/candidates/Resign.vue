@@ -1,6 +1,17 @@
 <template>
-    <div>
+    <div class="main-content">
         <div class="container">
+            <b-modal
+                id="login-modal"
+                v-model="showLoginModal"
+                hide-footer
+                hide-header
+                centered
+                @hidden="resetForm">
+                <LoginForm
+                    ref="settingRef"
+                    @close-modal="handleCloseModal" />
+            </b-modal>
             <b-row
                 align-v="center"
                 align-h="center"
@@ -8,7 +19,7 @@
                 <b-card
                     :class="'col-12 col-md-8 col-lg-6 XDC-card XDC-card--animated p-0'
                     + (loading ? ' XDC-loading' : '')">
-                    <h4 class=" color-white XDC-card__title XDC-card__title--big">Resign</h4>
+                    <h6 class="XDC-card__title XDC-card__title--big h6">Resign</h6>
                     <ul class="XDC-list list-unstyled">
                         <li class="XDC-list__item">
                             <i class="tm-wallet XDC-list__icon" />
@@ -75,13 +86,16 @@
 import axios from 'axios'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 import store from 'store'
+import LoginForm from '../LoginForm.vue'
 export default {
     name: 'App',
     components: {
-        VueQrcode
+        VueQrcode,
+        LoginForm
     },
     data () {
         return {
+            showLoginModal: false,
             isReady: !!this.web3,
             account: '',
             owner: '',
@@ -127,9 +141,11 @@ export default {
         resign: async function () {
             let self = this
             try {
-                if (!self.isReady) {
+                // my comment start
+                /* if (!self.isReady) {
                     self.$router.push({ path: '/setting' })
-                }
+                } */
+                // my comment end
 
                 self.loading = true
 
@@ -212,11 +228,28 @@ export default {
                 }
             } catch (e) {
                 self.loading = false
-                self.$toasted.show('An error occurred while retiring, please try again', {
-                    type: 'error'
-                })
+                self.$toasted.show(`You need login your account before voting`,
+                    {
+                        type : 'default',
+                        duration: 5000,
+                        action : [
+                            {
+                                text : 'Login',
+                                onClick : (e, toastObject) => {
+                                    this.showLoginModal = true
+                                }
+                            }
+                        ]
+                    })
+
                 console.log(e)
             }
+        },
+        resetForm () {
+            this.$refs.settingRef.resetForm()
+        },
+        handleCloseModal () {
+            this.showLoginModal = false // Close the modal
         },
         hideModal () {
             this.$refs.resignModal.hide()

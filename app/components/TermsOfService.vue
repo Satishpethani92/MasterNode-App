@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="main-content container">
         <b-card class="XDC-card">
             <h1 style="text-align: center">
                 Terms Of Service

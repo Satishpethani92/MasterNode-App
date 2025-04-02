@@ -44,14 +44,15 @@
                         </div>
                     </div>
                     <div class="XDC-header-block-right">
-                        <b-link
-                            href="#"
+                        <router-link
+                            to="/"
                             class="d-flex align-items-center">
                             <img
                                 class="mr-2"
                                 src="/app/assets/img/backarrow.svg"
                                 alt="Back-arrow img">
-                            Back to all Validators</b-link>
+                            Back to all Validators
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -68,8 +69,7 @@
                                 class="ml-2">
                         </h6>
                         <p class="XDC-card__text">
-                            14,825.25 XDC
-                        <!-- {{ activeCandidates }}/{{ activeCandidates + totalProposedNodes + slashedMN }} -->
+                            {{ formatCurrencySymbol(formatBigNumber(mnRewardsTotalRows, 2)) }}
                         </p>
                     </b-card>
                 </div>
@@ -88,24 +88,24 @@
                         </p>
                     </b-card>
                 </div>
+
                 <div class="col-sm-6 col-lg-3 mb-4 mb-sm-0">
                     <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
                         <h6 class="XDC-card__title d-flex align-items-center">
-                            Health Status
+                            Status
                             <img
                                 src="/app/assets/img/info.svg"
                                 alt="info-icon"
                                 class="ml-2">
                         </h6>
                         <div class="d-flex align-items-center">
-                            <div class="health-status"/>
-                            <p class="XDC-card__text ml-2">
-                                Healthy
-                                <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
+                            <p class="XDC-card__text">
+                                {{ candidate.status }}
                             </p>
                         </div>
                     </b-card>
                 </div>
+
                 <div class="col-sm-6 col-lg-3">
                     <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
                         <h6 class="XDC-card__title d-flex align-items-center">
@@ -209,8 +209,8 @@
                                     <div class="XDC-detail-value-small">
                                         <span
                                             :class="'XDC-info__description'">
-                                            7.98%
-                                            <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                            {{ voterROI ? voterROI + '%' : '-&#45;&#45;' }}
+
                                         </span>
                                     </div>
                                 </div>
@@ -225,7 +225,7 @@
                                     <div class="XDC-detail-value-small">
                                         <span
                                             :class="'XDC-info__description'">
-                                            {{ mnROI ? mnROI + '%' : '---' }}
+                                            {{ mnROI ? mnROI + '%' : '-&#45;&#45;' }}
                                         </span>
                                     </div>
                                 </div>
@@ -550,9 +550,10 @@
                                     <div
                                         :class="'XDC-info__description'"
                                         class="d-flex align-items-center">
-                                        {{ candidate.owner }}
+                                        {{ candidate.owner ? candidate.owner : "N/A" }}
                                         <button
                                             v-b-tooltip.hover
+                                            v-if="candidate.owner"
                                             ref="copyButton"
                                             :title="tooltipText"
                                             class="btn btn-transparent ml-2"
@@ -566,14 +567,15 @@
                             </div>
                             <hr>
                             <div class="XDC-detail-section d-flex justify-content-between">
-                                <div class="XDC-detail-label">Voter Address</div>
+                                <div class="XDC-detail-label">Coinbase Address</div>
                                 <div class="XDC-detail-value-small">
                                     <div
                                         :class="'XDC-info__description'"
                                         class="d-flex align-items-center">
-                                        {{ candidate.address }}
+                                        {{ candidate.address ? candidate.address : "N/A" }}
                                         <button
                                             v-b-tooltip.hover
+                                            v-if="candidate.address"
                                             ref="copyButton"
                                             :title="tooltipText"
                                             class="btn btn-transparent ml-2"
@@ -622,7 +624,7 @@
                                 <div class="XDC-detail-value-small">
                                     <span
                                         :class="'XDC-info__description'">
-                                        {{ candidate.hardwareInfo }}
+                                        {{ candidate.hardwareInfo ? candidate.hardwareInfo : "N/A" }}
                                     </span>
                                 </div>
                             </div>
@@ -890,9 +892,15 @@
                                         <h6 class="h6 color-text-3 fw-400 mb-0">Rewards History</h6>
                                         <div class="XDC-custom-tab">
                                             <ul>
-                                                <li>Week</li>
-                                                <li>Month</li>
-                                                <li>Year</li>
+                                                <li
+                                                    :class="currentTab === 'week' ? 'active' : ''"
+                                                    @click="filterSlash('week')">Week</li>
+                                                <li
+                                                    :class="currentTab === 'month' ? 'active' : ''"
+                                                    @click="filterSlash('month')">Month</li>
+                                                <li
+                                                    :class="currentTab === 'year' ? 'active' : ''"
+                                                    @click="filterSlash('year')">Year</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -1199,7 +1207,7 @@ export default {
 
                 if (c.data) {
                     let data = c.data
-                    console.log(data, 'data')
+                    console.log('data', data)
                     self.isCandidate = data.candidate
                     self.candidate.name = data.name ? data.name : 'XDC.Network'
                     self.candidate.status = data.status
@@ -1458,6 +1466,8 @@ export default {
                 .then((result) => {
                     if (result.data && result.data.voterROI) {
                         this.voterROI = result.data.voterROI.toFixed(2)
+                    }
+                    if (result.data && result.data.mnROI) {
                         this.mnROI = result.data.mnROI.toFixed(2)
                     }
                 })

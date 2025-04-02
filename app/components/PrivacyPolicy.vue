@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="main-content container">
         <div class="row">
             <b-card class="XDC-card">
                 <div class="col-12">

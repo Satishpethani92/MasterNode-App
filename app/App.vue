@@ -3,6 +3,7 @@
         id="app">
         <div class="page-layout">
             <b-modal
+                id="login-modal"
                 v-model="showLoginModal"
                 hide-footer
                 hide-header
@@ -19,11 +20,12 @@
                     <b-navbar-brand to="/">
                         <img
                             v-if="!darkMode"
-                            src="/app/assets/img/light-mode-logo.svg" >
-                        <img
-                            v-if="darkMode"
                             :style="{ width: '106px', height: '34px' }"
                             src="/app/assets/img/dark-mode-logo.svg" >
+                        <img
+                            v-else
+                            :style="{ width: '106px', height: '34px' }"
+                            src="/app/assets/img/light-mode-logo.svg" >
                     </b-navbar-brand>
                     <b-navbar-toggle
                         target="nav-collapse"
@@ -115,12 +117,41 @@
                             <b-button
                                 id="btn-darkmode"
                                 variant="transparent"
-                                class="p-0 bg-transparent border-0 ml-3"
+                                class="p-0 bg-transparent border-0 ml-3 light-dark btn"
                                 @click="toggleDarkMode"
                             >
-                                <img
-                                    src="/app/assets/img/darkmode.svg"
-                                    alt="dark-mode-icon">
+                                <svg
+                                    v-if="!darkMode"
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    focusable="false"
+                                    class="moon-icon"
+                                    height="1.5em"
+                                    width="1.5em"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        fill="none"
+                                        d="M0 0h24v24H0z"/>
+                                    <path d="M10 2c-1.82 0-3.53.5-5 1.35C7.99 5.08 10 8.3 10 12s-2.01 6.92-5 8.65C6.47 21.5 8.18 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2z"/>
+                                </svg>
+                                <svg
+                                    v-else
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    focusable="false"
+                                    class="sun-icon"
+                                    height="1.5em"
+                                    width="1.5em"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        fill="none"
+                                        d="M0 0h24v24H0z"/>
+                                    <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
+                                </svg>
                             </b-button>
                         </b-navbar-nav>
                     </b-collapse>
@@ -139,11 +170,12 @@
                                 class="mb-2">
                                 <img
                                     v-if="!darkMode"
-                                    src="/app/assets/img/light-mode-logo.svg" >
-                                <img
-                                    v-if="darkMode"
                                     :style="{ width: '106px', height: '34px' }"
                                     src="/app/assets/img/dark-mode-logo.svg" >
+                                <img
+                                    v-else
+                                    :style="{ width: '106px', height: '34px' }"
+                                    src="/app/assets/img/light-mode-logo.svg" >
                             </b-navbar-brand>
                             <p class="mb-5">Success Depends on Your Network</p>
 
@@ -152,45 +184,35 @@
                                     <a
                                         href="https://twitter.com/XinFin_Official"
                                         target="_blank">
-                                        <img
-                                            src="/app/assets//img/twitter.svg"
-                                            alt="X-icon">
+                                        <i class="fa-brands fa-square-x-twitter"/>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
                                         href="https://t.me/xinfintalk"
                                         target="_blank">
-                                        <img
-                                            src="/app/assets//img/telegram.svg"
-                                            alt="Telegram-icon">
+                                        <i class="fa-brands fa-telegram"/>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
                                         href="https://www.facebook.com/XinFinHybridBlockchain/"
                                         target="_blank">
-                                        <img
-                                            src="/app/assets//img/facebook.svg"
-                                            alt="Facebook-icon">
+                                        <i class="fa-brands fa-facebook"/>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
                                         href="https://github.com/XinFinOrg"
                                         target="_blank">
-                                        <img
-                                            src="/app/assets//img/github.svg"
-                                            alt="Github-icon">
+                                        <i class="fa-brands fa-github"/>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
                                         href="https://www.reddit.com/r/xinfin"
                                         target="_blank">
-                                        <img
-                                            src="/app/assets//img/reddit.svg"
-                                            alt="Reddit-icon">
+                                        <i class="fa-brands fa-reddit"/>
                                     </a>
                                 </li>
                             </ul>

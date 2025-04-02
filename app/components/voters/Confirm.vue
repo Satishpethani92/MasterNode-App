@@ -6,10 +6,10 @@
             class="m-0">
             <b-card
                 class="col-12 col-md-8 col-lg-6 XDC-card XDC-card--animated p-0">
-                <h4 class=" color-white XDC-card__title XDC-card__title--big">
+                <h6 class="XDC-card__title XDC-card__title--big h6">
                     <i :class="`tm-${icon}`"/>
                     {{ title }}
-                </h4>
+                </h6>
                 <p class="md-content">
                     You have {{ event }}
                     <span class="color-white">{{ amount }} XDC</span> for candidate

@@ -10,8 +10,10 @@ console.log((config.get('db.uri')))
 mongoose.Promise = global.Promise
 mongoose.set('useCreateIndex', true)
 mongoose.connect(config.get('db.uri'), {
-    useNewUrlParser: true
-}, (err) => {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+},
+(err) => {
     if (err) {
         console.error('Mongodb Connection error!!!')
         process.exit()

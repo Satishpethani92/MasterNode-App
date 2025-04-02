@@ -188,7 +188,7 @@ export default {
 
                 self.address = account
                 self.web3.eth.getBalance(self.address).then(balanceBN => {
-                    self.balance = new BigNumber(balanceBN).div(10 ** 18)
+                    self.balance = new BigNumber(balanceBN).div(10 ** 18).toFixed(2)
                 }).catch(e => {
                     self.$toasted.show('Cannot load balance', { type: 'error' })
                 })

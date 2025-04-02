@@ -13,6 +13,16 @@
     &.navbar-expand {
         flex-flow: inherit;
     }
+    &.navbar-expand-lg{
+        .navbar-nav{
+            .nav-link{
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+    
 }
 
 .navbar-brand {

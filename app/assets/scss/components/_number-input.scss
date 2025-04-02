@@ -22,10 +22,12 @@
         user-select: none;
         border-radius: 0;
         width: 30px;
-        border-color: var(--color-input-focus-bg);
-        border-left-color: #5050785c;
-        background-color: var(--color-input-focus-bg);
-        padding: 6px 10px;
+        // border-color: var(--color-input-focus-bg);
+        // border-left-color: #5050785c;
+        // background-color: var(--color-input-focus-bg);
+        padding: 5px 10px;
+        margin-left: -2px;
+        border: 1px solid var(--border-color);
 
         &:hover,
         &:focus,

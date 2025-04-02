@@ -1,6 +1,7 @@
 <template>
     <div>
         <b-modal
+            id="login-modal"
             v-model="showLoginModal"
             hide-footer
             hide-header

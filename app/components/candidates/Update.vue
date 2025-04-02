@@ -8,7 +8,7 @@
             <b-card
                 :class="'col-12 col-md-8 col-lg-6 XDC-card XDC-card--lighter p-0'
                 + (loading ? ' XDC-loading' : '')">
-                <h4 class=" color-white XDC-card__title XDC-card__title--big">Update Candidate Information</h4>
+                <h6 class="XDC-card__title XDC-card__title--big h6">Update Candidate Information</h6>
                 <b-form
                     class="XDC-form XDC-form--vote"
                     novalidate
@@ -108,7 +108,7 @@
             <b-card
                 :class="'col-12 col-md-8 col-lg-6 XDC-card XDC-card--lighter p-0'
                 + (loading ? ' XDC-loading' : '')">
-                <h4 class=" color-white XDC-card__title XDC-card__title--big">Confirmation</h4>
+                <h6 class="XDC-card__title XDC-card__title--big h6">Confirmation</h6>
                 <div>
                     <div
                         class="wrapper">

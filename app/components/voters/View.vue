@@ -16,14 +16,15 @@
                         </div>
                     </div>
                     <div class="XDC-header-block-right">
-                        <b-link
-                            href="#"
+                        <router-link
+                            to="/"
                             class="d-flex align-items-center">
                             <img
                                 class="mr-2"
                                 src="/app/assets/img/backarrow.svg"
                                 alt="Back-arrow img">
-                            Back to all Validators</b-link>
+                            Back to all Validators
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -40,8 +41,8 @@
                                 class="ml-2">
                         </h6>
                         <p class="XDC-card__text">
-                            14,825.25 XDC
-                        <!-- {{ activeCandidates }}/{{ activeCandidates + totalProposedNodes + slashedMN }} -->
+                            <!-- 14,825.25 XDC -->
+                            {{ formatCurrencySymbol(formatBigNumber(voterRewardsTotalRows, 2)) }}
                         </p>
                     </b-card>
                 </div>
@@ -63,17 +64,15 @@
                 <div class="col-sm-6 col-lg-3 mb-4 mb-sm-0">
                     <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
                         <h6 class="XDC-card__title d-flex align-items-center">
-                            Health Status
+                            Status
                             <img
                                 src="/app/assets/img/info.svg"
                                 alt="info-icon"
                                 class="ml-2">
                         </h6>
                         <div class="d-flex align-items-center">
-                            <div class="health-status"/>
-                            <p class="XDC-card__text ml-2">
-                                Healthy
-                                <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
+                            <p class="XDC-card__text">
+                                {{ candidate.status ? candidate.status : "N/A" }}
                             </p>
                         </div>
                     </b-card>
@@ -109,8 +108,7 @@
                                 <div class="XDC-detail-value-small">
                                     <span
                                         :class="'XDC-info__description'">
-                                        7.98%
-                                        <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                        {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }}
                                     </span>
                                 </div>
                             </div>
@@ -135,8 +133,8 @@
                                 <div class="XDC-detail-value-small">
                                     <span
                                         :class="'XDC-info__description'">
-                                        7.98%
-                                        <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
+                                        {{ voterROI ? voterROI + '%' : '-&#45;&#45;' }}
+
                                     </span>
                                 </div>
                             </div>
@@ -151,7 +149,7 @@
                                 <div class="XDC-detail-value-small">
                                     <span
                                         :class="'XDC-info__description'">
-                                        <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
+                                        {{ mnROI ? mnROI + '%' : '-&#45;&#45;' }}
                                     </span>
                                 </div>
                             </div>
@@ -371,9 +369,10 @@
                                 <div
                                     :class="'XDC-info__description'"
                                     class="d-flex align-items-center">
-                                    <!-- {{ candidate.owner }} -->
+                                    {{ candidate.owner ? candidate.owner : "N/A" }}
                                     <button
                                         v-b-tooltip.hover
+                                        v-if="candidate.owner"
                                         ref="copyButton"
                                         :title="tooltipText"
                                         class="btn btn-transparent ml-2"
@@ -387,14 +386,15 @@
                         </div>
                         <hr>
                         <div class="XDC-detail-section d-flex justify-content-between">
-                            <div class="XDC-detail-label">Voter Address</div>
+                            <div class="XDC-detail-label">Coinbase Address</div>
                             <div class="XDC-detail-value-small">
                                 <div
                                     :class="'XDC-info__description'"
                                     class="d-flex align-items-center">
-                                    <!-- {{ candidate.address }} -->
+                                    {{ candidate.address ? candidate.address : "N/A" }}
                                     <button
                                         v-b-tooltip.hover
+                                        v-if="candidate.address"
                                         ref="copyButton"
                                         :title="tooltipText"
                                         class="btn btn-transparent ml-2"
@@ -443,7 +443,7 @@
                             <div class="XDC-detail-value-small">
                                 <span
                                     :class="'XDC-info__description'">
-                                    <!-- {{ candidate.hardwareInfo }} -->
+                                    {{ candidate.hardwareInfo ? candidate.hardwareInfo : "N/A" }}
                                 </span>
                             </div>
                         </div>
@@ -817,6 +817,22 @@ export default {
     },
     data () {
         return {
+            candidate: {
+                address: '',
+                name: '',
+                balance: '',
+                status: '',
+                cap: 0,
+                latestBlock: '',
+                latestSignedBlock: 0,
+                rewarded: 0,
+                hardwareInfo: '',
+                dataCenterInfo: {},
+                socials: {},
+                voted: 0,
+                slashedTimes: 0,
+                rank: ''
+            },
             candidateFields: [
                 {
                     key: 'address',
@@ -926,19 +942,23 @@ export default {
                     key: 'createdAt',
                     label: 'Age',
                     sortable: false
-                },
-                {
+                }
+                // my comment start
+                /* {
                     key: 'tx',
                     label: '',
                     sortable: false
-                }
+                } */
+                // my comment start
             ],
             transactions: [],
             txCurrentPage: 1,
             txPerPage: 10,
             txTotalRows: 0,
             txSortBy: 'createdAt',
-            txSortDesc: true
+            txSortDesc: true,
+            voterROI: '',
+            mnROI: ''
         }
     },
     computed: { },
@@ -968,6 +988,53 @@ export default {
 
             return clazz
         },
+
+        async getCandidateData (candidate) {
+            let self = this
+
+            try {
+                let address = candidate.address
+
+                self.loading = true
+                const candidatePromise = axios.get(`/api/candidates/${address}`)
+
+                // Get candidate's information
+                let c = await candidatePromise
+
+                if (c.data) {
+                    let data = c.data
+                    console.log('data', data)
+                    self.isCandidate = data.candidate
+                    self.candidate.address = data.candidate
+                    self.candidate.name = data.name ? data.name : 'XDC.Network'
+                    self.candidate.status = data.status
+                    self.candidate.nodeId = data.nodeId
+                    self.candidate.owner = data.owner
+                    self.candidate.cap = new BigNumber(data.capacity).div(10 ** 18).toNumber()
+                    self.candidate.rewarded = 0
+                    self.candidate.latestBlock = '0'
+                    self.candidate.latestSignedBlock = data.latestSignedBlock
+                    self.candidate.hardwareInfo = data.hardware || 'N/A'
+                    self.candidate.dataCenterInfo = {
+                        name: (data.dataCenter || {}).name || 'N/A',
+                        location: (data.dataCenter || {}).location || 'N/A'
+                    }
+                    self.candidate.socials = data.socials
+                    self.candidate.slashedTimes = data.slashedTimes
+                    self.candidate.rank = data.rank
+
+                    if (data.rank) {
+                        await self.getAnnualReward(data)
+                    }
+                }
+
+                self.loading = false
+            } catch (e) {
+                self.loading = false
+                console.log(e)
+            }
+        },
+
         async copyToClipboard (text, button) {
             try {
                 await navigator.clipboard.writeText(text)
@@ -1018,7 +1085,9 @@ export default {
 
                 self.totalVoted = candidates.data.totalVoted
                 self.candidates = items
-
+                if (items[0]) {
+                    await self.getCandidateData(items[0])
+                }
                 self.totalRows = candidates.data.total
 
                 if (typeof self.web3 !== 'undefined') {
@@ -1052,6 +1121,8 @@ export default {
 
                 // transaction table
                 let txs = await txPromise
+                console.log('txs', txs)
+
                 let items = []
 
                 txs.data.items.map((tx, idx) => {
@@ -1146,6 +1217,21 @@ export default {
             this.txSortBy = obj.sortBy
             this.txSortDesc = obj.sortDesc
             this.getTransactions()
+        },
+        async getAnnualReward (data) {
+            axios.get('/api/voters/annualReward?candidate=' + data.candidate)
+                .then((result) => {
+                    if (result.data && result.data.voterROI) {
+                        this.voterROI = result.data.voterROI.toFixed(2)
+                    }
+                    if (result.data && result.data.mnROI) {
+                        this.mnROI = result.data.mnROI.toFixed(2)
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                    this.$toasted.show(error, { type: 'error' })
+                })
         }
     }
 }

@@ -27,39 +27,18 @@
                                     v-if="!isElectron"
                                     value="metamask">XDCPay</option>
                                 <option value="connect-wallet">WalletConnect v2</option>
-                                <!-- <option
-                                            value="XDCwallet">XDCWallet (Recommended)</option> -->
                                 <option
                                     value="custom">PrivateKey/MNEMONIC</option>
                                 <option
                                     value="ledger">Ledger Wallet</option>
                                 <option
                                     value="trezor">Trezor Wallet</option>
-                                    <!-- <option
-                                                v-if="!isElectron"
-                                                value="xinpay">XinPay</option> -->
                             </b-form-select>
                             <small
                                 v-if="provider !== 'metamask' && provider !== 'xinpay'"
                                 class="form-text text-muted">Using node at {{ chainConfig.rpc }}.</small>
                         </b-input-group>
                     </b-form-group>
-                    <!-- <b-form-group
-                                v-if="provider === 'custom'"
-                                class="mb-4"
-                                label="Network URL"
-                                label-for="networks-custom">
-                                <b-form-input
-                                    :class="getValidationClass('custom')"
-                                    v-model="networks.custom"
-                                    type="text" />
-                                <span
-                                    v-if="$v.networks.custom.$dirty && !$v.networks.custom.required"
-                                    class="text-danger">Required field</span>
-                                <span
-                                    v-else-if="$v.networks.custom.$dirty && !$v.networks.custom.localhostUrl"
-                                    class="text-danger">Wrong URL format</span>
-                            </b-form-group> -->
                     <b-form-group
                         v-if="provider === 'custom'"
                         class="mb-4"
@@ -207,11 +186,6 @@
                     </div>
                 </b-form>
             </b-card>
-            <!-- My comment start -->
-            <!-- <div class="col-12 col-md-2 col-lg-2"/>
-
-            </b-row>  -->
-            <!-- My comment end -->
         </div>
     </div>
 </template>
@@ -223,11 +197,9 @@ import axios from 'axios'
 import {
     required, minLength
 } from 'vuelidate/lib/validators'
-// import localhostUrl from '../../validators/localhostUrl.js'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 import store from 'store'
 import Helper from '../utils'
-// const HDWalletProvider = require('truffle-hdwallet-provider')
 const { HDWalletProvider } = require('../../helpers')
 const PrivateKeyProvider = require('truffle-privatekey-provider')
 const defaultWalletNumber = 10

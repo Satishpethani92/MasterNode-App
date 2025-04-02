@@ -21,7 +21,7 @@
             &:before {
                 content: '\e910';
                 font-size: 20px;
-        
+                color: var(--black);
                 @extend %tm-icon;
             }
         }
@@ -94,5 +94,15 @@
         color: #4AAE9B;
         font-size: 16pt;
         overflow-y: auto;
+    }
+}
+#login-modal___BV_modal_content_ {
+    border: none;
+}
+
+#login-modal___BV_modal_body_ {
+    padding: 0;
+    .card-body{
+        padding: 30px;
     }
 }

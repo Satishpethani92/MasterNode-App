@@ -3,7 +3,7 @@
         v-if="loadingPage"
         class="XDC-loading" />
     <div v-else>
-        <div class="container">
+        <div class="main-content container">
             <div
                 v-if="voted === 0"
                 class="row">
@@ -28,11 +28,11 @@
                         <b-card
                             :class="'col-12 col-md-8 col-lg-6 XDC-card XDC-card--lighter p-0'
                             + (loading ? ' XDC-loading' : '')">
-                            <h4 class=" color-white XDC-card__title XDC-card__title--big">Unvote
+                            <h6 class="XDC-card__title XDC-card__title--big h6">Unvote
                                 <span
                                     class="XDC-card__subtitle">
                                     Your XDC will be locked in a duration after unvoting</span>
-                            </h4>
+                            </h6>
                             <ul class="XDC-list list-unstyled">
                                 <li class="XDC-list__item">
                                     <i class="tm-wallet XDC-list__icon" />
@@ -80,9 +80,11 @@
                                             v-model="unvoteValue"
                                             name="vote-value"
                                             @input="onChange"/>
-                                        <b-input-group-append>
+                                        <!-- My comment start -->
+                                        <!--  <b-input-group-append>
                                             <i class="tm-XDC2" />
-                                        </b-input-group-append>
+                                        </b-input-group-append> -->
+                                        <!-- My comment end -->
                                         <span
                                             v-if="$v.unvoteValue.$dirty && !$v.unvoteValue.required"
                                             class="text-danger">Required field </span>
@@ -126,7 +128,7 @@
                         <b-card
                             :class="'col-12 col-md-8 col-lg-6 XDC-card XDC-card--lighter p-0'
                             + (loading ? ' XDC-loading' : '')">
-                            <h4 class=" color-white XDC-card__title XDC-card__title--big">Confirmation</h4>
+                            <h6 class="XDC-card__title XDC-card__title--big h6">Confirmation</h6>
                             <!-- <div>
                                 <strong>Using XDC wallet to execute the action
                                 </strong>

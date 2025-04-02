@@ -1,6 +1,7 @@
 <template>
-    <div class="container">
+    <div class="main-content container">
         <b-modal
+            id="login-modal"
             v-model="showLoginModal"
             hide-footer
             hide-header
@@ -19,7 +20,7 @@
                 <b-card
                     :class="'col-12 col-md-8 col-lg-6 XDC-card XDC-card--lighter p-0'
                     + (loading ? ' XDC-loading' : '')">
-                    <h4 class=" color-white XDC-card__title XDC-card__title--big">Vote</h4>
+                    <h6 class="XDC-card__title XDC-card__title--big h6">Vote</h6>
                     <ul class="XDC-list list-unstyled">
                         <li class="XDC-list__item">
                             <i class="tm-XDC2 XDC-list__icon" />
@@ -60,9 +61,11 @@
                                     :step="10"
                                     v-model="voteValue"
                                     name="vote-value"/>
-                                <b-input-group-append>
+                                <!-- my comment start -->
+                                <!-- <b-input-group-append>
                                     <i class="tm-XDC2" />
-                                </b-input-group-append>
+                                </b-input-group-append> -->
+                                <!-- my comment end -->
                                 <span
                                     v-if="$v.voteValue.$dirty && !$v.voteValue.required"
                                     class="text-danger">Required field</span>
@@ -104,7 +107,7 @@
                 <b-card
                     :class="'col-12 col-md-8 col-lg-6 XDC-card XDC-card--lighter p-0'
                     + (loading ? ' XDC-loading' : '')">
-                    <h4 class=" color-white XDC-card__title XDC-card__title--big">Confirmation</h4>
+                    <h6 class="XDC-card__title XDC-card__title--big h6">Confirmation</h6>
                     <!-- <div>
                         <strong>Using XDC wallet to execute the action
                         </strong>
@@ -121,7 +124,7 @@
                                 <label style="margin-top: 5px">
                                     <textarea
                                         :value="message"
-                                        class="sign-message"
+                                        class="sign-message p-2"
                                         type="text"
                                         disabled
                                         cols="100"

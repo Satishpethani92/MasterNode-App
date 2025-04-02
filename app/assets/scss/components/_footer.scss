@@ -25,18 +25,22 @@
   .list-inline-item{
     margin-right: 0.3rem;
     a {
+      font-size: 17px;
       &:hover{
         text-decoration: none;
+        color: var(--black);
+        & i{
+          color: var(--black)
+         }
       }  
     }
   }
 
   a {
-    color: #919BAA;
-  }
-
-  a:hover {
-    color: #7573a6;
+    color: var(--color-text);
+    &:hover{
+      color: var(--color-link); 
+    }
   }
 
   &__copyright {

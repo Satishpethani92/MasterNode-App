@@ -3,8 +3,13 @@
         <div
             class="container">
             <div class="row">
+                <!-- my comment start -->
+                <!-- <div class="col-6">
+                    <LineChart/>
+                </div> -->
+                <!-- my comment end -->
                 <div class="col-12">
-                    <h6 class="h6 color-text-3 fw-600 mb-4">By staking XDC, you can contribute to XDC Network & earn rewards. <b-link to="/setting">Setup Masternode Now!</b-link></h6>
+                    <h6 class="h6 color-text-3 fw-600 mb-4">By staking XDC, you can contribute to XDC Network & earn rewards. <router-link to="/apply">Setup Masternode Now!</router-link></h6>
                 </div>
                 <div class="col-sm-6 col-lg-3">
                     <b-card class="XDC-card custom-card">
@@ -85,8 +90,7 @@
                                 class="ml-2">
                         </h6>
                         <p class="XDC-card__text">
-                            25,317
-                            <!-- {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }} -->
+                            {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }}
                         </p>
                     </b-card>
                 </div>
@@ -100,8 +104,7 @@
                                 class="ml-2">
                         </h6>
                         <p class="XDC-card__text">
-                            25 Minutes
-                            <!-- {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }} -->
+                            {{ checkpointInterval ? checkpointInterval : "N/A" }} {{ checkpointInterval && "Minutes" }}
                         </p>
                     </b-card>
                 </div>
@@ -168,7 +171,6 @@
                             @click="changeTable('resigned')">Resigned Nodes ({{ resignedMN }})</li>
                     </ul>
                 </div>
-
                 <b-pagination
                     v-if="mobileCheck && totalRows > 0 && totalRows > perPage"
                     :total-rows="totalRows"
@@ -259,7 +261,7 @@
                     :per-page="perPage"
                     v-model="currentPage"
                     align="center"
-                    class="XDC-pagination py-4 mb-0"
+                    class="XDC-pagination py-4 my-0"
                     @change="pageChange"/>
             </b-card>
         </div>
@@ -271,9 +273,15 @@ import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import store from 'store'
 import Web3 from 'xdc3'
+// import LineChart from '../LineChart.vue'
 
 export default {
     name: 'App',
+    //    my comment start
+    /* components: {
+        LineChart
+    }, */
+    //    my comment end
     data () {
         return {
             chainConfig: {},
@@ -307,7 +315,8 @@ export default {
             currentTable: 'masternodes',
             averageStakingROI: '',
             averageOwnerROI: '',
-            currentBlock: ''
+            currentBlock: '',
+            checkpointInterval: ''
         }
     },
     computed: {
@@ -357,9 +366,9 @@ export default {
             console.log(error)
         }
         self.getDataFromApi()
-        // self.averageroi()
+        self.averageroi()
     },
-    mounted () { },
+    mounted () {},
     methods: {
         watch: async function () {
             let contract = await self.getXDCValidatorInstance()
@@ -624,7 +633,12 @@ export default {
                 .then(result => {
                     if (result.data && result.data.averageStakingROI) {
                         this.averageStakingROI = result.data.averageStakingROI.toFixed(2)
+                    }
+                    if (result.data && result.data.averageOwnerROI) {
                         this.averageOwnerROI = result.data.averageOwnerROI.toFixed(2)
+                    }
+                    if (result.data && result.data.epochDuration) {
+                        this.checkpointInterval = result.data.epochDuration.toFixed(2)
                     }
                 })
                 .catch(error => {

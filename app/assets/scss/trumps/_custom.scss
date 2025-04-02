@@ -9,22 +9,10 @@
 .color-white {
     color: var(--color-white) !important;
 }
-
 .page-layout {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-}
-
-.health-status {
-    width: 26px;
-    height: 12px;
-    background-color: $color-green;
-    border-radius: 5px;
-}
-
-.color-green{
-    color: $color-green
 }
 
 .form-control, input[type=text], input[type=number], input[type=email], input[type=phone], input[type=password]{
@@ -35,6 +23,23 @@
         color: var(--color-text-3);
     }
 }
+
+#btn-darkmode {
+    color: var(--black);
+    .moon-icon{
+        rotate: 145deg
+    }
+}
+
+.custom-file-label {
+    background-color: var(--form-input-color);
+    color: var(--color-text-2);
+    &::after{
+        background-color: var(--color-body-bg);
+        color: var(--color-text-3);
+    }
+}
+
 .flex-grow {
     display: flex;
     flex-grow: 1;
@@ -100,7 +105,7 @@
 }
 
 .toasted.bubble .action {
-    color: var(--color-body-bg);
+    color: var(--btn-white-text);
 }
 
 *::selection {
