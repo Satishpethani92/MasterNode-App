@@ -60,6 +60,9 @@ const routes = [
     },
     {
         path: '/terms', component: TermsOfService
+    },
+    {
+        path: '*', component: CandidateList
     }
 ]
 

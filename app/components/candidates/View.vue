@@ -909,19 +909,24 @@
                                     <div class="d-flex align-items-center justify-content-between px-4">
                                         <h6 class="h6 color-text-3 fw-400 mb-0">{{ currentTableDesc }}</h6>
                                         <!-- my comment start -->
-                                        <!-- <div class="XDC-custom-tab">
+                                        <div
+                                            v-if="currentTable === 'rewards'"
+                                            class="XDC-custom-tab">
                                             <ul>
                                                 <li
                                                     :class="currentTab === 'week' ? 'active' : ''"
+                                                    class="time-tab"
                                                     @click="filterSlash('week')">Week</li>
                                                 <li
                                                     :class="currentTab === 'month' ? 'active' : ''"
+                                                    class="time-tab"
                                                     @click="filterSlash('month')">Month</li>
                                                 <li
                                                     :class="currentTab === 'year' ? 'active' : ''"
+                                                    class="time-tab"
                                                     @click="filterSlash('year')">Year</li>
                                             </ul>
-                                        </div> -->
+                                        </div>
                                         <!-- my comment end -->
                                     </div>
                                     <b-table

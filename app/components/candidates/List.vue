@@ -463,6 +463,7 @@ export default {
                         rank: candidate.rank
                     })
                 })
+                items = items.sort((a, b) => a.rank - b.rank)
                 self.candidates = items
 
                 self.activeCandidates = candidates.data.activeCandidates
@@ -515,6 +516,7 @@ export default {
                         latestSignedBlock: candidate.latestSignedBlock || 0
                     })
                 })
+                items = items.sort((a, b) => a.rank - b.rank)
                 self.candidates = items
 
                 self.totalRows = candidates.data.total
@@ -553,6 +555,7 @@ export default {
                         latestSignedBlock: '---' // candidate.latestSignedBlock
                     })
                 })
+                items = items.sort((a, b) => a.rank - b.rank)
                 self.candidates = items
 
                 self.totalRows = candidates.data.total
@@ -590,6 +593,7 @@ export default {
                         latestSignedBlock: candidate.latestSignedBlock || 0
                     })
                 })
+                items = items.sort((a, b) => a.rank - b.rank)
                 self.candidates = items
 
                 self.totalRows = candidates.data.total

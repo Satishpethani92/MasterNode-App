@@ -8,6 +8,7 @@ button,
     border-color: var(--color-btn-bg);
     background-color: var(--color-btn-bg);
     padding: 4px 20px;
+    transition: all .2s ease-in-out, background-color .2s ease-in-out, opacity .2s ease-in-out;
 
     @extend %transit;
 
