@@ -4,7 +4,7 @@ import CandidateApply from './components/candidates/Apply.vue'
 import CandidateResign from './components/candidates/Resign.vue'
 import CandidateWithdraw from './components/candidates/Withdraw.vue'
 import CandidateUpdate from './components/candidates/Update.vue'
-import VoterView from './components/voters/View.vue'
+// import VoterView from './components/voters/View.vue'
 import VotingView from './components/voters/Voting.vue'
 import UnvotingView from './components/voters/Unvoting.vue'
 import ConfirmView from './components/voters/Confirm.vue'
@@ -40,9 +40,9 @@ const routes = [
     {
         path: '/candidate/:address/update', component: CandidateUpdate
     },
-    {
+    /* {
         path: '/voter/:address', component: VoterView
-    },
+    }, */
     {
         path: '/voting/:candidate', component: VotingView
     },

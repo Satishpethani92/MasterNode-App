@@ -489,14 +489,15 @@
 
 .XDC-table--transactions {
 
-    th[aria-colindex="1"],
+    th[aria-colindex="2"],
+    th[aria-colindex="3"],
     th[aria-colindex="4"],
     th[aria-colindex="5"] {
         padding-left: 0px;
     }
 
     td[aria-colindex="5"] {
-        text-align: center;
+        // text-align: center;
         grid-template-columns: 100% !important;
 
         &:before {
@@ -520,22 +521,22 @@
 
         thead tr,
         tbody tr {
-            grid-template-columns: auto 15% 15% 15% 15%;
+            grid-template-columns: 30% 18% 17% 19% 16%;
         }
 
         th[aria-colindex="3"],
         td[aria-colindex="3"] {
-            text-align: left;
+            // text-align: left;
         }
 
         th[aria-colindex="4"],
         td[aria-colindex="4"] {
-            text-align: left;
+            // text-align: left;
         }
 
         th[aria-colindex="5"],
         td[aria-colindex="5"] {
-            text-align: center;
+            // text-align: center;
 
             a > span {
                 font-size: 0;
@@ -737,7 +738,7 @@
 
         thead tr,
         tbody tr {
-            grid-template-columns: 10% 40% 20% 15% 15%;
+            grid-template-columns: 20% 20% 20% 20% 20%;
         }
     }
 

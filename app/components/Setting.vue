@@ -12,11 +12,14 @@
                         <div>
                             <h4 class="h4 color-text-3">Address</h4>
                             <p>
-                                <router-link
+                                <!-- my comment start -->
+                                <!-- <router-link
                                     :to="`/voter/xdc${address.substring(2)}`"
                                     class="text-truncate">
                                     {{ 'xdc' + address.substring(2) }}
-                                </router-link>
+                                </router-link> -->
+                                <!-- my comment end -->
+                                {{ 'xdc' + address.substring(2) }}
                             </p>
                         </div>
                     </div>
@@ -39,11 +42,15 @@
                                 <li class="XDC-list__item">
                                     <i class="tm-wallet XDC-list__icon" />
                                     <p class="XDC-list__text">
-                                        <router-link
+                                        <!-- my comment start -->
+                                        <!-- <router-link
                                             :to="`/voter/xdc${address.substring(2)}`"
                                             class="text-truncate">
                                             {{ 'xdc' + address.substring(2) }}
                                         </router-link>
+                                        <span>Address</span> -->
+                                        <!-- my comment end -->
+                                        {{ 'xdc' + address.substring(2) }}
                                         <span>Address</span>
                                     </p>
                                 </li>

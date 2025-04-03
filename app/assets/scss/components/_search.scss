@@ -66,51 +66,49 @@
   }
   
   .autocomplete-results {
-    // background-image: linear-gradient(-135deg, #373658 0%, #40406a 100%);
     border-radius: 5px;
-    box-shadow: 0px 5px 20px #1d1e31;
+    box-shadow: var(--card-shadow);
     list-style: none;
-    margin-left: 10px;
-    margin-bottom: 0;
     max-height: 268px;
     overflow: auto;
     padding-left: 1px;
     position: absolute;
-    width: calc(100% - 20px);
+    width: calc(100%);
     z-index: 5;
-  }
+    margin-top: 5px;
+    }
   
   .autocomplete-result {
     cursor: pointer;
-    color: #7573a6;
-    border-bottom: 1px solid #45446b;
     padding: 4px 10px;
-    transition: .3s all ease-in;
+    transition: 0.3s all ease-in;
+    background-color: var(--search-input-bg);
+    color: var(--btn-white-text);
 
     small {
          line-height: 10px;
          font-size: 11px;
          padding-bottom: 8px;
          transition: .3s all ease-in;
+         color: var(--btn-white-text) !important;
     }
 
     mark {
         background-color: transparent;
-        color: #8f8dc1 !important;
+        color: var(--btn-white-text) !important;
         font-size: inherit !important;
         padding: 0;
         transition: .3s all ease-in;
     }
 }
   
-  .autocomplete-result.is-active,
+//   .autocomplete-result.is-active,
   .autocomplete-result:hover {
-    background-color: #7573a6;
-    color: var(--color-white);
+    background-color: var(--search-input-bg-hover);
 
     .XDC-list__text small,
     .XDC-list__text mark {
-        color: var(--color-white) !important;
+        color: var(--btn-text-white) !important;
     }
   }
   

@@ -25,7 +25,10 @@
                         <li class="XDC-list__item">
                             <i class="tm-XDC2 XDC-list__icon" />
                             <p class="XDC-list__text">
-                                <span><router-link :to="`/voter/${voter}`">{{ voter }}</router-link></span>
+                                <!-- my comment start -->
+                                <!-- <span><router-link :to="`/voter/${voter}`">{{ voter }}</router-link></span> -->
+                                <!-- my comment end -->
+                                <span>{{ voter }}</span>
                                 <span>Voter</span>
                             </p>
                         </li>

@@ -21,11 +21,14 @@
                                 </router-link>
                             </h6>
                             <p>
-                                <router-link
+                                <!-- My comment start -->
+                                <!-- <router-link
                                     :to="'/voter/' + candidate.owner"
                                     class="text-truncate">
                                     {{ candidate.owner }}
-                                </router-link>
+                                </router-link> -->
+                                <!-- My comment end -->
+                                {{ candidate.owner }}
                                 <ul class="list-inline social-links mb-0">
                                     <li
                                         v-for="(value, key) in candidate.socials"
@@ -877,10 +880,25 @@
                         <b-card class="XDC-card pagination xdc-p-none">
                             <div class="XDC-custom-tab mb-3">
                                 <ul>
-                                    <li>Rewards</li>
-                                    <li>Voters</li>
-                                    <li>Transactions</li>
-                                    <li>Reward Metrics</li>
+                                    <li
+                                        :class="currentTable === 'rewards' ? 'active' : ''"
+                                        @click="changeTable('rewards')">Rewards</li>
+                                    <!-- my comment start -->
+                                    <!-- <li
+                                        :class="currentTable === 'voters' ? 'active' : ''"
+                                        @click="changeTable('voters')">Voters</li> -->
+                                    <!-- my comment end -->
+                                    <li
+                                        :class="currentTable === 'transactions' ? 'active' : ''"
+                                        @click="changeTable('transactions')">Transactions</li>
+                                        <!-- my comment start -->
+                                        <!-- <li>Reward Metrics</li> -->
+                                        <!-- my comment end -->
+                                        <!-- my comment start -->
+                                        <!-- <li
+                                        :class="currentTable === 'voterRewards' ? 'active' : ''"
+                                        @click="changeTable('voterRewards')">Voter Rewards</li> -->
+                                        <!-- my comment end -->
                                 </ul>
                             </div>
 
@@ -889,8 +907,9 @@
                                 + (txLoading ? ' XDC-loading' : '')">
                                 <div class="table-wrapper">
                                     <div class="d-flex align-items-center justify-content-between px-4">
-                                        <h6 class="h6 color-text-3 fw-400 mb-0">Rewards History</h6>
-                                        <div class="XDC-custom-tab">
+                                        <h6 class="h6 color-text-3 fw-400 mb-0">{{ currentTableDesc }}</h6>
+                                        <!-- my comment start -->
+                                        <!-- <div class="XDC-custom-tab">
                                             <ul>
                                                 <li
                                                     :class="currentTab === 'week' ? 'active' : ''"
@@ -902,9 +921,11 @@
                                                     :class="currentTab === 'year' ? 'active' : ''"
                                                     @click="filterSlash('year')">Year</li>
                                             </ul>
-                                        </div>
+                                        </div> -->
+                                        <!-- my comment end -->
                                     </div>
                                     <b-table
+                                        v-if="currentTable === 'rewards'"
                                         :items="mnRewards"
                                         :fields="mnRewardsFields"
                                         :sort-by.sync="mnRewardsSortBy"
@@ -939,13 +960,151 @@
 
                                     </b-table>
                                     <b-pagination
-                                        v-if="mnRewardsTotalRows > 0 && mnRewardsTotalRows > mnRewardsPerPage"
+                                        v-if="(currentTable === 'rewards') && (mnRewardsTotalRows > 0 && mnRewardsTotalRows > mnRewardsPerPage)"
                                         :total-rows="mnRewardsTotalRows"
                                         :per-page="mnRewardsPerPage"
                                         v-model="mnRewardsCurrentPage"
                                         align="center"
                                         class="XDC-pagination"
                                         @change="rewardPageChange" />
+
+                                    <b-table
+                                        v-if="currentTable === 'transactions'"
+                                        :items="transactions"
+                                        :fields="txFields"
+                                        :per-page="txPerPage"
+                                        :show-empty="true"
+                                        :class="`XDC-table XDC-table--transactions${txLoading ? ' loading' : ''}`"
+                                        empty-text="There are no transactions to show"
+                                        stacked="md"
+                                        @sort-changed="sortingChangeTxes" >
+
+                                        <template
+                                            slot="id"
+                                            slot-scope="data">{{ data.item.id }}
+                                        </template>
+
+                                        <template
+                                            slot="voter"
+                                            slot-scope="data">
+                                            <!-- my comment start -->
+                                            <!-- <router-link
+                                                :to="'/voter/' + data.item.voter"
+                                                class="text-truncate">
+                                                {{ data.item.voter }}
+                                            </router-link> -->
+                                            <!-- my comment end -->
+                                            {{ data.item.voter }}
+                                        </template>
+
+                                        <template
+                                            slot="blockNumber"
+                                            slot-scope="data">
+                                            {{ data.item.blockNumber }}
+                                        </template>
+
+                                        <template
+                                            slot="event"
+                                            slot-scope="data">
+                                            <span :class="'fw-600 ' + getEventClass(data.item.event)">{{ data.item.event }}</span>
+                                        </template>
+
+                                        <template
+                                            slot="capacity"
+                                            slot-scope="data">
+                                            {{ isNaN(data.item.cap) ? '---' : formatCurrencySymbol(data.item.cap) }}
+                                        </template>
+
+                                        <template
+                                            slot="createdAt"
+                                            slot-scope="data">
+                                            <span :id="`timestamp__${data.index}`">{{ data.item.createdAt }}</span>
+                                            <b-tooltip :target="`timestamp__${data.index}`">
+                                                {{ data.item.dateTooltip }}
+                                            </b-tooltip>
+                                        </template>
+
+                                        <template
+                                            slot="action"
+                                            slot-scope="data">
+                                            <a
+                                                v-b-tooltip.hover.right
+                                                :href="`${config.explorerUrl}/txs/${data.item.tx}`"
+                                                title="View on XDCScan"
+                                                target="_blank">
+                                                <i class="tm-eye" />
+                                                <span>View on XDCScan</span>
+                                            </a>
+                                        </template>
+                                    </b-table>
+
+                                    <b-pagination
+                                        v-if="(currentTable === 'transactions') && (txTotalRows > 0 && txTotalRows > txPerPage)"
+                                        :total-rows="txTotalRows"
+                                        :per-page="txPerPage"
+                                        v-model="txCurrentPage"
+                                        align="center"
+                                        class="XDC-pagination"
+                                        @change="txPageChange"/>
+
+                                    <b-table
+                                        v-if="currentTable === 'voterRewards'"
+                                        :items="voterRewards"
+                                        :fields="voterRewardsFields"
+                                        :sort-by.sync="voterRewardsSortBy"
+                                        :sort-desc.sync="voterRewardsSortDesc"
+                                        :per-page="voterRewardsPerPage"
+                                        :show-empty="true"
+                                        :class="`XDC-table XDC-table--voterrewards${rewardLoading ? ' loading' : ''}`"
+                                        empty-text="There are no voter rewards to show"
+                                        stacked="md" >
+
+                                        <template
+                                            slot="id"
+                                            slot-scope="data">{{ data.index + 1 }}
+                                        </template>
+
+                                        <template
+                                            slot="checkpoint"
+                                            slot-scope="data">{{ data.item.checkpoint }}
+                                        </template>
+
+                                        <template
+                                            slot="reward"
+                                            slot-scope="data">
+                                            {{ formatCurrencySymbol(formatNumber(data.item.reward)) }}
+                                        </template>
+
+                                        <template
+                                            slot="validatorName"
+                                            slot-scope="data">
+                                            <!-- <router-link
+                                                :to="'/candidate/' + data.item.candidate"
+                                                class="text-truncate"> -->
+                                            {{ data.item.validatorName }}
+                                            <!-- </router-link> -->
+                                        </template>
+
+                                        <template
+                                            slot="createdAt"
+                                            slot-scope="data">
+                                            <span :id="`timestamp__${data.index}`">{{ data.item.createdAt }}</span>
+                                            <b-tooltip :target="`timestamp__${data.index}`">
+                                                {{ data.item.dateTooltip }}
+                                            </b-tooltip>
+                                        </template>
+
+                                    </b-table>
+
+                                    <b-pagination
+                                        v-if="(currentTable === 'voterRewards') && (voterRewardsTotalRows > 0 && voterRewardsTotalRows > voterRewardsPerPage)"
+                                        :total-rows="voterRewardsTotalRows"
+                                        :per-page="voterRewardsPerPage"
+                                        v-model="voterRewardsCurrentPage"
+                                        align="center"
+                                        class="XDC-pagination"
+                                        @change="voterRewardsPageChange" />
+
                                 </div>
                             </div>
                         </b-card>
@@ -988,6 +1147,7 @@ export default {
             tooltipText: 'Copy to clipboard',
             candidate: {
                 address: this.$route.params.address.toLowerCase(),
+                owner: '',
                 name: '',
                 balance: '',
                 status: '',
@@ -1056,30 +1216,75 @@ export default {
             voterCurrentPage: 1,
             voterPerPage: 10,
             voterTotalRows: 0,
-            txFields: [
+            voterRewards: [],
+            voterRewardsFields: [
                 {
-                    key: 'voter',
-                    label: 'Voter',
-                    sortable: true
+                    key: 'epoch',
+                    label: 'Epoch',
+                    sortable: false
                 },
                 {
-                    key: 'event',
-                    label: 'Event',
-                    sortable: true
+                    key: 'validatorName',
+                    label: 'Name',
+                    sortable: false
+                },
+                // my comment start
+                /* {
+                    key: 'candidateName',
+                    label: 'Masternode',
+                    sortable: false
+                }, */
+                // my comment end
+                {
+                    key: 'signNumber',
+                    label: 'Sign Number',
+                    sortable: false
                 },
                 {
-                    key: 'capacity',
-                    label: 'Capacity',
-                    sortable: true
+                    key: 'signNumber',
+                    label: 'Sign Number',
+                    sortable: false
+                },
+                {
+                    key: 'reward',
+                    label: 'Rewards',
+                    sortable: false
                 },
                 {
                     key: 'createdAt',
                     label: 'Age',
                     sortable: false
+                }
+            ],
+            voterRewardsCurrentPage: 1,
+            voterRewardsSortBy: 'epoch',
+            voterRewardsPerPage: 10,
+            voterRewardsSortDesc: true,
+            voterRewardsTotalRows: 0,
+            txFields: [
+                {
+                    key: 'voter',
+                    label: 'Voter Address',
+                    sortable: true
                 },
                 {
-                    key: 'action',
-                    label: '',
+                    key: 'blockNumber',
+                    label: 'Block',
+                    sortable: false
+                },
+                {
+                    key: 'event',
+                    label: 'Event',
+                    sortable: false
+                },
+                {
+                    key: 'capacity',
+                    label: 'Capacity',
+                    sortable: false
+                },
+                {
+                    key: 'createdAt',
+                    label: 'Age',
                     sortable: false
                 }
             ],
@@ -1105,7 +1310,9 @@ export default {
             KYC: {
                 url: '',
                 status: false
-            }
+            },
+            currentTable: 'rewards',
+            currentTableDesc: 'Rewards History'
         }
     },
     computed: {
@@ -1169,6 +1376,38 @@ export default {
             }
 
             return clazz
+        },
+        changeTable (tableName) {
+            this.currentPage = 1
+            this.$store.state.currentPage = 1
+            if (this.currentTable !== tableName) {
+                this.currentTable = tableName
+                this.loadDataTables(tableName)
+            }
+        },
+        loadDataTables (tableName) {
+            switch (tableName) {
+            case 'rewards':
+                this.getCandidateRewards()
+                this.currentTableDesc = 'Rewards history'
+                break
+            case 'voters':
+                // this.getSlashedMNs()
+                this.currentTableDesc = 'People who voted for this candidate'
+                break
+            case 'transactions':
+                this.getCandidateTransactions()
+                this.currentTableDesc = 'All transactions of this candidate'
+                break
+            case 'voterRewards':
+                this.getVoterRewards(this.candidate.owner)
+                this.currentTableDesc = 'Voters rewards history'
+                break
+            default:
+                this.getCandidateRewards()
+                this.currentTableDesc = 'Rewards history'
+                break
+            }
         },
         async copyToClipboard (text, button) {
             try {
@@ -1352,6 +1591,7 @@ export default {
                     items.push({
                         tx: tx.tx,
                         voter: tx.voter,
+                        blockNumber: tx.blockNumber,
                         candidate: tx.candidate,
                         event: tx.event,
                         cap: new BigNumber(tx.capacity).div(10 ** 18).toNumber(),
@@ -1366,6 +1606,53 @@ export default {
             } catch (error) {
                 self.txLoading = false
                 console.log(error)
+            }
+        },
+        async getVoterRewards (voterAddress) {
+            console.log('voterAddress', voterAddress)
+            try {
+                const self = this
+                const voter = voterAddress
+                self.rewardLoading = true
+
+                const params = {
+                    page: self.voterRewardsCurrentPage,
+                    limit: self.voterRewardsPerPage
+                }
+
+                const rewardPromise = axios.get(`/api/voters/${voter}/rewards?${self.serializeQuery(params)}`)
+
+                // voter reward table
+                let voterRewards = await rewardPromise
+                let items = []
+
+                voterRewards.data.items.map((r) => {
+                    items.push({
+                        epoch: r.epoch,
+                        candidate: r.validator,
+                        candidateName: r.candidateName,
+                        validatorName: r.validatorName,
+                        startBlockNumber: r.startBlockNumber,
+                        endBlockNumber: r.endBlockNumber,
+                        signNumber: r.signNumber,
+                        reward: new BigNumber(r.reward).toFixed(6),
+                        createdAt: moment(r.rewardTime).fromNow(),
+                        dateTooltip: moment(r.rewardTime).format('lll')
+                    })
+                })
+                self.voterRewards = items
+
+                self.voterRewardsTotalRows = voterRewards.data.total
+                self.rewardLoading = false
+            } catch (error) {
+                self.rewardLoading = false
+                console.log(error)
+            }
+        },
+        voterRewardsPageChange (val) {
+            if (this.voterRewardsCurrentPage !== val) {
+                this.voterRewardsCurrentPage = val
+                this.getVoterRewards(this.candidate.owner)
             }
         },
         getColor (latestSignedBlock, currentBlock) {

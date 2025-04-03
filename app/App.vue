@@ -96,11 +96,20 @@
                                     slot="button-content">
                                     <i class="tm-cog icon-2x"/>
                                 </template>
-                                <b-dropdown-item
+
+                                <!-- My comment start -->
+                                <!-- <b-dropdown-item
                                     :to="`/voter/${account}`"
                                     class="dd-address">
                                     {{ truncate(account, 20) }}
+                                </b-dropdown-item> -->
+                                <!-- My comment end -->
+
+                                <b-dropdown-item
+                                    class="dd-address">
+                                    {{ truncate(account, 20) }}
                                 </b-dropdown-item>
+
                                 <!-- My comment start -->
                                 <!-- <b-dropdown-divider />
                                 <b-dropdown-item
@@ -437,6 +446,8 @@ export default {
                 axios.get(`/api/search/${search}`)
                     .then((response) => {
                         const data = response.data
+                        console.log('data', data)
+
                         if (Object.keys(data.candidate).length > 0) {
                             to = { path: `/candidate/${data.candidate.candidate}` }
                         } else if (Object.keys(data.voter).length > 0) {
