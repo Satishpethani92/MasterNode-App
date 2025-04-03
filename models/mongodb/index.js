@@ -10,8 +10,7 @@ console.log((config.get('db.uri')))
 mongoose.Promise = global.Promise
 mongoose.set('useCreateIndex', true)
 mongoose.connect(config.get('db.uri'), {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    useNewUrlParser: true
 },
 (err) => {
     if (err) {
