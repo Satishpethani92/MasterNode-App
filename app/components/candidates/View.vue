@@ -60,23 +60,28 @@
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0">
-                    <b-card class="XDC-card custom-card mb-0 h-100">
-                        <h6 class="XDC-card__title d-flex align-items-center">
-                            Total Rewards Earned
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
-                        </h6>
-                        <p class="XDC-card__text">
-                            {{ formatCurrencySymbol(formatBigNumber(mnRewardsTotalRows, 2)) }}
-                        </p>
-                    </b-card>
-                </div>
-                <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0">
+        <div v-if="isCandidate">
+            <div
+
+                class="container">
+                <div
+                    class="row">
+                    <div class="col-12 col-md-4 mb-4 mb-md-0">
+                        <b-card class="XDC-card custom-card mb-0 h-100">
+                            <h6 class="XDC-card__title d-flex align-items-center">
+                                Total Rewards Earned
+                                <img
+                                    src="/app/assets/img/info.svg"
+                                    alt="info-icon"
+                                    class="ml-2">
+                            </h6>
+                            <p class="XDC-card__text">
+                                {{ formatCurrencySymbol(formatBigNumber(mnRewardsTotalRows, 2)) }}
+                            </p>
+                        </b-card>
+                    </div>
+                    <!-- future use start-->
+                    <!-- <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0">
                     <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Voting Power
@@ -87,68 +92,67 @@
                         </h6>
                         <p class="XDC-card__text">
                             3.42%
-                        <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
                         </p>
                     </b-card>
-                </div>
+                </div> -->
+                    <!-- future use end -->
+                    <div class="col-12 col-md-4 mb-4 mb-md-0">
+                        <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
+                            <h6 class="XDC-card__title d-flex align-items-center">
+                                Status
+                                <img
+                                    src="/app/assets/img/info.svg"
+                                    alt="info-icon"
+                                    class="ml-2">
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <p class="XDC-card__text">
+                                    {{ candidate.status }}
+                                </p>
+                            </div>
+                        </b-card>
+                    </div>
 
-                <div class="col-sm-6 col-lg-3 mb-4 mb-sm-0">
-                    <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
-                        <h6 class="XDC-card__title d-flex align-items-center">
-                            Status
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
-                        </h6>
-                        <div class="d-flex align-items-center">
-                            <p class="XDC-card__text">
-                                {{ candidate.status }}
+                    <div class="col-12 col-md-4">
+                        <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
+                            <h6 class="XDC-card__title d-flex align-items-center">
+                                Validator Uptime
+                                <img
+                                    src="/app/assets/img/info.svg"
+                                    alt="info-icon"
+                                    class="ml-2">
+                            </h6>
+                            <p class="XDC-card__text color-green">
+                                99.4%
+                                <!-- {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }} -->
                             </p>
-                        </div>
-                    </b-card>
-                </div>
-
-                <div class="col-sm-6 col-lg-3">
-                    <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
-                        <h6 class="XDC-card__title d-flex align-items-center">
-                            Validator Uptime
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
-                        </h6>
-                        <p class="XDC-card__text color-green">
-                            99.4%
-                        <!-- {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }} -->
-                        </p>
-                    </b-card>
+                        </b-card>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="main-content container">
-            <div
-                v-if="!isCandidate"
-                class="row">
+            <div class="main-content container">
                 <div
-                    class="XDC-empty col-12">
-                    <i class="tm-notice XDC-empty__icon"/>
-                    <p class="XDC-empty__description">This is not a candidate</p>
-                </div>
-            </div>
-            <div
-                v-else>
-                <b-row>
+                    v-if="!isCandidate"
+                    class="row">
                     <div
-                        class="col-12 col-lg-6 mb-lg-4">
-                        <b-card
-                            :class="'XDC-card XDC-card--lighter XDC-card--candidate'
-                            + (loading ? ' XDC-loading' : '')">
-                            <div class="XDC-detail">
-                                <h6 class="h6 fw-400 color-text-3 mb-4">Validator Overview</h6>
+                        class="XDC-empty col-12">
+                        <i class="tm-notice XDC-empty__icon"/>
+                        <p class="XDC-empty__description">This is not a candidate</p>
+                    </div>
+                </div>
+                <div
+                    v-else>
+                    <b-row>
+                        <div
+                            class="col-12 col-lg-6 mb-lg-4">
+                            <b-card
+                                :class="'XDC-card XDC-card--lighter XDC-card--candidate'
+                                + (loading ? ' XDC-loading' : '')">
+                                <div class="XDC-detail">
+                                    <h6 class="h6 fw-400 color-text-3 mb-4">Validator Overview</h6>
 
-                                <!-- My comments start -->
-                                <!-- <div class="XDC-detail-section">
+                                    <!-- My comments start -->
+                                    <!-- <div class="XDC-detail-section">
                                     <div class="XDC-detail-label">Capacity</div>
                                     <div class="XDC-detail-value-big">{{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }}</div>
                                 </div>
@@ -180,72 +184,72 @@
                                         </p>
                                     </div>
                                 </div> -->
-                                <!-- My comments end -->
+                                    <!-- My comments end -->
 
-                                <div class="XDC-detail-section d-flex justify-content-between">
-                                    <div class="XDC-detail-label">Capacity</div>
-                                    <div class="XDC-detail-value-small">
-                                        <span
-                                            :class="'XDC-info__description'">
-                                            {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }}
-                                        </span>
+                                    <div class="XDC-detail-section d-flex justify-content-between">
+                                        <div class="XDC-detail-label">Capacity</div>
+                                        <div class="XDC-detail-value-small">
+                                            <span
+                                                :class="'XDC-info__description'">
+                                                {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="XDC-detail-section d-flex justify-content-between">
-                                    <div class="XDC-detail-label">Checkpoints</div>
-                                    <div class="XDC-detail-value-small">
-                                        <span
-                                            :class="'XDC-info__description'">
-                                            99.4%
+                                    <hr>
+                                    <div class="XDC-detail-section d-flex justify-content-between">
+                                        <div class="XDC-detail-label">Checkpoints</div>
+                                        <div class="XDC-detail-value-small">
+                                            <span
+                                                :class="'XDC-info__description'">
+                                                99.4%
                                             <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
-                                        </span>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="XDC-detail-section d-flex justify-content-between">
-                                    <div class="XDC-detail-label d-flex align-items-center">Est. Staking ROI
-                                        <img
-                                            src="/app/assets/img/info.svg"
-                                            alt="info-icon"
-                                            class="ml-2"></div>
-                                    <div class="XDC-detail-value-small">
-                                        <span
-                                            :class="'XDC-info__description'">
-                                            {{ voterROI ? voterROI + '%' : '-&#45;&#45;' }}
+                                    <hr>
+                                    <div class="XDC-detail-section d-flex justify-content-between">
+                                        <div class="XDC-detail-label d-flex align-items-center">Est. Staking ROI
+                                            <img
+                                                src="/app/assets/img/info.svg"
+                                                alt="info-icon"
+                                                class="ml-2"></div>
+                                        <div class="XDC-detail-value-small">
+                                            <span
+                                                :class="'XDC-info__description'">
+                                                {{ voterROI ? voterROI + '%' : '-&#45;&#45;' }}
 
-                                        </span>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="XDC-detail-section d-flex justify-content-between">
-                                    <div class="XDC-detail-label align-items-center">Est. Owner ROI
-                                        <img
-                                            src="/app/assets/img/info.svg"
-                                            alt="info-icon"
-                                            class="ml-2">
+                                    <hr>
+                                    <div class="XDC-detail-section d-flex justify-content-between">
+                                        <div class="XDC-detail-label align-items-center">Est. Owner ROI
+                                            <img
+                                                src="/app/assets/img/info.svg"
+                                                alt="info-icon"
+                                                class="ml-2">
+                                        </div>
+                                        <div class="XDC-detail-value-small">
+                                            <span
+                                                :class="'XDC-info__description'">
+                                                {{ mnROI ? mnROI + '%' : '-&#45;&#45;' }}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="XDC-detail-value-small">
-                                        <span
-                                            :class="'XDC-info__description'">
-                                            {{ mnROI ? mnROI + '%' : '-&#45;&#45;' }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="XDC-detail-section d-flex justify-content-between mb-0">
-                                    <div class="XDC-detail-label">Commission</div>
-                                    <div class="XDC-detail-value-small">
-                                        <span
-                                            :class="'XDC-info__description'">
-                                            82,700,070
+                                    <hr>
+                                    <div class="XDC-detail-section d-flex justify-content-between mb-0">
+                                        <div class="XDC-detail-label">Commission</div>
+                                        <div class="XDC-detail-value-small">
+                                            <span
+                                                :class="'XDC-info__description'">
+                                                82,700,070
                                             <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
-                                        </span>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- My comments start -->
-                                <!-- <div class="XDC-detail-section d-flex justify-content-between">
+                                    <!-- My comments start -->
+                                    <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Hardware</div>
                                     <div class="XDC-detail-value-small">
                                         <span
@@ -280,9 +284,9 @@
                                         </span>
                                     </div>
                                 </div> -->
-                                <!-- My comments end -->
+                                    <!-- My comments end -->
 
-                                <!-- <div
+                                    <!-- <div
                                     v-for="(value, key) in candidate.dataCenterInfo"
                                     :key="key"
                                     class="col-12 order-md-1 order-lg-0 XDC-info">
@@ -293,7 +297,7 @@
                                         {{ value }}
                                     </p>
                                 </div> -->
-                                <!-- <div
+                                    <!-- <div
                                     v-for="(value, key) in candidate.dataCenterInfo"
                                     :key="key"
                                     class="col-12 XDC-info">
@@ -305,8 +309,8 @@
                                     </p>
                                 </div> -->
 
-                                <!-- My comments start -->
-                                <!-- <div class="XDC-detail-section d-flex justify-content-between">
+                                    <!-- My comments start -->
+                                    <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Latest Signed Block</div>
                                     <div class="XDC-detail-value-small">
                                         <span
@@ -316,13 +320,13 @@
                                         </span>
                                     </div>
                                 </div> -->
-                                <!-- My comments end -->
+                                    <!-- My comments end -->
 
-                                <!-- <div class="XDC-detail-section d-flex justify-content-between">
+                                    <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Voters</div>
                                     <div class="XDC-detail-value-small">000</div>
                                 </div> -->
-                                <!-- <div class="XDC-detail-section d-flex justify-content-between">
+                                    <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Location</div>
                                     <div class="XDC-detail-value-small">N/A</div>
                                 </div>
@@ -331,8 +335,8 @@
                                     <div class="XDC-detail-value-small">2020-09-12</div>
                                 </div> -->
 
-                                <!-- My comments start -->
-                                <!-- <div class="XDC-detail-section">
+                                    <!-- My comments start -->
+                                    <!-- <div class="XDC-detail-section">
                                     <div class="XDC-detail-label">Owner Address</div>
                                     <div class="XDC-detail-value-small">
                                         <router-link
@@ -352,15 +356,15 @@
                                         </router-link>
                                     </div>
                                 </div> -->
-                                <!-- My comments end -->
-                                <div
-                                    class="buttons text-right">
-                                    <b-button
-                                        v-if="candidate.owner === account && candidate.status !== 'RESIGNED'"
-                                        :to="`/resign/${candidate.address}`"
-                                        class="mt-3"
-                                        variant="secondary">Resign</b-button>
-                                <!-- <b-button
+                                    <!-- My comments end -->
+                                    <div
+                                        class="buttons text-right">
+                                        <b-button
+                                            v-if="candidate.owner === account && candidate.status !== 'RESIGNED'"
+                                            :to="`/resign/${candidate.address}`"
+                                            class="mt-3"
+                                            variant="secondary">Resign</b-button>
+                                            <!-- <b-button
                                     v-if="candidate.voted > 0"
                                     :to="`/unvoting/${candidate.address}`"
                                     variant="secondary">Unvote</b-button>
@@ -368,8 +372,8 @@
                                     v-if="candidate.status !== 'RESIGNED' && isXDCnet"
                                     :to="`/voting/${candidate.address}`"
                                     variant="primary">Vote</b-button> -->
+                                    </div>
                                 </div>
-                            </div>
 
                             <!-- <div class="section section&#45;&#45;candidate">
                                 <div class="section-title">
@@ -534,103 +538,103 @@
                                         variant="primary">Vote</b-button>
                                 </div>
                             </div> -->
-                        </b-card>
-                    </div>
-                    <div
-                        class="col-12 col-lg-6 mb-lg-4">
-                        <b-card
-                            :class="'XDC-card XDC-card--lighter'
-                            + (loading ? ' XDC-loading' : '')">
-                            <div class="XDC-custom-tab mb-3">
-                                <ul>
-                                    <li>Validator Info</li>
-                                    <li>Health Check</li>
-                                </ul>
-                            </div>
-                            <div class="XDC-detail-section d-flex justify-content-between">
-                                <div class="XDC-detail-label">Owner Address</div>
-                                <div class="XDC-detail-value-small">
-                                    <div
-                                        :class="'XDC-info__description'"
-                                        class="d-flex align-items-center">
-                                        {{ candidate.owner ? candidate.owner : "N/A" }}
-                                        <button
-                                            v-b-tooltip.hover
-                                            v-if="candidate.owner"
-                                            ref="copyButton"
-                                            :title="tooltipText"
-                                            class="btn btn-transparent ml-2"
-                                            @click="copyToClipboard(candidate.owner, $event.target)">
-                                            <img
-                                                src="/app/assets/img/copy-icon.svg"
-                                                alt="copy-icon" >
-                                        </button>
+                            </b-card>
+                        </div>
+                        <div
+                            class="col-12 col-lg-6 mb-lg-4">
+                            <b-card
+                                :class="'XDC-card XDC-card--lighter'
+                                + (loading ? ' XDC-loading' : '')">
+                                <div class="XDC-custom-tab mb-3">
+                                    <ul>
+                                        <li>Validator Info</li>
+                                        <li>Health Check</li>
+                                    </ul>
+                                </div>
+                                <div class="XDC-detail-section d-flex justify-content-between">
+                                    <div class="XDC-detail-label">Owner Address</div>
+                                    <div class="XDC-detail-value-small">
+                                        <div
+                                            :class="'XDC-info__description'"
+                                            class="d-flex align-items-center">
+                                            {{ candidate.owner ? candidate.owner : "N/A" }}
+                                            <button
+                                                v-b-tooltip.hover
+                                                v-if="candidate.owner"
+                                                ref="copyButton"
+                                                :title="tooltipText"
+                                                class="btn btn-transparent ml-2"
+                                                @click="copyToClipboard(candidate.owner, $event.target)">
+                                                <img
+                                                    src="/app/assets/img/copy-icon.svg"
+                                                    alt="copy-icon" >
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <div class="XDC-detail-section d-flex justify-content-between">
-                                <div class="XDC-detail-label">Coinbase Address</div>
-                                <div class="XDC-detail-value-small">
-                                    <div
-                                        :class="'XDC-info__description'"
-                                        class="d-flex align-items-center">
-                                        {{ candidate.address ? candidate.address : "N/A" }}
-                                        <button
-                                            v-b-tooltip.hover
-                                            v-if="candidate.address"
-                                            ref="copyButton"
-                                            :title="tooltipText"
-                                            class="btn btn-transparent ml-2"
-                                            @click="copyToClipboard(candidate.address, $event.target)">
-                                            <img
-                                                src="/app/assets/img/copy-icon.svg"
-                                                alt="copy-icon" >
-                                        </button>
+                                <hr>
+                                <div class="XDC-detail-section d-flex justify-content-between">
+                                    <div class="XDC-detail-label">Coinbase Address</div>
+                                    <div class="XDC-detail-value-small">
+                                        <div
+                                            :class="'XDC-info__description'"
+                                            class="d-flex align-items-center">
+                                            {{ candidate.address ? candidate.address : "N/A" }}
+                                            <button
+                                                v-b-tooltip.hover
+                                                v-if="candidate.address"
+                                                ref="copyButton"
+                                                :title="tooltipText"
+                                                class="btn btn-transparent ml-2"
+                                                @click="copyToClipboard(candidate.address, $event.target)">
+                                                <img
+                                                    src="/app/assets/img/copy-icon.svg"
+                                                    alt="copy-icon" >
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <div class="XDC-detail-section d-flex justify-content-between">
-                                <div class="XDC-detail-label d-flex align-items-center">Active From
-                                    <img
-                                        src="/app/assets/img/info.svg"
-                                        alt="info-icon"
-                                        class="ml-2"></div>
-                                <div class="XDC-detail-value-small">
-                                    <span
-                                        :class="'XDC-info__description'">
-                                        Jan, 13, 2021
+                                <hr>
+                                <div class="XDC-detail-section d-flex justify-content-between">
+                                    <div class="XDC-detail-label d-flex align-items-center">Active From
+                                        <img
+                                            src="/app/assets/img/info.svg"
+                                            alt="info-icon"
+                                            class="ml-2"></div>
+                                    <div class="XDC-detail-value-small">
+                                        <span
+                                            :class="'XDC-info__description'">
+                                            Jan, 13, 2021
                                         <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
-                                    </span>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <div class="XDC-detail-section d-flex justify-content-between">
-                                <div class="XDC-detail-label align-items-center">Location
-                                    <img
-                                        src="/app/assets/img/info.svg"
-                                        alt="info-icon"
-                                        class="ml-2">
-                                </div>
-                                <div class="XDC-detail-value-small">
-                                    <span
-                                        :class="'XDC-info__description'">
-                                        Burlingston, USA
+                                <hr>
+                                <div class="XDC-detail-section d-flex justify-content-between">
+                                    <div class="XDC-detail-label align-items-center">Location
+                                        <img
+                                            src="/app/assets/img/info.svg"
+                                            alt="info-icon"
+                                            class="ml-2">
+                                    </div>
+                                    <div class="XDC-detail-value-small">
+                                        <span
+                                            :class="'XDC-info__description'">
+                                            Burlingston, USA
                                         <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
-                                    </span>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <div class="XDC-detail-section d-flex justify-content-between mb-0">
-                                <div class="XDC-detail-label">Hardware</div>
-                                <div class="XDC-detail-value-small">
-                                    <span
-                                        :class="'XDC-info__description'">
-                                        {{ candidate.hardwareInfo ? candidate.hardwareInfo : "N/A" }}
-                                    </span>
+                                <hr>
+                                <div class="XDC-detail-section d-flex justify-content-between mb-0">
+                                    <div class="XDC-detail-label">Hardware</div>
+                                    <div class="XDC-detail-value-small">
+                                        <span
+                                            :class="'XDC-info__description'">
+                                            {{ candidate.hardwareInfo ? candidate.hardwareInfo : "N/A" }}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
                             <!-- My comments start--->
                             <!-- <b-tabs
                                 pills
@@ -874,247 +878,248 @@
                                     </div>
                                 </div>
                             </div> -->
-                        </b-card>
-                    </div>
-                    <div class="col-12">
-                        <b-card class="XDC-card pagination xdc-p-none">
-                            <div class="XDC-custom-tab mb-3">
-                                <ul>
-                                    <li
-                                        :class="currentTable === 'rewards' ? 'active' : ''"
-                                        @click="changeTable('rewards')">Rewards</li>
-                                    <!-- my comment start -->
-                                    <!-- <li
+                            </b-card>
+                        </div>
+                        <div class="col-12">
+                            <b-card class="XDC-card pagination xdc-p-none">
+                                <div class="XDC-custom-tab mb-3">
+                                    <ul>
+                                        <li
+                                            :class="currentTable === 'rewards' ? 'active' : ''"
+                                            @click="changeTable('rewards')">Rewards</li>
+                                        <!-- future use start-->
+                                        <!-- <li
                                         :class="currentTable === 'voters' ? 'active' : ''"
                                         @click="changeTable('voters')">Voters</li> -->
-                                    <!-- my comment end -->
-                                    <li
-                                        :class="currentTable === 'transactions' ? 'active' : ''"
-                                        @click="changeTable('transactions')">Transactions</li>
-                                        <!-- my comment start -->
-                                        <!-- <li>Reward Metrics</li> -->
-                                        <!-- my comment end -->
-                                        <!-- my comment start -->
-                                        <!-- <li
+                                        <!-- future use end -->
+                                        <li
+                                            :class="currentTable === 'transactions' ? 'active' : ''"
+                                            @click="changeTable('transactions')">Transactions</li>
+                                            <!-- my comment start -->
+                                            <!-- <li>Reward Metrics</li> -->
+                                            <!-- my comment end -->
+                                            <!-- future use start-->
+                                            <!-- <li
                                         :class="currentTable === 'voterRewards' ? 'active' : ''"
                                         @click="changeTable('voterRewards')">Voter Rewards</li> -->
-                                        <!-- my comment end -->
-                                </ul>
-                            </div>
+                                            <!-- future use end -->
+                                    </ul>
+                                </div>
 
-                            <div
-                                :class="
-                                + (txLoading ? ' XDC-loading' : '')">
-                                <div class="table-wrapper">
-                                    <div class="d-flex align-items-center justify-content-between px-4">
-                                        <h6 class="h6 color-text-3 fw-400 mb-0">{{ currentTableDesc }}</h6>
-                                        <!-- my comment start -->
-                                        <div
-                                            v-if="currentTable === 'rewards'"
-                                            class="XDC-custom-tab">
-                                            <ul>
-                                                <li
-                                                    :class="currentTab === 'week' ? 'active' : ''"
-                                                    class="time-tab"
-                                                    @click="filterSlash('week')">Week</li>
-                                                <li
-                                                    :class="currentTab === 'month' ? 'active' : ''"
-                                                    class="time-tab"
-                                                    @click="filterSlash('month')">Month</li>
-                                                <li
-                                                    :class="currentTab === 'year' ? 'active' : ''"
-                                                    class="time-tab"
-                                                    @click="filterSlash('year')">Year</li>
-                                            </ul>
-                                        </div>
-                                        <!-- my comment end -->
-                                    </div>
-                                    <b-table
-                                        v-if="currentTable === 'rewards'"
-                                        :items="mnRewards"
-                                        :fields="mnRewardsFields"
-                                        :sort-by.sync="mnRewardsSortBy"
-                                        :sort-desc.sync="mnRewardsSortDesc"
-                                        :per-page="mnRewardsPerPage"
-                                        :show-empty="true"
-                                        :class="`XDC-table XDC-table--mnrewards${rewardLoading ? ' loading' : ''}`"
-                                        :style="(mnRewardsTotalRows > 0 && mnRewardsTotalRows < mnRewardsPerPage) ? { borderRadius: '12px', marginBottom:'0' } : {}"
-                                        :empty-text="`There are no ${(currentTab !== '' ? 'records' : 'rewards')} to show`"
-                                        stacked="md" >
-
-                                        <template
-                                            slot="checkpoint"
-                                            slot-scope="data">{{ data.item.checkpoint }}
-                                        </template>
-
-                                        <template
-                                            slot="reward"
-                                            slot-scope="data">
-                                            {{ !isNaN(data.item.reward)
-                                            ? formatCurrencySymbol(formatNumber(data.item.reward)) : data.item.reward }}
-                                        </template>
-
-                                        <template
-                                            slot="createdAt"
-                                            slot-scope="data">
-                                            <span :id="`timestamp__${data.index}`">{{ data.item.createdAt }}</span>
-                                            <b-tooltip :target="`timestamp__${data.index}`">
-                                                {{ data.item.dateTooltip }}
-                                            </b-tooltip>
-                                        </template>
-
-                                    </b-table>
-                                    <b-pagination
-                                        v-if="(currentTable === 'rewards') && (mnRewardsTotalRows > 0 && mnRewardsTotalRows > mnRewardsPerPage)"
-                                        :total-rows="mnRewardsTotalRows"
-                                        :per-page="mnRewardsPerPage"
-                                        v-model="mnRewardsCurrentPage"
-                                        align="center"
-                                        class="XDC-pagination"
-                                        @change="rewardPageChange" />
-
-                                    <b-table
-                                        v-if="currentTable === 'transactions'"
-                                        :items="transactions"
-                                        :fields="txFields"
-                                        :per-page="txPerPage"
-                                        :show-empty="true"
-                                        :class="`XDC-table XDC-table--transactions${txLoading ? ' loading' : ''}`"
-                                        empty-text="There are no transactions to show"
-                                        stacked="md"
-                                        @sort-changed="sortingChangeTxes" >
-
-                                        <template
-                                            slot="id"
-                                            slot-scope="data">{{ data.item.id }}
-                                        </template>
-
-                                        <template
-                                            slot="voter"
-                                            slot-scope="data">
+                                <div
+                                    :class="
+                                    + (txLoading ? ' XDC-loading' : '')">
+                                    <div class="table-wrapper">
+                                        <div class="d-flex align-items-center justify-content-between px-4">
+                                            <h6 class="h6 color-text-3 fw-400 mb-0">{{ currentTableDesc }}</h6>
                                             <!-- my comment start -->
-                                            <!-- <router-link
+                                            <div
+                                                v-if="currentTable === 'rewards'"
+                                                class="XDC-custom-tab">
+                                                <ul>
+                                                    <li
+                                                        :class="currentTab === 'week' ? 'active' : ''"
+                                                        class="time-tab"
+                                                        @click="filterSlash('week')">Week</li>
+                                                    <li
+                                                        :class="currentTab === 'month' ? 'active' : ''"
+                                                        class="time-tab"
+                                                        @click="filterSlash('month')">Month</li>
+                                                    <li
+                                                        :class="currentTab === 'year' ? 'active' : ''"
+                                                        class="time-tab"
+                                                        @click="filterSlash('year')">Year</li>
+                                                </ul>
+                                            </div>
+                                        <!-- my comment end -->
+                                        </div>
+                                        <b-table
+                                            v-if="currentTable === 'rewards'"
+                                            :items="mnRewards"
+                                            :fields="mnRewardsFields"
+                                            :sort-by.sync="mnRewardsSortBy"
+                                            :sort-desc.sync="mnRewardsSortDesc"
+                                            :per-page="mnRewardsPerPage"
+                                            :show-empty="true"
+                                            :class="`XDC-table XDC-table--mnrewards${rewardLoading ? ' loading' : ''}`"
+                                            :style="(mnRewardsTotalRows > 0 && mnRewardsTotalRows < mnRewardsPerPage) ? { borderRadius: '12px', marginBottom:'0' } : {}"
+                                            :empty-text="`There are no ${(currentTab !== '' ? 'records' : 'rewards')} to show`"
+                                            stacked="md" >
+
+                                            <template
+                                                slot="checkpoint"
+                                                slot-scope="data">{{ data.item.checkpoint }}
+                                            </template>
+
+                                            <template
+                                                slot="reward"
+                                                slot-scope="data">
+                                                {{ !isNaN(data.item.reward)
+                                                ? formatCurrencySymbol(formatNumber(data.item.reward)) : data.item.reward }}
+                                            </template>
+
+                                            <template
+                                                slot="createdAt"
+                                                slot-scope="data">
+                                                <span :id="`timestamp__${data.index}`">{{ data.item.createdAt }}</span>
+                                                <b-tooltip :target="`timestamp__${data.index}`">
+                                                    {{ data.item.dateTooltip }}
+                                                </b-tooltip>
+                                            </template>
+
+                                        </b-table>
+                                        <b-pagination
+                                            v-if="(currentTable === 'rewards') && (mnRewardsTotalRows > 0 && mnRewardsTotalRows > mnRewardsPerPage)"
+                                            :total-rows="mnRewardsTotalRows"
+                                            :per-page="mnRewardsPerPage"
+                                            v-model="mnRewardsCurrentPage"
+                                            align="center"
+                                            class="XDC-pagination"
+                                            @change="rewardPageChange" />
+
+                                        <b-table
+                                            v-if="currentTable === 'transactions'"
+                                            :items="transactions"
+                                            :fields="txFields"
+                                            :per-page="txPerPage"
+                                            :show-empty="true"
+                                            :class="`XDC-table XDC-table--transactions${txLoading ? ' loading' : ''}`"
+                                            empty-text="There are no transactions to show"
+                                            stacked="md"
+                                            @sort-changed="sortingChangeTxes" >
+
+                                            <template
+                                                slot="id"
+                                                slot-scope="data">{{ data.item.id }}
+                                            </template>
+
+                                            <template
+                                                slot="voter"
+                                                slot-scope="data">
+                                                <!-- my comment start -->
+                                                <!-- <router-link
                                                 :to="'/voter/' + data.item.voter"
                                                 class="text-truncate">
                                                 {{ data.item.voter }}
                                             </router-link> -->
-                                            <!-- my comment end -->
-                                            {{ data.item.voter }}
-                                        </template>
+                                                <!-- my comment end -->
+                                                {{ data.item.voter }}
+                                            </template>
 
-                                        <template
-                                            slot="blockNumber"
-                                            slot-scope="data">
-                                            {{ data.item.blockNumber }}
-                                        </template>
+                                            <template
+                                                slot="blockNumber"
+                                                slot-scope="data">
+                                                {{ data.item.blockNumber }}
+                                            </template>
 
-                                        <template
-                                            slot="event"
-                                            slot-scope="data">
-                                            <span :class="'fw-600 ' + getEventClass(data.item.event)">{{ data.item.event }}</span>
-                                        </template>
+                                            <template
+                                                slot="event"
+                                                slot-scope="data">
+                                                <span :class="'fw-600 ' + getEventClass(data.item.event)">{{ data.item.event }}</span>
+                                            </template>
 
-                                        <template
-                                            slot="capacity"
-                                            slot-scope="data">
-                                            {{ isNaN(data.item.cap) ? '---' : formatCurrencySymbol(data.item.cap) }}
-                                        </template>
+                                            <template
+                                                slot="capacity"
+                                                slot-scope="data">
+                                                {{ isNaN(data.item.cap) ? '---' : formatCurrencySymbol(data.item.cap) }}
+                                            </template>
 
-                                        <template
-                                            slot="createdAt"
-                                            slot-scope="data">
-                                            <span :id="`timestamp__${data.index}`">{{ data.item.createdAt }}</span>
-                                            <b-tooltip :target="`timestamp__${data.index}`">
-                                                {{ data.item.dateTooltip }}
-                                            </b-tooltip>
-                                        </template>
+                                            <template
+                                                slot="createdAt"
+                                                slot-scope="data">
+                                                <span :id="`timestamp__${data.index}`">{{ data.item.createdAt }}</span>
+                                                <b-tooltip :target="`timestamp__${data.index}`">
+                                                    {{ data.item.dateTooltip }}
+                                                </b-tooltip>
+                                            </template>
 
-                                        <template
-                                            slot="action"
-                                            slot-scope="data">
-                                            <a
-                                                v-b-tooltip.hover.right
-                                                :href="`${config.explorerUrl}/txs/${data.item.tx}`"
-                                                title="View on XDCScan"
-                                                target="_blank">
-                                                <i class="tm-eye" />
-                                                <span>View on XDCScan</span>
-                                            </a>
-                                        </template>
-                                    </b-table>
+                                            <template
+                                                slot="action"
+                                                slot-scope="data">
+                                                <a
+                                                    v-b-tooltip.hover.right
+                                                    :href="`${config.explorerUrl}/txs/${data.item.tx}`"
+                                                    title="View on XDCScan"
+                                                    target="_blank">
+                                                    <i class="tm-eye" />
+                                                    <span>View on XDCScan</span>
+                                                </a>
+                                            </template>
+                                        </b-table>
 
-                                    <b-pagination
-                                        v-if="(currentTable === 'transactions') && (txTotalRows > 0 && txTotalRows > txPerPage)"
-                                        :total-rows="txTotalRows"
-                                        :per-page="txPerPage"
-                                        v-model="txCurrentPage"
-                                        align="center"
-                                        class="XDC-pagination"
-                                        @change="txPageChange"/>
+                                        <b-pagination
+                                            v-if="(currentTable === 'transactions') && (txTotalRows > 0 && txTotalRows > txPerPage)"
+                                            :total-rows="txTotalRows"
+                                            :per-page="txPerPage"
+                                            v-model="txCurrentPage"
+                                            align="center"
+                                            class="XDC-pagination"
+                                            @change="txPageChange"/>
 
-                                    <b-table
-                                        v-if="currentTable === 'voterRewards'"
-                                        :items="voterRewards"
-                                        :fields="voterRewardsFields"
-                                        :sort-by.sync="voterRewardsSortBy"
-                                        :sort-desc.sync="voterRewardsSortDesc"
-                                        :per-page="voterRewardsPerPage"
-                                        :show-empty="true"
-                                        :class="`XDC-table XDC-table--voterrewards${rewardLoading ? ' loading' : ''}`"
-                                        empty-text="There are no voter rewards to show"
-                                        stacked="md" >
+                                        <b-table
+                                            v-if="currentTable === 'voterRewards'"
+                                            :items="voterRewards"
+                                            :fields="voterRewardsFields"
+                                            :sort-by.sync="voterRewardsSortBy"
+                                            :sort-desc.sync="voterRewardsSortDesc"
+                                            :per-page="voterRewardsPerPage"
+                                            :show-empty="true"
+                                            :class="`XDC-table XDC-table--voterrewards${rewardLoading ? ' loading' : ''}`"
+                                            empty-text="There are no voter rewards to show"
+                                            stacked="md" >
 
-                                        <template
-                                            slot="id"
-                                            slot-scope="data">{{ data.index + 1 }}
-                                        </template>
+                                            <template
+                                                slot="id"
+                                                slot-scope="data">{{ data.index + 1 }}
+                                            </template>
 
-                                        <template
-                                            slot="checkpoint"
-                                            slot-scope="data">{{ data.item.checkpoint }}
-                                        </template>
+                                            <template
+                                                slot="checkpoint"
+                                                slot-scope="data">{{ data.item.checkpoint }}
+                                            </template>
 
-                                        <template
-                                            slot="reward"
-                                            slot-scope="data">
-                                            {{ formatCurrencySymbol(formatNumber(data.item.reward)) }}
-                                        </template>
+                                            <template
+                                                slot="reward"
+                                                slot-scope="data">
+                                                {{ formatCurrencySymbol(formatNumber(data.item.reward)) }}
+                                            </template>
 
-                                        <template
-                                            slot="validatorName"
-                                            slot-scope="data">
-                                            <!-- <router-link
+                                            <template
+                                                slot="validatorName"
+                                                slot-scope="data">
+                                                <!-- <router-link
                                                 :to="'/candidate/' + data.item.candidate"
                                                 class="text-truncate"> -->
-                                            {{ data.item.validatorName }}
+                                                {{ data.item.validatorName }}
                                             <!-- </router-link> -->
-                                        </template>
+                                            </template>
 
-                                        <template
-                                            slot="createdAt"
-                                            slot-scope="data">
-                                            <span :id="`timestamp__${data.index}`">{{ data.item.createdAt }}</span>
-                                            <b-tooltip :target="`timestamp__${data.index}`">
-                                                {{ data.item.dateTooltip }}
-                                            </b-tooltip>
-                                        </template>
+                                            <template
+                                                slot="createdAt"
+                                                slot-scope="data">
+                                                <span :id="`timestamp__${data.index}`">{{ data.item.createdAt }}</span>
+                                                <b-tooltip :target="`timestamp__${data.index}`">
+                                                    {{ data.item.dateTooltip }}
+                                                </b-tooltip>
+                                            </template>
 
-                                    </b-table>
+                                        </b-table>
 
-                                    <b-pagination
-                                        v-if="(currentTable === 'voterRewards') && (voterRewardsTotalRows > 0 && voterRewardsTotalRows > voterRewardsPerPage)"
-                                        :total-rows="voterRewardsTotalRows"
-                                        :per-page="voterRewardsPerPage"
-                                        v-model="voterRewardsCurrentPage"
-                                        align="center"
-                                        class="XDC-pagination"
-                                        @change="voterRewardsPageChange" />
+                                        <b-pagination
+                                            v-if="(currentTable === 'voterRewards') && (voterRewardsTotalRows > 0 && voterRewardsTotalRows > voterRewardsPerPage)"
+                                            :total-rows="voterRewardsTotalRows"
+                                            :per-page="voterRewardsPerPage"
+                                            v-model="voterRewardsCurrentPage"
+                                            align="center"
+                                            class="XDC-pagination"
+                                            @change="voterRewardsPageChange" />
 
+                                    </div>
                                 </div>
-                            </div>
-                        </b-card>
-                    </div>
-                </b-row>
+                            </b-card>
+                        </div>
+                    </b-row>
+                </div>
             </div>
         </div>
     </div>

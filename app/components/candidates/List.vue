@@ -14,7 +14,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <b-card class="XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
-                            Core Validators / Protector Nodes
+                            Masternode / Total Nodes
                             <img
                                 src="/app/assets/img/info.svg"
                                 alt="info-icon"

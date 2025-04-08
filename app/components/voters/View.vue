@@ -31,7 +31,7 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0">
+                <div class="col-12 col-md-4 mb-4 mb-md-0">
                     <b-card class="XDC-card custom-card mb-0 h-100">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Total Rewards Earned
@@ -41,12 +41,12 @@
                                 class="ml-2">
                         </h6>
                         <p class="XDC-card__text">
-                            <!-- 14,825.25 XDC -->
-                            {{ formatCurrencySymbol(formatBigNumber(voterRewardsTotalRows, 2)) }}
+                            {{ formatCurrencySymbol(formatBigNumber(mnRewardsTotalRows, 2)) }}
                         </p>
                     </b-card>
                 </div>
-                <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0">
+                <!-- future use start-->
+                <!-- <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0">
                     <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Voting Power
@@ -57,11 +57,11 @@
                         </h6>
                         <p class="XDC-card__text">
                             3.42%
-                        <!-- {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }} -->
                         </p>
                     </b-card>
-                </div>
-                <div class="col-sm-6 col-lg-3 mb-4 mb-sm-0">
+                </div> -->
+                <!-- future use end -->
+                <div class="col-12 col-md-4 mb-4 mb-md-0">
                     <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Status
@@ -72,12 +72,13 @@
                         </h6>
                         <div class="d-flex align-items-center">
                             <p class="XDC-card__text">
-                                {{ candidate.status ? candidate.status : "N/A" }}
+                                {{ candidate.status }}
                             </p>
                         </div>
                     </b-card>
                 </div>
-                <div class="col-sm-6 col-lg-3">
+
+                <div class="col-12 col-md-4">
                     <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Validator Uptime
