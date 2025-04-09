@@ -166,7 +166,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- My comments start -->
+                        <!-- My comment start -->
                         <!-- <div class="XDC-detail">
                             <div
                                 class="XDC-detail-section">
@@ -185,7 +185,7 @@
                                 <div class="XDC-detail-value-big">{{ formatCurrencySymbol(formatNumber(totalVoted)) }}</div>
                             </div>
                         </div> -->
-                        <!-- My comments end -->
+                        <!-- My comment end -->
 
                         <!--<div class="section section&#45;&#45;candidate">
                             <div class="section-title">
@@ -448,7 +448,7 @@
                                 </span>
                             </div>
                         </div>
-                        <!-- My comments start--->
+                        <!-- My comment start--->
                         <!-- <b-tabs
                             pills
                             card
@@ -514,7 +514,7 @@
                                         @change="candidatePageChange" />
                                 </div>
                             </b-tab> -->
-                        <!-- My comments end--->
+                        <!-- My comment end--->
 
                         <!-- <b-tab
                                 title="Voter Rewards">
@@ -580,7 +580,7 @@
                                 </div>
                             </b-tab> -->
 
-                        <!-- My comments start--->
+                        <!-- My comment start--->
                         <!-- <b-tab
                                 title="Transactions">
                                 <div
@@ -653,7 +653,7 @@
                                 </div>
                             </b-tab>
                         </b-tabs> -->
-                        <!-- My comments end--->
+                        <!-- My comment end--->
                     </b-card>
                 </div>
 
@@ -944,13 +944,6 @@ export default {
                     label: 'Age',
                     sortable: false
                 }
-                // my comment start
-                /* {
-                    key: 'tx',
-                    label: '',
-                    sortable: false
-                } */
-                // my comment start
             ],
             transactions: [],
             txCurrentPage: 1,

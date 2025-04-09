@@ -151,7 +151,7 @@
                                 <div class="XDC-detail">
                                     <h6 class="h6 fw-400 color-text-3 mb-4">Validator Overview</h6>
 
-                                    <!-- My comments start -->
+                                    <!-- My comment start -->
                                     <!-- <div class="XDC-detail-section">
                                     <div class="XDC-detail-label">Capacity</div>
                                     <div class="XDC-detail-value-big">{{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }}</div>
@@ -184,7 +184,7 @@
                                         </p>
                                     </div>
                                 </div> -->
-                                    <!-- My comments end -->
+                                    <!-- My comment end -->
 
                                     <div class="XDC-detail-section d-flex justify-content-between">
                                         <div class="XDC-detail-label">Capacity</div>
@@ -248,7 +248,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- My comments start -->
+                                    <!-- My comment start -->
                                     <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Hardware</div>
                                     <div class="XDC-detail-value-small">
@@ -284,7 +284,7 @@
                                         </span>
                                     </div>
                                 </div> -->
-                                    <!-- My comments end -->
+                                    <!-- My comment end -->
 
                                     <!-- <div
                                     v-for="(value, key) in candidate.dataCenterInfo"
@@ -309,7 +309,7 @@
                                     </p>
                                 </div> -->
 
-                                    <!-- My comments start -->
+                                    <!-- My comment start -->
                                     <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Latest Signed Block</div>
                                     <div class="XDC-detail-value-small">
@@ -320,7 +320,7 @@
                                         </span>
                                     </div>
                                 </div> -->
-                                    <!-- My comments end -->
+                                    <!-- My comment end -->
 
                                     <!-- <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label">Voters</div>
@@ -335,7 +335,7 @@
                                     <div class="XDC-detail-value-small">2020-09-12</div>
                                 </div> -->
 
-                                    <!-- My comments start -->
+                                    <!-- My comment start -->
                                     <!-- <div class="XDC-detail-section">
                                     <div class="XDC-detail-label">Owner Address</div>
                                     <div class="XDC-detail-value-small">
@@ -356,7 +356,7 @@
                                         </router-link>
                                     </div>
                                 </div> -->
-                                    <!-- My comments end -->
+                                    <!-- My comment end -->
                                     <div
                                         class="buttons text-right">
                                         <b-button
@@ -635,14 +635,14 @@
                                         </span>
                                     </div>
                                 </div>
-                            <!-- My comments start--->
+                            <!-- My comment start--->
                             <!-- <b-tabs
                                 pills
                                 card
                                 class="XDC-tab"> -->
-                            <!-- My comments end--->
+                            <!-- My comment end--->
 
-                            <!-- My comments start--->
+                            <!-- My comment start--->
                             <!-- <b-tab
                                     title="Staking"
                                     active>
@@ -719,7 +719,7 @@
                                             @change="txPageChange"/>
                                     </div>
                                 </b-tab> -->
-                            <!-- My comments end--->
+                            <!-- My comment end--->
 
                             <!-- <b-tab title="Voters">
                                     <div
@@ -767,7 +767,7 @@
                                     </div>
                                 </b-tab> -->
 
-                            <!-- My comments start--->
+                            <!-- My comment start--->
                             <!-- <b-tab title="Rewards">
                                     <div
                                         :class="'section section--mnrewards'
@@ -842,11 +842,11 @@
                                             @change="rewardPageChange" />
                                     </div>
                                 </b-tab> -->
-                            <!-- My comments end--->
+                            <!-- My comment end--->
 
-                            <!-- My comments start--->
+                            <!-- My comment start--->
                             <!-- </b-tabs> -->
-                            <!-- My comments end--->
+                            <!-- My comment end--->
 
                             <!-- <div
                                 v-if="candidate.status !== 'RESIGNED' && candidate.nodeId"
@@ -895,9 +895,6 @@
                                         <li
                                             :class="currentTable === 'transactions' ? 'active' : ''"
                                             @click="changeTable('transactions')">Transactions</li>
-                                            <!-- my comment start -->
-                                            <!-- <li>Reward Metrics</li> -->
-                                            <!-- my comment end -->
                                             <!-- future use start-->
                                             <!-- <li
                                         :class="currentTable === 'voterRewards' ? 'active' : ''"
@@ -912,7 +909,6 @@
                                     <div class="table-wrapper">
                                         <div class="d-flex align-items-center justify-content-between px-4">
                                             <h6 class="h6 color-text-3 fw-400 mb-0">{{ currentTableDesc }}</h6>
-                                            <!-- my comment start -->
                                             <div
                                                 v-if="currentTable === 'rewards'"
                                                 class="XDC-custom-tab">
@@ -931,7 +927,6 @@
                                                         @click="filterSlash('year')">Year</li>
                                                 </ul>
                                             </div>
-                                        <!-- my comment end -->
                                         </div>
                                         <b-table
                                             v-if="currentTable === 'rewards'"

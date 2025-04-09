@@ -141,12 +141,6 @@ export default {
         resign: async function () {
             let self = this
             try {
-                // my comment start
-                /* if (!self.isReady) {
-                    self.$router.push({ path: '/setting' })
-                } */
-                // my comment end
-
                 self.loading = true
 
                 const account = (await self.getAccount() || '').toLowerCase()
