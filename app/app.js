@@ -37,6 +37,7 @@ import * as HDKey from 'hdkey'
 import * as ethUtils from 'ethereumjs-util'
 import Meta from 'vue-meta'
 import Helper from './utils'
+import './assets/fonts/fontawesome/css/all.min.css'
 
 Vue.use(Meta)
 Vue.use(BootstrapVue)
