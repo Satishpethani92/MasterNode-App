@@ -165,7 +165,7 @@
                         v-if="!isReady && provider === 'metamask'">
                         <p class="mb-4">Please install &amp; login
                             <a
-                                href="https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo/"
+                                href="https://chromewebstore.google.com/detail/xdcpay/dgimfmajflciajjbhbkibdbfmpncbnmj"
                                 target="_blank">XDCPay Extension</a>
                             then connect it to XDC Network Mainnet or Apothem Testnet.</p>
                     </div>

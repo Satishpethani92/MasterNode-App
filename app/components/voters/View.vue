@@ -88,7 +88,7 @@
                                 class="ml-2">
                         </h6>
                         <p class="XDC-card__text color-green">
-                            99.4%
+                            ToDo
                         <!-- {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }} -->
                         </p>
                     </b-card>
@@ -119,7 +119,7 @@
                                 <div class="XDC-detail-value-small">
                                     <span
                                         :class="'XDC-info__description'">
-                                        99.4%
+                                        ToDo
                                         <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
                                     </span>
                                 </div>
@@ -160,7 +160,7 @@
                                 <div class="XDC-detail-value-small">
                                     <span
                                         :class="'XDC-info__description'">
-                                        82,700,070
+                                        ToDo
                                         <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
                                     </span>
                                 </div>
@@ -417,7 +417,7 @@
                             <div class="XDC-detail-value-small">
                                 <span
                                     :class="'XDC-info__description'">
-                                    Jan, 13, 2021
+                                    ToDo
                                     <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
                                 </span>
                             </div>
@@ -433,7 +433,7 @@
                             <div class="XDC-detail-value-small">
                                 <span
                                     :class="'XDC-info__description'">
-                                    Burlingston, USA
+                                    ToDo
                                     <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
                                 </span>
                             </div>

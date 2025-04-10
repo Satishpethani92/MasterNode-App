@@ -70,10 +70,7 @@
                         <b-card class="XDC-card custom-card mb-0 h-100">
                             <h6 class="XDC-card__title d-flex align-items-center">
                                 Total Rewards Earned
-                                <img
-                                    src="/app/assets/img/info.svg"
-                                    alt="info-icon"
-                                    class="ml-2">
+                                <InfoToolTip :content="`Total rewards earned: ${ formatCurrencySymbol(formatBigNumber(mnRewardsTotalRows, 2)) }`" />
                             </h6>
                             <p class="XDC-card__text">
                                 {{ formatCurrencySymbol(formatBigNumber(mnRewardsTotalRows, 2)) }}
@@ -100,10 +97,7 @@
                         <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
                             <h6 class="XDC-card__title d-flex align-items-center">
                                 Status
-                                <img
-                                    src="/app/assets/img/info.svg"
-                                    alt="info-icon"
-                                    class="ml-2">
+                                <InfoToolTip :content="`Status: ${ candidate.status }`" />
                             </h6>
                             <div class="d-flex align-items-center">
                                 <p class="XDC-card__text">
@@ -117,13 +111,10 @@
                         <b-card class="XDC-card XDC-card custom-card mb-0 h-100">
                             <h6 class="XDC-card__title d-flex align-items-center">
                                 Validator Uptime
-                                <img
-                                    src="/app/assets/img/info.svg"
-                                    alt="info-icon"
-                                    class="ml-2">
+                                <InfoToolTip :content="`Validator uptime: ToDo`" />
                             </h6>
                             <p class="XDC-card__text color-green">
-                                99.4%
+                                ToDo
                                 <!-- {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }} -->
                             </p>
                         </b-card>
@@ -201,7 +192,7 @@
                                         <div class="XDC-detail-value-small">
                                             <span
                                                 :class="'XDC-info__description'">
-                                                99.4%
+                                                ToDo
                                             <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
                                             </span>
                                         </div>
@@ -209,10 +200,8 @@
                                     <hr>
                                     <div class="XDC-detail-section d-flex justify-content-between">
                                         <div class="XDC-detail-label d-flex align-items-center">Est. Staking ROI
-                                            <img
-                                                src="/app/assets/img/info.svg"
-                                                alt="info-icon"
-                                                class="ml-2"></div>
+                                            <InfoToolTip :content="`Est. Staking ROI: ${ voterROI ? voterROI + '%' : 'N/A' }`" />
+                                        </div>
                                         <div class="XDC-detail-value-small">
                                             <span
                                                 :class="'XDC-info__description'">
@@ -224,10 +213,7 @@
                                     <hr>
                                     <div class="XDC-detail-section d-flex justify-content-between">
                                         <div class="XDC-detail-label align-items-center">Est. Owner ROI
-                                            <img
-                                                src="/app/assets/img/info.svg"
-                                                alt="info-icon"
-                                                class="ml-2">
+                                            <InfoToolTip :content="`Est. Owner ROI: ${ mnROI ? mnROI + '%' : 'N/A' }`" />
                                         </div>
                                         <div class="XDC-detail-value-small">
                                             <span
@@ -242,7 +228,7 @@
                                         <div class="XDC-detail-value-small">
                                             <span
                                                 :class="'XDC-info__description'">
-                                                82,700,070
+                                                ToDo
                                             <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
                                             </span>
                                         </div>
@@ -597,14 +583,12 @@
                                 <hr>
                                 <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label d-flex align-items-center">Active From
-                                        <img
-                                            src="/app/assets/img/info.svg"
-                                            alt="info-icon"
-                                            class="ml-2"></div>
+                                        <InfoToolTip :content="`Active From: ToDo`" />
+                                    </div>
                                     <div class="XDC-detail-value-small">
                                         <span
                                             :class="'XDC-info__description'">
-                                            Jan, 13, 2021
+                                            ToDo
                                         <!-- {{ formatCurrencySymbol(formatBigNumber(candidate.cap, 3)) }} -->
                                         </span>
                                     </div>
@@ -612,15 +596,12 @@
                                 <hr>
                                 <div class="XDC-detail-section d-flex justify-content-between">
                                     <div class="XDC-detail-label align-items-center">Location
-                                        <img
-                                            src="/app/assets/img/info.svg"
-                                            alt="info-icon"
-                                            class="ml-2">
+                                        <InfoToolTip :content="`Location: ToDo`" />
                                     </div>
                                     <div class="XDC-detail-value-small">
                                         <span
                                             :class="'XDC-info__description'">
-                                            Burlingston, USA
+                                            ToDo
                                         <!-- {{ mnROI ? mnROI + '%' : '---' }} -->
                                         </span>
                                     </div>
@@ -1125,6 +1106,7 @@ import BigNumber from 'bignumber.js'
 import Chart from '../Chart.vue'
 import moment from 'moment'
 import store from 'store'
+import InfoToolTip from '../InfoToolTip.vue'
 
 export default {
     name: 'App',
@@ -1135,7 +1117,8 @@ export default {
         ]
     },
     components: {
-        chart: Chart
+        chart: Chart,
+        InfoToolTip
     },
     data () {
         return {

@@ -334,8 +334,13 @@ router.get('/search', [
         return res.status(400).json({ errors: errors.array() })
     }
     try {
-        const regexpAddr = /^(xdc)?[0-9a-fA-F]{40}$/
-        const query = req.query.query || ''
+        const regexpAddr = /^(xdc|0x)?[0-9a-fA-F]{40}$/
+        let query = req.query.query || ''
+        /* if (req.query.query.substring(0, 2) === '0x') {
+            query = 'xdc' + req.query.query.substring(2)
+        } else {
+            query = req.query.query || ''
+        } */
         let limit = (req.query.limit) ? parseInt(req.query.limit) : 200
         let skip
         skip = (req.query.page) ? limit * (req.query.page - 1) : 0

@@ -15,10 +15,7 @@
                     <b-card class="XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Masternode / Total Nodes
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
+                            <InfoToolTip :content="`Current masternodes: ${activeCandidates} out of ${activeCandidates + totalProposedNodes + slashedMN} total nodes`" />
                         </h6>
                         <p class="XDC-card__text">
                             {{ activeCandidates }}/{{ activeCandidates + totalProposedNodes + slashedMN }}
@@ -29,10 +26,7 @@
                     <b-card class="XDC-card XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Total Reward Distributed
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
+                            <InfoToolTip :content="`Total reward distributed: ${ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }`" />
                         </h6>
                         <p class="XDC-card__text">
                             {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }}
@@ -43,10 +37,7 @@
                     <b-card class="XDC-card XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Total Value Locked
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
+                            <InfoToolTip :content="`Total value locked: ${ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }`" />
                         </h6>
                         <p class="XDC-card__text">
                             {{ formatCurrencySymbol(formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2)) }}
@@ -57,13 +48,11 @@
                     <b-card class="XDC-card XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Total Transactions
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
+                            <InfoToolTip :content="`Total transactions: ToDo`" />
                         </h6>
                         <p class="XDC-card__text">
-                            {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }}
+                            ToDo
+                            <!-- {{ formatBigNumber(toXDCNumber(chainConfig.XDCStakeAmount),2) }} -->
                         </p>
                     </b-card>
                 </div>
@@ -71,10 +60,7 @@
                     <b-card class="XDC-card XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Epoch / Block Height
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
+                            <InfoToolTip :content="`Current epoch: ${formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1)}, Block height: ${formatBigNumber(candidates[0].latestSignedBlock)}`" />
                         </h6>
                         <p class="XDC-card__text">
                             {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }}</p>
@@ -84,10 +70,7 @@
                     <b-card class="XDC-card XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Last Checkpoint
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
+                            <InfoToolTip :content="`Last checkpoint: ${ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }`" />
                         </h6>
                         <p class="XDC-card__text">
                             {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }}
@@ -98,10 +81,7 @@
                     <b-card class="XDC-card XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             Checkpoint Interval
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
+                            <InfoToolTip :content="`Checkpoint interval: ${checkpointInterval ? checkpointInterval : 'N/A'} ${ checkpointInterval && 'minutes'}`" />
                         </h6>
                         <p class="XDC-card__text">
                             {{ checkpointInterval ? checkpointInterval : "N/A" }} {{ checkpointInterval && "Minutes" }}
@@ -112,13 +92,10 @@
                     <b-card class="XDC-card XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
                             XDC Wallets / Multisig Wallets
-                            <img
-                                src="/app/assets/img/info.svg"
-                                alt="info-icon"
-                                class="ml-2">
+                            <InfoToolTip :content="`XDC wallets: ToDo, Multisig wallets: ToDo`" />
                         </h6>
                         <p class="XDC-card__text">
-                            28 / 3
+                            ToDo
                             <!-- {{ formatBigNumber(Math.floor(chainConfig.blockNumber / chainConfig.epoch) + 1) }} / {{ formatBigNumber(candidates[0].latestSignedBlock) }} -->
                         </p>
                     </b-card>
@@ -271,6 +248,7 @@
 <script>
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
+import InfoToolTip from '../InfoToolTip.vue'
 import store from 'store'
 import Web3 from 'xdc3'
 // import LineChart from '../LineChart.vue'
@@ -282,6 +260,9 @@ export default {
         LineChart
     }, */
     //    my comment end
+    components: {
+        InfoToolTip
+    },
     data () {
         return {
             chainConfig: {},

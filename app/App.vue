@@ -67,7 +67,7 @@
                             </li>
                             <li class="nav-item">
                                 <a
-                                    href="https://howto.xinfin.org/"
+                                    href="https://xdc.dev"
                                     target="_blank"
                                     class="nav-link">Help</a>
                             </li>
@@ -191,35 +191,35 @@
                             <ul class="list-inline mb-2">
                                 <li class="list-inline-item">
                                     <a
-                                        href="https://twitter.com/XinFin_Official"
+                                        href="https://x.com/XDC_Network_"
                                         target="_blank">
                                         <i class="fa-brands fa-square-x-twitter"/>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
-                                        href="https://t.me/xinfintalk"
+                                        href="https://t.me/XDC_Network_Updates"
                                         target="_blank">
                                         <i class="fa-brands fa-telegram"/>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
-                                        href="https://www.facebook.com/XinFinHybridBlockchain/"
+                                        href="https://www.facebook.com/XDCNetworkBlockchain"
                                         target="_blank">
                                         <i class="fa-brands fa-facebook"/>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
-                                        href="https://github.com/XinFinOrg"
+                                        href="https://github.com/XinFinorg"
                                         target="_blank">
                                         <i class="fa-brands fa-github"/>
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a
-                                        href="https://www.reddit.com/r/xinfin"
+                                        href="https://www.reddit.com/r/xinfin/?rdt=33804"
                                         target="_blank">
                                         <i class="fa-brands fa-reddit"/>
                                     </a>
@@ -232,45 +232,93 @@
                         <div class="col-lg-2">
                             <h6 class="h6">Community</h6>
                             <ul class="footer-links">
-                                <li class="mb-1"><a href="#">Developers Ecosystem Partners</a></li>
-                                <li class="mb-1"><a href="#">Join Community</a></li>
-                                <li class="mb-1"><a href="#">Join Accelerator</a></li>
-                                <li class="mb-1"><a href="#">Community Bounty</a></li>
-                                <li class="mb-1"><a href="#">XDC Forum</a></li>
-                                <li class="mb-1"><a href="#">Events</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/developers-ecosystem-partners">Developers Ecosystem Partners</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/join-community">Join Community</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/xdc-accelerator-program">Join Accelerator</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/community-bounty">Community Bounty</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://forum.xinfin.org/">XDC Forum</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/events">Events</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-2">
                             <h6 class="h6">Use XDC</h6>
                             <ul class="footer-links">
-                                <li class="mb-1"><a href="#">Ecosystem dApps</a></li>
-                                <li class="mb-1"><a href="#">Setup Masternode</a></li>
-                                <li class="mb-1"><a href="#">Get XDC</a></li>
-                                <li class="mb-1"><a href="#">XDC Wallets</a></li>
-                                <li class="mb-1"><a href="#">XDC Subnet</a></li>
-                                <li class="mb-1"><a href="#">About XDC Network</a></li>
-                                <li class="mb-1"><a href="#">XDC 2.0</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/ecosystem-dapps">Ecosystem dApps</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/setup-masternode">Setup Masternode</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/get-xdc">Get XDC</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/wallets">XDC Wallets</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/xdc-subnet">XDC Subnet</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/about">About XDC Network</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/xdpos">XDC 2.0</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-2">
                             <h6 class="h6">XDC Tools</h6>
                             <ul class="footer-links">
-                                <li class="mb-1"><a href="#">XDC Explorer</a></li>
-                                <li class="mb-1"><a href="#">XDC Network Status</a></li>
-                                <li class="mb-1"><a href="#">XDC Faucet</a></li>
-                                <li class="mb-1"><a href="#">XDC Network Remix</a></li>
-                                <li class="mb-1"><a href="#">Quick Tools Guide</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xdcscan.com/">XDC Explorer</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://stats1.xinfin.network/">XDC Network Status</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://faucet.apothem.network/">XDC Faucet</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://remix.xinfin.network/#optimize=false&runs=200&evmVersion=null&version=soljson-v0.8.7+commit.e28d00a7.js">XDC Network Remix</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/quick-tools-guide">Quick Tools Guide</a></li>
                             </ul>
                         </div>
                         <div class="col-lg-2">
                             <h6 class="h6">Developers</h6>
                             <ul class="footer-links">
-                                <li class="mb-1"><a href="#">Documentation</a></li>
-                                <li class="mb-1"><a href="#">XDC Developers Forum</a></li>
-                                <li class="mb-1"><a href="#">XDC AI Developer Tools</a></li>
-                                <li class="mb-1"><a href="#">Technical White Paper</a></li>
-                                <li class="mb-1"><a href="#">Business White Paper</a></li>
-                                <li class="mb-1"><a href="#">Github</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://docs.xdc.network/">Documentation</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="#">XDC Developers Forum</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://www.xdc.dev/">XDC AI Developer Tools</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/docs/whitepaper-tech.pdf">Technical White Paper</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://xinfin.org/docs/whitepaper-business.pdf">Business White Paper</a></li>
+                                <li class="mb-1"><a
+                                    target="_blank"
+                                    href="https://github.com/XinFinorg">Github</a></li>
                             </ul>
                         </div>
                         <!-- <div class="col-md-8">

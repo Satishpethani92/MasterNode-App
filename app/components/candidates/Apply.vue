@@ -44,8 +44,12 @@
                                         <p class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong"> Become a MasterNode </strong>and upload the <strong class="markup--strong markup--p-strong">Know Your Community (KYC) certificate</strong> in PDF format.</p>
                                         <p class="graf graf--p graf-after--p">This KYC certificate needs to be signed by one of the following personnel:</p>
                                         <ul class="postList"><li>Company Secretary,</li><li>A Notary Public,</li><li>Chartered Secretary,</li><li >Consulate, or</li><li>A lawyer with Seal.</li></ul>
-                                        <p class="graf graf--p graf-after--li">For <strong class="markup--strong markup--p-strong">INDIVIDUAL format</strong>, <a href="https://docs.google.com/document/d/1Us9chjXEDYrDOpfuwWITxaQOSEYxYIpJpwWuYK0TyXY" ><strong class="markup--strong markup--p-strong">click here</strong></a>.</p>
-                                        <p>For <strong class="markup--strong markup--p-strong">ORGANIZATION format</strong>, <a href="https://docs.google.com/document/d/1eyjFp3DXhrpLscngELocmXFwJ_Y8H9si6n8Z2SLADhg"><strong class="markup--strong markup--p-strong">click here</strong></a>.</p>
+                                        <p class="graf graf--p graf-after--li">For <strong class="markup--strong markup--p-strong">INDIVIDUAL format</strong>, <a
+                                            target="_blank"
+                                            href="https://docs.google.com/document/d/1Us9chjXEDYrDOpfuwWITxaQOSEYxYIpJpwWuYK0TyXY" ><strong class="markup--strong markup--p-strong">click here</strong></a>.</p>
+                                        <p>For <strong class="markup--strong markup--p-strong">ORGANIZATION format</strong>, <a
+                                            target="_blank"
+                                            href="https://docs.google.com/document/d/1eyjFp3DXhrpLscngELocmXFwJ_Y8H9si6n8Z2SLADhg"><strong class="markup--strong markup--p-strong">click here</strong></a>.</p>
                                         <p><em class="markup--em markup--p-em">Note: It’s mandatory to upload the certificate in a </em><strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">PDF format</em></strong><em class="markup--em markup--p-em">.</em></p>
                                     </div>
                                 </li>
