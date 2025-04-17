@@ -129,15 +129,6 @@
         hyphens: auto;
         margin-bottom: 5px;
 
-        div{
-            a{
-                color: var(--color-text-3);
-                &:hover{
-                    color: var(--color-link);
-                }
-            }
-        }
-
         &:first-child {
             border-top: none;
         }
@@ -778,5 +769,8 @@
     border-radius: 12px;
 }
 .table {
-    margin-bottom: 0
+    margin-bottom: 0;
+    td{
+        border-color: var(--border-color)
+    }
 }

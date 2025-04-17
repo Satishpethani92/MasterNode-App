@@ -27,9 +27,85 @@
                             :style="{ width: '106px', height: '34px' }"
                             src="/app/assets/img/light-mode-logo.svg" >
                     </b-navbar-brand>
-                    <b-navbar-toggle
+
+                    <div class="d-lg-none d-flex ml-auto">
+                        <b-navbar-toggle
+                            target="nav-collapse"
+                            class="btn-menu-sp p-0 mr-2"/>
+                        <b-button
+                            v-if="!isXDCnet"
+                            id="btn-become-candidate"
+                            class="mr-2"
+                            variant="primary"
+                            @click="showLoginModal = true">Login</b-button>
+                        <b-dropdown
+                            v-if="isXDCnet"
+                            class="dd-setting mr-2"
+                            style="height: 30px; width:30px"
+                            right
+                            offset="25"
+                            no-caret
+                            variant="primary">
+                            <template slot="button-content">
+                                <i class="tm-cog icon-2x"/>
+                            </template>
+                            <b-dropdown-item class="dd-address">
+                                {{ truncate(account, 20) }}
+                            </b-dropdown-item>
+                            <b-dropdown-item to="/setting">Settings/Withdraws</b-dropdown-item>
+                            <b-dropdown-divider />
+                            <b-dropdown-item
+                                v-if="!mobileCheck && isXDCnet"
+                                href="/"
+                                @click="signOut">Sign out</b-dropdown-item>
+                        </b-dropdown>
+
+                        <b-button
+                            id="btn-darkmode"
+                            variant="transparent"
+                            class="p-0 bg-transparent border-0 btn"
+                            style="height: 30px; width:30px"
+                            @click="toggleDarkMode">
+                            <svg
+                                v-if="!darkMode"
+                                stroke="currentColor"
+                                fill="currentColor"
+                                stroke-width="0"
+                                viewBox="0 0 24 24"
+                                focusable="false"
+                                class="moon-icon"
+                                height="1.5em"
+                                width="1.5em"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    fill="none"
+                                    d="M0 0h24v24H0z"/>
+                                <path d="M10 2c-1.82 0-3.53.5-5 1.35C7.99 5.08 10 8.3 10 12s-2.01 6.92-5 8.65C6.47 21.5 8.18 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2z"/>
+                            </svg>
+                            <svg
+                                v-else
+                                stroke="currentColor"
+                                fill="currentColor"
+                                stroke-width="0"
+                                viewBox="0 0 24 24"
+                                focusable="false"
+                                class="sun-icon"
+                                height="1.5em"
+                                width="1.5em"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    fill="none"
+                                    d="M0 0h24v24H0z"/>
+                                <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
+                            </svg>
+                        </b-button>
+                    </div>
+
+                    <!-- my comment start -->
+                    <!-- <b-navbar-toggle
                         target="nav-collapse"
-                        class="btn-menu-sp"/>
+                        class="btn-menu-sp"/> -->
+                    <!-- my comment end -->
                     <b-collapse
                         id="nav-collapse"
                         is-nav>
@@ -45,7 +121,7 @@
                                     @click="searchCandidate">Search</b-button>
                             </b-nav-form>
                         </b-navbar-nav>
-                        <b-navbar-nav class="ml-3">
+                        <b-navbar-nav class="ml-lg-3">
                             <li class="nav-item">
                                 <router-link
                                     to="/"
@@ -72,19 +148,13 @@
                                     class="nav-link">Help</a>
                             </li>
                         </b-navbar-nav>
-                        <b-navbar-nav class="ml-3 navbar-buttons">
+                        <b-navbar-nav class="ml-lg-3 navbar-buttons d-none d-lg-flex">
                             <b-button
                                 v-if="!isXDCnet"
                                 id="btn-become-candidate"
                                 variant="primary"
                                 @click="showLoginModal = true">Login</b-button>
-                            <!-- My comment start -->
-                            <!-- <b-button
-                                v-else
-                                id="btn-become-candidate"
-                                to="/apply"
-                                variant="primary">Become a candidate</b-button> -->
-                            <!-- My comment end -->
+
                             <b-dropdown
                                 v-if="isXDCnet"
                                 class="dd-setting"
@@ -92,30 +162,12 @@
                                 offset="25"
                                 no-caret
                                 variant="primary">
-                                <template
-                                    slot="button-content">
+                                <template slot="button-content">
                                     <i class="tm-cog icon-2x"/>
                                 </template>
-
-                                <!-- My comment start -->
-                                <!-- <b-dropdown-item
-                                    :to="`/voter/${account}`"
-                                    class="dd-address">
-                                    {{ truncate(account, 20) }}
-                                </b-dropdown-item> -->
-                                <!-- My comment end -->
-
-                                <b-dropdown-item
-                                    class="dd-address">
+                                <b-dropdown-item class="dd-address">
                                     {{ truncate(account, 20) }}
                                 </b-dropdown-item>
-
-                                <!-- My comment start -->
-                                <!-- <b-dropdown-divider />
-                                <b-dropdown-item
-                                    target="_bank"
-                                    href="https://howto.xinfin.org/">Help</b-dropdown-item> -->
-                                <!-- My comment end -->
                                 <b-dropdown-item to="/setting">Settings/Withdraws</b-dropdown-item>
                                 <b-dropdown-divider />
                                 <b-dropdown-item
@@ -123,12 +175,12 @@
                                     href="/"
                                     @click="signOut">Sign out</b-dropdown-item>
                             </b-dropdown>
+
                             <b-button
                                 id="btn-darkmode"
                                 variant="transparent"
-                                class="p-0 bg-transparent border-0 ml-3 light-dark btn"
-                                @click="toggleDarkMode"
-                            >
+                                class="p-0 bg-transparent border-0 ml-lg-3 light-dark btn"
+                                @click="toggleDarkMode">
                                 <svg
                                     v-if="!darkMode"
                                     stroke="currentColor"
@@ -173,7 +225,7 @@
                 class="XDC-footer">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-4 mb-3 mb-lg-0">
                             <b-navbar-brand
                                 to="/"
                                 class="mb-2">

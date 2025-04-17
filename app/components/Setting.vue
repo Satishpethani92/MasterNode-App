@@ -66,7 +66,7 @@
                                     <i class="tm-XDC XDC-list__icon" />
                                     <div class="XDC-list__text">
                                         <p class="color-text mb-0">
-                                        <span class="text-muted">{{ Boolean(KYCStatus) }}</span></p>
+                                        <span class="text-muted text-uppercase">{{ Boolean(KYCStatus) }}</span></p>
                                         <span>KYC</span>
                                     </div>
                                 </li>
@@ -182,6 +182,21 @@ export default {
             let account
             self.address = ''
             try {
+                if (!self.web3 && self.NetworkProvider === 'metamask') {
+                    throw Error('Web3 is not properly detected. Have you installed MetaMask extension?')
+                }
+                if (!self.web3 && self.NetworkProvider === 'xinpay') {
+                    throw Error('Web3 is not properly detected. Have you installed XinPay extension?')
+                }
+                if (self.web3) {
+                    try {
+                        contract = self.XDCValidator
+                        self.gasPrice = await self.web3.eth.getGasPrice()
+                    } catch (error) {
+                        self.$toasted.show('Make sure you choose correct XDC Network network.')
+                    }
+                }
+
                 if (store.get('address') && self.isReady) {
                     account = store.get('address').toLowerCase()
                 } else {
@@ -244,13 +259,6 @@ export default {
         await self.setupAccount()
     },
     methods: {
-        async setKYCStatus (contract) {
-            const isHashFound = await contract.methods.getHashCount(this.address).call()
-            if (new BigNumber(isHashFound).toNumber()) {
-                const getKYC = await contract.methods.getLatestKYC(this.address).call()
-                this.KYCStatus = getKYC
-            }
-        },
         changeView (w, k) {
             const txFee = new BigNumber(this.chainConfig.gas * this.gasPrice).div(10 ** 18)
 
@@ -268,6 +276,15 @@ export default {
                 this.$toasted.show('Not enough XDC for transaction fee', {
                     type: 'info'
                 })
+            }
+        },
+        async setKYCStatus (contract) {
+            const isHashFound = await contract.methods.getHashCount(this.address).call()
+            console.log(isHashFound, 'isHashFound')
+            console.log(new BigNumber(isHashFound).toNumber(), 'KYC uploaded successfully')
+            if (new BigNumber(isHashFound).toNumber()) {
+                const getKYC = await contract.methods.getLatestKYC(this.address).call()
+                this.KYCStatus = getKYC
             }
         }
     }

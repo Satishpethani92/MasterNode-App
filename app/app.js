@@ -38,11 +38,22 @@ import * as ethUtils from 'ethereumjs-util'
 import Meta from 'vue-meta'
 import Helper from './utils'
 import './assets/fonts/fontawesome/css/all.min.css'
+import Highcharts from 'highcharts'
+import HighstockModule from 'highcharts/modules/stock'
+import HighchartsVue from 'highcharts-vue'
 
+// 🛠️ Apply the stock module (support ESM/CommonJS builds)
+if (typeof HighstockModule === 'function') {
+    HighstockModule(Highcharts)
+} else if (typeof HighstockModule?.default === 'function') {
+    HighstockModule.default(Highcharts)
+}
+
+Vue.use(HighchartsVue)
+Vue.prototype.$Highcharts = Highcharts
 Vue.use(Meta)
 Vue.use(BootstrapVue)
 Vue.use(VueClipboards)
-
 Vue.use(Toasted, {
     position: 'bottom-right',
     theme: 'bubble',

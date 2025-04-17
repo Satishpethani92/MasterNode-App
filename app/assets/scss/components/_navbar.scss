@@ -6,6 +6,25 @@
     &.navbar-light {
         padding-top: 4px;
     }
+    &.navbar-dark {
+        .navbar-toggler-icon{
+            background-image: none;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            &::before{
+                content: '\f0c9';
+                font-family: "FontAwesome";
+                color: var(--black);
+            }
+        }
+    }
+
+    .navbar-collapse {
+        @include media-breakpoint-down(md) {
+            padding: 15px;
+        }
+    }
 
     > .container {
         align-items: center;
@@ -50,6 +69,12 @@
 
     @include media-breakpoint-up(md) {
         width: auto;
+    }
+    @include media-breakpoint-down(md) {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.5rem 0;
+        gap: 15px;
     }
 }
 

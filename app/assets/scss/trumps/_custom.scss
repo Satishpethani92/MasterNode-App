@@ -24,6 +24,25 @@
     }
 }
 
+.validators-top-item {
+    margin-bottom: 7px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border-color);
+    &:last-child{
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+}
+
+a.link-regular{
+    color: var(--color-text-3);
+    &:hover{
+        color: var(--color-link);
+    }
+}
+
+
 #btn-darkmode {
     color: var(--black);
     .moon-icon{

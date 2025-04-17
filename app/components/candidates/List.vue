@@ -3,14 +3,90 @@
         <div
             class="container">
             <div class="row">
-                <!-- my comment start -->
-                <!-- <div class="col-6">
-                    <LineChart/>
-                </div> -->
-                <!-- my comment end -->
                 <div class="col-12">
                     <h6 class="h6 color-text-3 fw-600 mb-4">By staking XDC, you can contribute to XDC Network & earn rewards. <router-link to="/apply">Setup Masternode Now!</router-link></h6>
                 </div>
+                <div class="col-12 col-lg-5">
+                    <b-card class="card XDC-card XDC-card custom-card">
+                        <h6 class="h6 color-text-3 mb-3 d-flex align-items-center">
+                            New Validators
+                            <img
+                                class="pl-2"
+                                src="/app/assets/img/verify2.svg">
+                        </h6>
+                        <div
+                            v-for="(candidate, index) in candidates.slice(0, 4)"
+                            :key="index"
+                            class="d-flex align-items-center justify-content-between w-100 validators-top-item">
+                            <div class="d-flex align-items-center">
+                                <img src="/app/assets/img/verify.svg">
+                                <div class="pl-3">
+                                    <router-link
+                                        :to="'/candidate/' + candidate.address"
+                                        class="link-regular">
+                                        {{ truncate(candidate.address, 18) }}
+                                    </router-link>
+                                    <div
+                                        :id="`name_${candidate.index}`"
+                                        class="text-truncate">
+                                        {{ candidate.name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="color-green">{{ formatCurrencySymbol(formatBigNumber(candidate.cap, 2)) }}
+                            </div>
+
+                        </div>
+                    </b-card>
+                </div>
+                <div class="col-12 col-lg-7">
+                    <b-card class="card XDC-card XDC-card custom-card-row">
+                        <div class="row align-items-center">
+                            <div class="col-sm-4 col-12">
+                                <div class="mb-3">
+                                    <h6 class="XDC-card__title d-flex align-items-center mb-0">
+                                        XDC Market Cap
+                                        <InfoToolTip :content="`XDC Market Cap: ToDo`" />
+                                    </h6>
+                                    <p class="XDC-card__text">
+                                        ToDo
+                                    </p>
+                                </div>
+                                <div class="mb-3">
+                                    <h6 class="XDC-card__title d-flex align-items-center mb-0">
+                                        Total XDC Staked
+                                        <InfoToolTip :content="`Total XDC Staked: ToDo`" />
+                                    </h6>
+                                    <p class="XDC-card__text">
+                                        ToDo
+                                    </p>
+                                </div>
+                                <div class="mb-3">
+                                    <h6 class="XDC-card__title d-flex align-items-center mb-0">
+                                        Staking APY
+                                        <InfoToolTip :content="`Staking APY: ToDo`" />
+                                    </h6>
+                                    <p class="XDC-card__text">
+                                        ToDo
+                                    </p>
+                                </div>
+                                <div>
+                                    <h6 class="XDC-card__title d-flex align-items-center mb-0">
+                                        Staking Ratio
+                                        <InfoToolTip :content="`Staking Ratio: ToDo`" />
+                                    </h6>
+                                    <p class="XDC-card__text">
+                                        ToDo
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- <LineChart class="col-8"/> -->
+                            <StockAreaChart class="col-sm-8 col-12 mt-3 mt-sm-0"/>
+                        </div>
+                    </b-card>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-sm-6 col-lg-3">
                     <b-card class="XDC-card custom-card">
                         <h6 class="XDC-card__title d-flex align-items-center">
@@ -118,6 +194,7 @@
                     </b-card>
                 </div>-->
             </div>
+
         </div>
 
         <div
@@ -171,7 +248,8 @@
                         slot-scope="data">
                         <img src="/app/assets/img/verify.svg">
                         <router-link
-                            :to="'/candidate/' + data.item.address">
+                            :to="'/candidate/' + data.item.address"
+                            class="link-regular">
                             {{ truncate(data.item.address, 18) }}
                         </router-link>
                     </template>
@@ -251,17 +329,15 @@ import BigNumber from 'bignumber.js'
 import InfoToolTip from '../InfoToolTip.vue'
 import store from 'store'
 import Web3 from 'xdc3'
+import StockAreaChart from '../StockAreaChart.vue'
 // import LineChart from '../LineChart.vue'
 
 export default {
     name: 'App',
-    //    my comment start
-    /* components: {
-        LineChart
-    }, */
-    //    my comment end
     components: {
-        InfoToolTip
+        InfoToolTip,
+        StockAreaChart
+        // LineChart,
     },
     data () {
         return {
