@@ -50,11 +50,11 @@ export default {
                     type: 'areaspline',
                     name: 'Price',
                     data: this.generateDummyData(),
-                    color: '#3399cc',
+                    color: '#51a8bb',
                     fillColor: {
                         linearGradient: [0, 0, 0, 300],
                         stops: [
-                            [0, '#3399cc'],
+                            [0, '#51a8bb'],
                             [1, 'rgba(51, 153, 204, 0)']
                         ]
                     },
