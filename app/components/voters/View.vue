@@ -23,7 +23,7 @@
                                 class="mr-2"
                                 src="/app/assets/img/backarrow.svg"
                                 alt="Back-arrow img">
-                            Back to all Validators
+                            Back to all Masternodes
                         </router-link>
                     </div>
                 </div>

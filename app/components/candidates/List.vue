@@ -9,7 +9,7 @@
                 <div class="col-12 col-lg-5">
                     <b-card class="card XDC-card XDC-card custom-card">
                         <h6 class="h6 color-text-3 mb-3 d-flex align-items-center">
-                            New Validators
+                            New Masternodes
                             <img
                                 class="pl-2"
                                 src="/app/assets/img/verify2.svg">
@@ -80,7 +80,6 @@
                                     </p>
                                 </div>
                             </div>
-                            <!-- <LineChart class="col-8"/> -->
                             <StockAreaChart class="col-sm-8 col-12 mt-3 mt-sm-0"/>
                         </div>
                     </b-card>
@@ -330,14 +329,12 @@ import InfoToolTip from '../InfoToolTip.vue'
 import store from 'store'
 import Web3 from 'xdc3'
 import StockAreaChart from '../StockAreaChart.vue'
-// import LineChart from '../LineChart.vue'
 
 export default {
     name: 'App',
     components: {
         InfoToolTip,
         StockAreaChart
-        // LineChart,
     },
     data () {
         return {
