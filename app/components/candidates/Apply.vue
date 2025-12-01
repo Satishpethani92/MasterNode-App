@@ -337,8 +337,8 @@ export default {
     methods: {
         async onTruliooTabClick () {
             try {
-                const { data } = await axios.post(`/api/trulioo/generateID`)
-                window.open(data.launchUrl, '_blank')
+                const { data } = await axios.post(`/api/trulioo/generateSessionID`)
+                window.open(`https://launch-workflow.trulioo.com/test/${data.flowId}?x-hf-session=${data.sessionId}`, '_blank')
             } catch (e) {
                 console.error(e)
                 this.$toasted.show('Unable to start Trulioo KYC. Please try again later.', {
