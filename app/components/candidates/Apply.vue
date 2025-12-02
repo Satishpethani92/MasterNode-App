@@ -214,7 +214,63 @@
                     key="trulioo"
                     title="Trulioo KYC"
                     @click="onTruliooTabClick"
-                />
+                >
+                    <div class="mt-4">
+                        <!-- Error message -->
+                        <b-alert
+                            v-if="truliooError"
+                            variant="danger"
+                            show
+                        >
+                            {{ truliooError }}
+                        </b-alert>
+
+                        <!-- Loading -->
+                        <div v-if="truliooLoading">
+                            Checking Trulioo KYC status for wallet <strong>{{ account }}</strong>...
+                        </div>
+
+                        <!-- Status -->
+                        <div v-else-if="truliooStatus">
+                            <p>
+                                Current Trulioo KYC status for wallet
+                                <strong>{{ account }}</strong>:
+                            </p>
+                            <b-badge :variant="truliooStatusVariant">
+                                {{ truliooStatus }}
+                            </b-badge>
+
+                            <p
+                                v-if="truliooStatus.toLowerCase() === 'pending' || truliooStatus.toLowerCase() === 'in progress'"
+                                class="mt-2">
+                                Your KYC status is {{ truliooStatus }}.
+                            </p>
+
+                            <p
+                                v-else-if="truliooStatus.toLowerCase() === 'completed'"
+                                class="mt-2">
+                                Your Trulioo KYC has been completed for this wallet.
+                            </p>
+
+                            <b-button
+                                v-if="truliooStatus.toLowerCase() !== 'completed'"
+                                class="mt-2"
+                                variant="primary"
+                                @click="onTruliooTabClick"
+                            >
+                                Refresh status / Open Trulioo
+                            </b-button>
+                        </div>
+
+                        <!-- No status yet (first time) -->
+                        <div v-else>
+                            <p>
+                                Click this tab to start Trulioo KYC for wallet
+                                <strong>{{ account }}</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </b-tab>
             </b-tabs>
         </div>
     </div>
@@ -270,7 +326,11 @@ export default {
             dropzoneOptions: {
                 url: 'https://httpbin.org/post',
                 acceptedFiles: 'application/pdf'
-            }
+            },
+            truliooLoading: false,
+            truliooStatus: null,
+            truliooExisting: false,
+            truliooError: null
         }
     },
     validations: {
@@ -289,7 +349,23 @@ export default {
         },
         */
     },
-    computed: { },
+    computed: {
+        truliooStatusVariant () {
+            switch ((this.truliooStatus || '').toLowerCase()) {
+            case 'completed':
+            case 'approved':
+                return 'success'
+            case 'pending':
+            case 'in progress':
+                return 'warning'
+            case 'failed':
+            case 'rejected':
+                return 'danger'
+            default:
+                return 'secondary'
+            }
+        }
+    },
     watch: {},
     updated () {},
     beforeDestroy () {
@@ -337,15 +413,48 @@ export default {
     methods: {
         async onTruliooTabClick () {
             try {
-                const { data } = await axios.post(`/api/trulioo/generateSessionID`)
-                window.open(`https://launch-workflow.trulioo.com/test/${data.flowId}?x-hf-session=${data.sessionId}`, '_blank')
+                this.truliooError = null
+                this.truliooLoading = true
+
+                const { data } = await axios.post('/api/trulioo/generateSessionID', {
+                    walletAddress: this.account // current wallet
+                })
+
+                // Save status + existing flag for UI
+                this.truliooStatus = data.status || null
+                this.truliooExisting = !!data.existing
+
+                // If KYC already completed: just show message, don't open Trulioo
+                if (data.status && data.status.toLowerCase() === 'completed') {
+                    this.$toasted.show('KYC already completed for this wallet.', {
+                        type: 'success'
+                    })
+                    return
+                }
+
+                // If this is a brand new session, open Trulioo flow
+                if (!data.existing) {
+                    window.open(
+                        `https://launch-workflow.trulioo.com/test/${data.flowId}?x-hf-session=${data.sessionId}`,
+                        '_blank'
+                    )
+                } else {
+                    // Existing session but not completed: optionally still allow user to open flow
+                    // If you want that behaviour:
+                    window.open(
+                        `https://launch-workflow.trulioo.com/test/${data.flowId}?x-hf-session=${data.sessionId}`,
+                        '_blank'
+                    )
+                }
             } catch (e) {
                 console.error(e)
-                this.$toasted.show('Unable to start Trulioo KYC. Please try again later.', {
-                    type: 'error'
-                })
+                this.truliooError = 'Unable to start Trulioo KYC. Please try again later.'
+                this.$toasted.show(this.truliooError, { type: 'error' })
+            } finally {
+                this.truliooLoading = false
             }
         },
+
         getValidationClass: function (fieldName) {
             const field = this.$v[fieldName]
 
