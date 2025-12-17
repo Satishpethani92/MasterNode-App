@@ -332,11 +332,24 @@ async function updateSignerPenAndStatus () {
         const finalList = candidatesWithStatus.map((candidate) => {
             const masterNodes = candidateAddressData.data.result.Masternodes
             const standByNodes = candidateAddressData.data.result.Standbynodes
+            const slashedNodes = candidateAddressData.data.result.Penalty
             let candid = candidate.candidate.candidate
             if (candid.substring(0, 3) === 'xdc') {
                 candid = '0x' + candid.substring(3)
             }
-            if (masterNodes.some((e) => e === candid)) {
+            if (slashedNodes.some((e) => e.toLowerCase() === candid.toLowerCase())) {
+                return ({
+                    ...candidate,
+                    candidateStatus:{
+                        ...candidate.candidateStatus,
+                        result:{
+                            ...candidate.candidateStatus.result,
+                            status: 'SLASHED'
+                        }
+                    }
+                })
+            }
+            if (masterNodes.some((e) => e.toLowerCase() === candid.toLowerCase())) {
                 return ({
                     ...candidate,
                     candidateStatus:{
@@ -347,7 +360,8 @@ async function updateSignerPenAndStatus () {
                         }
                     }
                 })
-            } else if (standByNodes.some((e) => e === candid)) {
+            }
+            if (standByNodes.some((e) => e.toLowerCase() === candid.toLowerCase())) {
                 return ({
                     ...candidate,
                     candidateStatus:{
@@ -358,9 +372,8 @@ async function updateSignerPenAndStatus () {
                         }
                     }
                 })
-            } else {
-                return { ...candidate }
             }
+            return { ...candidate }
         })
 
         await Promise.all(finalList.map(async ({ candidateStatus, candidate }) => {

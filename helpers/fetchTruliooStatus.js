@@ -10,11 +10,7 @@ async function fetchTruliooStatus (sessionId) {
         TRULIOO_CLIENT_SECRET = 'wfs.export'
     } = process.env
 
-    if (!TRULIOO_CLIENT_ID || !TRULIOO_CLIENT_SECRET) {
-        throw new Error('Trulioo client ID/secret not configured')
-    }
-
-    // 1️⃣ Get OAuth token from Trulioo auth API
+    // 1️⃣ Get OAuth token
     const tokenResp = await axios.post(
         'https://auth-api.trulioo.com/connect/token',
         new URLSearchParams({
@@ -22,52 +18,53 @@ async function fetchTruliooStatus (sessionId) {
             client_id: TRULIOO_CLIENT_ID,
             client_secret: TRULIOO_CLIENT_SECRET
         }),
-        {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     )
 
     const accessToken = tokenResp.data.access_token
-    if (!accessToken) {
-        throw new Error('Failed to obtain Trulioo access token')
-    }
 
-    // 2️⃣ Query Workflow Studio export API with x-hf-session
-    //    Docs: GET https://api.trulioo.com/wfs/export/v2/query/client/{x-hf-session}
+    // 2️⃣ Query Workflow Studio export API
     const exportResp = await axios.get(
-        `https://api.trulioo.com/wfs/export/v2/query/client/${sessionId}`,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        }
+        `https://api.trulioo.com/wfs/export/test/v2/query/client/${sessionId}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
     )
-    console.log('exportResp', exportResp)
-    const exportData = exportResp.data
-    console.log('exportData', exportData)
 
-    // 3️⃣ Derive a simple status from flowData
-    //    flowData is an object with steps; each has `completed: boolean` etc. :contentReference[oaicite:3]{index=3}
+    const exportData = exportResp.data
+
+    // 3️⃣ Derive Status
+    // Default to pending
     let status = 'pending'
 
     if (exportData && exportData.flowData) {
-        const steps = Object.values(exportData.flowData)
-        const allCompleted = steps.every((step) => step.completed === true)
+        // A. Check for specific top-level status or decision fields often returned by Trulioo
+        // Adjust these keys based on your specific console.log(exportData) output
+        const flowStatus = (exportData.status || '').toLowerCase()
+        const executionStatus = (exportData.executionStatus || '').toLowerCase()
 
-        if (allCompleted) {
+        // 🚨 FAILURE / DECLINED CHECKS
+        if (
+            flowStatus === 'declined' ||
+            flowStatus === 'rejected' ||
+            flowStatus === 'failed' ||
+            executionStatus === 'failed'
+        ) {
+            status = 'declined'
+        } else if (
+            flowStatus === 'completed' ||
+            flowStatus === 'approved' ||
+            executionStatus === 'success'
+        ) {
             status = 'completed'
+        } else {
+            const steps = Object.values(exportData.flowData)
+            const allCompleted = steps.every((step) => step.completed === true)
+            if (allCompleted) {
+                status = 'completed'
+            }
         }
-    // OPTIONAL: You could inspect serviceData / decision fields here to set "failed" / "rejected"
     }
 
-    console.log('status', status)
-    console.log('raw', exportData)
-    return {
-        status,
-        raw: exportData
-    }
+    return { status, raw: exportData }
 }
 
 module.exports = { fetchTruliooStatus }

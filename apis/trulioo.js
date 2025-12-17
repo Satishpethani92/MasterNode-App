@@ -20,75 +20,77 @@ function normalizeWalletAddress (addr = '') {
 router.post('/generateSessionID', async (req, res) => {
     try {
         const { walletAddress } = req.body
-
-        if (!walletAddress) {
-            return res.status(400).json({ error: 'walletAddress is required' })
-        }
+        if (!walletAddress) return res.status(400).json({ error: 'walletAddress is required' })
 
         const normalizedAddress = normalizeWalletAddress(walletAddress)
 
-        // 1️⃣ Check if this wallet already has a session
+        // 1️⃣ Find existing session (Sort by created date descending to get the latest)
         let existing = await TruliooSession.findOne({ walletAddress: normalizedAddress })
-        console.log('existing', existing)
+            .sort({ createdAt: -1 })
+
+        // 2️⃣ If exists, REFRESH STATUS immediately
         if (existing) {
-            // (Optional) refresh status from Trulioo
             try {
                 const statusData = await fetchTruliooStatus(existing.sessionId)
-                console.log('statusData', statusData)
+
                 if (statusData) {
+                    // Update DB with latest status
                     existing.status = statusData.status || existing.status
-                    existing.rawStatus = statusData
+                    existing.rawStatus = statusData.raw
                     await existing.save()
                 }
-            } catch (e) {
-                console.log('Error fetching Trulioo status:', e.message)
-            }
 
-            return res.json({
-                sessionId: existing.sessionId,
-                flowId: existing.flowId,
-                status: existing.status,
-                existing: true
-            })
+                // CHECK LOGIC:
+                // If Completed -> Return it (User is done)
+                // If Pending   -> Return it (User resumes flow)
+                // If Declined  -> IGNORE it and let code fall through to create NEW session
+                if (existing.status !== 'declined' && existing.status !== 'rejected' && existing.status !== 'failed') {
+                    return res.json({
+                        sessionId: existing.sessionId,
+                        flowId: existing.flowId,
+                        status: existing.status,
+                        existing: true
+                    })
+                }
+
+                // If we are here, status is 'declined'.
+                // We log it and proceed to generate a NEW session below.
+                console.log(`User ${normalizedAddress} has declined session. Generating new one...`)
+            } catch (e) {
+                console.log('Error refreshing Trulioo status:', e.message)
+                // If error, safer to return existing so user doesn't lose progress if it was just a network blip
+                return res.json({
+                    sessionId: existing.sessionId,
+                    flowId: existing.flowId,
+                    status: existing.status,
+                    existing: true
+                })
+            }
         }
 
-        // 2️⃣ No existing session ⇒ create a new one via Trulioo flow
+        // 3️⃣ Create NEW Session (Runs if no session exists OR if previous session was declined)
         const url = `https://api.trulioo.com/wfs/interpreter-v2/test/flow/${TRULIOO_FLOW_ID}`
-
         const resp = await axios.get(url)
-        console.log('flow resp status:', resp.status)
-        console.log('flow resp headers:', resp.headers)
-
         const sessionId = resp.headers['x-hf-session']
 
-        if (!sessionId) {
-            throw new Error('x-hf-session header not found in Trulioo flow response')
-        }
+        if (!sessionId) throw new Error('x-hf-session header not found')
 
-        console.log('x-hf-session:', sessionId)
-
-        // Save in DB
         const record = await TruliooSession.create({
             walletAddress: normalizedAddress,
             sessionId,
             flowId: TRULIOO_FLOW_ID,
-            status: 'pending'
+            status: 'pending' // New sessions always start as pending
         })
 
         return res.json({
             sessionId: record.sessionId,
             flowId: record.flowId,
             status: record.status,
-            existing: false
+            existing: false // Frontend will see this is new and open the window
         })
     } catch (err) {
-        console.error(
-            'Trulioo session Id generate error:',
-      err.response?.data || err.message
-        )
-        return res
-            .status(500)
-            .json({ error: 'Unable to generate session Id' })
+        console.error('Trulioo error:', err.response?.data || err.message)
+        return res.status(500).json({ error: 'Unable to generate session Id' })
     }
 })
 
