@@ -245,6 +245,11 @@
                                 class="mt-2">
                                 Your KYC status is {{ truliooStatus }}.
                             </p>
+                            <p
+                                v-else-if="truliooStatus.toLowerCase() === 'declined'"
+                                class="mt-2">
+                                Your Trulioo KYC has been not accepted for this wallet.
+                            </p>
 
                             <p
                                 v-else-if="truliooStatus.toLowerCase() === 'completed'"
@@ -252,14 +257,18 @@
                                 Your Trulioo KYC has been completed for this wallet.
                             </p>
 
-                            <b-button
-                                v-if="truliooStatus.toLowerCase() !== 'completed'"
-                                class="mt-2"
-                                variant="primary"
-                                @click="onTruliooTabClick"
-                            >
-                                Refresh status / Open Trulioo
-                            </b-button>
+                            <div>
+                                <b-button
+                                    v-if="truliooStatus && truliooStatus.toLowerCase() !== 'completed'
+                                    && truliooStatus.toLowerCase() !== 'declined'"
+                                    class="mt-2"
+                                    variant="primary"
+                                    @click="onTruliooTabClick"
+                                >
+                                    Refresh status / Open Trulioo
+                                </b-button>
+
+                            </div>
                         </div>
 
                         <!-- No status yet (first time) -->
@@ -354,13 +363,17 @@ export default {
             switch ((this.truliooStatus || '').toLowerCase()) {
             case 'completed':
             case 'approved':
-                return 'success'
+                return 'success' // Green
+            case 'processing':
+            case 'submitted':
+                return 'info' // Blue (New state)
             case 'pending':
             case 'in progress':
-                return 'warning'
+                return 'warning' // Yellow
             case 'failed':
             case 'rejected':
-                return 'danger'
+            case 'declined':
+                return 'danger' // Red
             default:
                 return 'secondary'
             }
@@ -416,15 +429,18 @@ export default {
                 this.truliooError = null
                 this.truliooLoading = true
 
+                // 1. Call Backend
+                // If status was 'declined' before, backend now generates a NEW session with status 'pending'
                 const { data } = await axios.post('/api/trulioo/generateSessionID', {
-                    walletAddress: this.account // current wallet
+                    walletAddress: this.account
                 })
 
-                // Save status + existing flag for UI
                 this.truliooStatus = data.status || null
                 this.truliooExisting = !!data.existing
 
-                // If KYC already completed: just show message, don't open Trulioo
+                // 2. Handle Completed
+                // If status is completed, we just show toast and return.
+                // The HTML template handles hiding the button via v-if="truliooStatus !== 'completed'"
                 if (data.status && data.status.toLowerCase() === 'completed') {
                     this.$toasted.show('KYC already completed for this wallet.', {
                         type: 'success'
@@ -432,15 +448,13 @@ export default {
                     return
                 }
 
-                // If this is a brand new session, open Trulioo flow
-                if (!data.existing) {
-                    window.open(
-                        `https://launch-workflow.trulioo.com/test/${data.flowId}?x-hf-session=${data.sessionId}`,
-                        '_blank'
-                    )
-                } else {
-                    // Existing session but not completed: optionally still allow user to open flow
-                    // If you want that behaviour:
+                // 3. Handle New Flow (or Retry of Declined flow)
+                // If backend returned existing: false (which it does for new sessions after decline), open window.
+                // OR if it's an existing 'pending' session, we also want to open the window to resume.
+
+                const isPendingOrProgress = ['pending', 'in progress'].includes((data.status || '').toLowerCase())
+
+                if (!data.existing || isPendingOrProgress) {
                     window.open(
                         `https://launch-workflow.trulioo.com/test/${data.flowId}?x-hf-session=${data.sessionId}`,
                         '_blank'
@@ -448,8 +462,7 @@ export default {
                 }
             } catch (e) {
                 console.error(e)
-                this.truliooError = 'Unable to start Trulioo KYC. Please try again later.'
-                this.$toasted.show(this.truliooError, { type: 'error' })
+                this.truliooError = 'Unable to start Trulioo KYC.'
             } finally {
                 this.truliooLoading = false
             }
