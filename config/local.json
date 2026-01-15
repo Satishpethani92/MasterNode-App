@@ -29,7 +29,7 @@
         "randomizeAddress": "0x0000000000000000000000000000000000000090"
     },
     "db": {
-        "uri": "mongodb://127.0.0.1:27017/mnAppBeta"
+        "uri": "mongodb://127.0.0.1:27017/mnAppBeta?replicaSet=rs0&directConnection=true"
     },
     "explorerUrl": "https://xdc.blocksscan.io",
     "XDCscanUrl": "https://xdc.network",
