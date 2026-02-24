@@ -211,10 +211,9 @@
                     </b-modal>
                 </b-tab>
                 <b-tab
-                    key="trulioo"
-                    title="Trulioo KYC"
-                    @click="onTruliooTabClick"
-                >
+                    key="individual"
+                    title="Individual KYC"
+                    @click="onIndividualClick">
                     <div class="mt-4">
                         <!-- Error message -->
                         <b-alert
@@ -263,7 +262,7 @@
                                     && truliooStatus.toLowerCase() !== 'declined'"
                                     class="mt-2"
                                     variant="primary"
-                                    @click="onTruliooTabClick"
+                                    @click="onIndividualClick"
                                 >
                                     Refresh status / Open Trulioo
                                 </b-button>
@@ -280,6 +279,75 @@
                         </div>
                     </div>
                 </b-tab>
+                <b-tab
+                    key="company"
+                    title="Company KYC"
+                    @click="onCompanyClick"/>
+                <div class="mt-4">
+                    Company KYC is coming soon. Please stay tuned!
+                    <!-- Error message -->
+                    <!-- <b-alert
+                        v-if="truliooError"
+                        variant="danger"
+                        show
+                    >
+                        {{ truliooError }}
+                    </b-alert> -->
+
+                    <!-- Loading -->
+                    <!-- <div v-if="truliooLoading">
+                        Checking Trulioo KYC status for wallet <strong>{{ account }}</strong>...
+                    </div> -->
+
+                    <!-- Status -->
+                    <!-- <div v-else-if="truliooStatus">
+                        <p>
+                            Current Trulioo KYC status for wallet
+                            <strong>{{ account }}</strong>:
+                        </p>
+                        <b-badge :variant="truliooStatusVariant">
+                            {{ truliooStatus }}
+                        </b-badge>
+
+                        <p
+                            v-if="truliooStatus.toLowerCase() === 'pending' || truliooStatus.toLowerCase() === 'in progress'"
+                            class="mt-2">
+                            Your KYC status is {{ truliooStatus }}.
+                        </p>
+                        <p
+                            v-else-if="truliooStatus.toLowerCase() === 'declined'"
+                            class="mt-2">
+                            Your Trulioo KYC has been not accepted for this wallet.
+                        </p>
+
+                        <p
+                            v-else-if="truliooStatus.toLowerCase() === 'completed'"
+                            class="mt-2">
+                            Your Trulioo KYC has been completed for this wallet.
+                        </p>
+
+                        <div>
+                            <b-button
+                                v-if="truliooStatus && truliooStatus.toLowerCase() !== 'completed'
+                                && truliooStatus.toLowerCase() !== 'declined'"
+                                class="mt-2"
+                                variant="primary"
+                                @click="onIndividualClick"
+                            >
+                                Refresh status / Open Trulioo
+                            </b-button>
+
+                        </div>
+                    </div> -->
+
+                    <!-- No status yet (first time) -->
+                    <!-- <div v-else>
+                        <p>
+                            Click this tab to start Trulioo KYC for wallet
+                            <strong>{{ account }}</strong>.
+                        </p>
+                    </div> -->
+                </div>
             </b-tabs>
         </div>
     </div>
@@ -424,7 +492,7 @@ export default {
     mounted () {
     },
     methods: {
-        async onTruliooTabClick () {
+        async onIndividualClick () {
             try {
                 this.truliooError = null
                 this.truliooLoading = true
@@ -466,6 +534,28 @@ export default {
             } finally {
                 this.truliooLoading = false
             }
+        },
+
+        async onCompanyClick () {
+            console.log('Company KYC coming soon!')
+            /* try {
+                this.companyError = null
+                this.companyLoading = true
+
+                const { data } = await axios.post('/api/companyKYC/start', {
+                    walletAddress: this.account
+                })
+
+                this.companyStatus = data.status || null
+
+                if (data.url) {
+                    window.open(data.url, '_blank')
+                }
+            } catch (e) {
+                this.companyError = 'Unable to start Company KYC.'
+            } finally {
+                this.companyLoading = false
+            } */
         },
 
         getValidationClass: function (fieldName) {
