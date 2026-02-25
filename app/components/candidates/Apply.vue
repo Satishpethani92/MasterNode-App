@@ -245,13 +245,18 @@
                                 Your KYC status is {{ truliooStatus }}.
                             </p>
                             <p
+                                v-else-if="truliooStatus.toLowerCase() === 'pending_review'"
+                                class="mt-2">
+                                Your Trulioo KYC is currently pending review.
+                            </p>
+                            <p
                                 v-else-if="truliooStatus.toLowerCase() === 'declined'"
                                 class="mt-2">
                                 Your Trulioo KYC has been not accepted for this wallet.
                             </p>
 
                             <p
-                                v-else-if="truliooStatus.toLowerCase() === 'completed'"
+                                v-else-if="truliooStatus.toLowerCase() === 'completed' || truliooStatus.toLowerCase() === 'approved'"
                                 class="mt-2">
                                 Your Trulioo KYC has been completed for this wallet.
                             </p>
@@ -259,6 +264,7 @@
                             <div>
                                 <b-button
                                     v-if="truliooStatus && truliooStatus.toLowerCase() !== 'completed'
+                                        && truliooStatus.toLowerCase() !== 'approved'
                                     && truliooStatus.toLowerCase() !== 'declined'"
                                     class="mt-2"
                                     variant="primary"
@@ -282,72 +288,74 @@
                 <b-tab
                     key="company"
                     title="Company KYC"
-                    @click="onCompanyClick"/>
-                <div class="mt-4">
-                    Company KYC is coming soon. Please stay tuned!
-                    <!-- Error message -->
-                    <!-- <b-alert
-                        v-if="truliooError"
-                        variant="danger"
-                        show
-                    >
-                        {{ truliooError }}
-                    </b-alert> -->
+                    @click="onCompanyClick">
+                    <div class="mt-4">
+                        <b-alert
+                            v-if="companyKycError"
+                            variant="danger"
+                            show
+                        >
+                            {{ companyKycError }}
+                        </b-alert>
 
-                    <!-- Loading -->
-                    <!-- <div v-if="truliooLoading">
-                        Checking Trulioo KYC status for wallet <strong>{{ account }}</strong>...
-                    </div> -->
-
-                    <!-- Status -->
-                    <!-- <div v-else-if="truliooStatus">
-                        <p>
-                            Current Trulioo KYC status for wallet
-                            <strong>{{ account }}</strong>:
-                        </p>
-                        <b-badge :variant="truliooStatusVariant">
-                            {{ truliooStatus }}
-                        </b-badge>
-
-                        <p
-                            v-if="truliooStatus.toLowerCase() === 'pending' || truliooStatus.toLowerCase() === 'in progress'"
-                            class="mt-2">
-                            Your KYC status is {{ truliooStatus }}.
-                        </p>
-                        <p
-                            v-else-if="truliooStatus.toLowerCase() === 'declined'"
-                            class="mt-2">
-                            Your Trulioo KYC has been not accepted for this wallet.
-                        </p>
-
-                        <p
-                            v-else-if="truliooStatus.toLowerCase() === 'completed'"
-                            class="mt-2">
-                            Your Trulioo KYC has been completed for this wallet.
-                        </p>
-
-                        <div>
-                            <b-button
-                                v-if="truliooStatus && truliooStatus.toLowerCase() !== 'completed'
-                                && truliooStatus.toLowerCase() !== 'declined'"
-                                class="mt-2"
-                                variant="primary"
-                                @click="onIndividualClick"
-                            >
-                                Refresh status / Open Trulioo
-                            </b-button>
-
+                        <div v-if="companyKycLoading">
+                            Checking Company KYC status for wallet <strong>{{ account }}</strong>...
                         </div>
-                    </div> -->
 
-                    <!-- No status yet (first time) -->
-                    <!-- <div v-else>
-                        <p>
-                            Click this tab to start Trulioo KYC for wallet
-                            <strong>{{ account }}</strong>.
-                        </p>
-                    </div> -->
-                </div>
+                        <div v-else-if="companyKycStatus">
+                            <p>
+                                Current Company KYC status for wallet
+                                <strong>{{ account }}</strong>:
+                            </p>
+                            <b-badge :variant="companyKycStatusVariant">
+                                {{ companyKycStatus }}
+                            </b-badge>
+
+                            <p
+                                v-if="companyKycStatus.toLowerCase() === 'pending' || companyKycStatus.toLowerCase() === 'in progress'"
+                                class="mt-2">
+                                Your Company KYC status is {{ companyKycStatus }}.
+                            </p>
+                            <p
+                                v-else-if="companyKycStatus.toLowerCase() === 'pending_review'"
+                                class="mt-2">
+                                Your Company KYC is currently pending review.
+                            </p>
+                            <p
+                                v-else-if="companyKycStatus.toLowerCase() === 'declined'"
+                                class="mt-2">
+                                Your Company KYC has not been accepted for this wallet.
+                            </p>
+
+                            <p
+                                v-else-if="companyKycStatus.toLowerCase() === 'completed' || companyKycStatus.toLowerCase() === 'approved'"
+                                class="mt-2">
+                                Your Company KYC has been completed for this wallet.
+                            </p>
+
+                            <div>
+                                <b-button
+                                    v-if="companyKycStatus && companyKycStatus.toLowerCase() !== 'completed'
+                                        && companyKycStatus.toLowerCase() !== 'approved'
+                                    && companyKycStatus.toLowerCase() !== 'declined'"
+                                    class="mt-2"
+                                    variant="primary"
+                                    @click="onCompanyClick"
+                                >
+                                    Refresh status / Open Trulioo
+                                </b-button>
+
+                            </div>
+                        </div>
+
+                        <div v-else>
+                            <p>
+                                Click this tab to start Company KYC for wallet
+                                <strong>{{ account }}</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </b-tab>
             </b-tabs>
         </div>
     </div>
@@ -407,7 +415,11 @@ export default {
             truliooLoading: false,
             truliooStatus: null,
             truliooExisting: false,
-            truliooError: null
+            truliooError: null,
+            companyKycLoading: false,
+            companyKycStatus: null,
+            companyKycExisting: false,
+            companyKycError: null
         }
     },
     validations: {
@@ -437,11 +449,32 @@ export default {
                 return 'info' // Blue (New state)
             case 'pending':
             case 'in progress':
+            case 'pending_review':
                 return 'warning' // Yellow
             case 'failed':
             case 'rejected':
             case 'declined':
                 return 'danger' // Red
+            default:
+                return 'secondary'
+            }
+        },
+        companyKycStatusVariant () {
+            switch ((this.companyKycStatus || '').toLowerCase()) {
+            case 'completed':
+            case 'approved':
+                return 'success'
+            case 'processing':
+            case 'submitted':
+                return 'info'
+            case 'pending':
+            case 'in progress':
+            case 'pending_review':
+                return 'warning'
+            case 'failed':
+            case 'rejected':
+            case 'declined':
+                return 'danger'
             default:
                 return 'secondary'
             }
@@ -509,7 +542,7 @@ export default {
                 // 2. Handle Completed
                 // If status is completed, we just show toast and return.
                 // The HTML template handles hiding the button via v-if="truliooStatus !== 'completed'"
-                if (data.status && data.status.toLowerCase() === 'completed') {
+                if (data.status && (data.status.toLowerCase() === 'completed' || data.status.toLowerCase() === 'approved')) {
                     this.$toasted.show('KYC already completed for this wallet.', {
                         type: 'success'
                     })
@@ -530,32 +563,45 @@ export default {
                 }
             } catch (e) {
                 console.error(e)
-                this.truliooError = 'Unable to start Trulioo KYC.'
+                this.truliooError = e?.response?.data?.error || 'Unable to start Trulioo KYC.'
             } finally {
                 this.truliooLoading = false
             }
         },
 
         async onCompanyClick () {
-            console.log('Company KYC coming soon!')
-            /* try {
-                this.companyError = null
-                this.companyLoading = true
+            try {
+                this.companyKycError = null
+                this.companyKycLoading = true
 
-                const { data } = await axios.post('/api/companyKYC/start', {
+                const { data } = await axios.post('/api/trulioo/generateCompanyID', {
                     walletAddress: this.account
                 })
 
-                this.companyStatus = data.status || null
+                this.companyKycStatus = data.status || null
+                this.companyKycExisting = !!data.existing
 
-                if (data.url) {
-                    window.open(data.url, '_blank')
+                if (data.status && (data.status.toLowerCase() === 'completed' || data.status.toLowerCase() === 'approved')) {
+                    this.$toasted.show('Company KYC already completed for this wallet.', {
+                        type: 'success'
+                    })
+                    return
+                }
+
+                const isPendingOrProgress = ['pending', 'in progress'].includes((data.status || '').toLowerCase())
+
+                if (!data.existing || isPendingOrProgress) {
+                    window.open(
+                        `https://launch-workflow.trulioo.com/test/${data.flowId}?x-hf-session=${data.sessionId}`,
+                        '_blank'
+                    )
                 }
             } catch (e) {
-                this.companyError = 'Unable to start Company KYC.'
+                console.error(e)
+                this.companyKycError = e?.response?.data?.error || 'Unable to start Company KYC.'
             } finally {
-                this.companyLoading = false
-            } */
+                this.companyKycLoading = false
+            }
         },
 
         getValidationClass: function (fieldName) {

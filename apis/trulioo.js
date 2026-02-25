@@ -6,6 +6,7 @@ const TruliooSession = require('../models/mongodb/truliooSession')
 const { fetchTruliooStatus } = require('../helpers/fetchTruliooStatus')
 
 const TRULIOO_FLOW_ID = process.env.TRULIOO_FLOW_ID
+const TRULIOO_COMPANY_FLOW_ID = process.env.TRULIOO_COMPANY_FLOW_ID
 
 // Optional: helper to normalize wallet address
 function normalizeWalletAddress (addr = '') {
@@ -17,45 +18,49 @@ function normalizeWalletAddress (addr = '') {
     return a
 }
 
-router.post('/generateSessionID', async (req, res) => {
+async function generateTruliooId (req, res, options = {}) {
+    const { flowId, kycType = 'individual' } = options
+
     try {
         const { walletAddress } = req.body
         if (!walletAddress) return res.status(400).json({ error: 'walletAddress is required' })
+        if (!flowId) return res.status(500).json({ error: 'Trulioo flow id is not configured' })
 
         const normalizedAddress = normalizeWalletAddress(walletAddress)
 
         // 1️⃣ Find existing session (Sort by created date descending to get the latest)
-        let existing = await TruliooSession.findOne({ walletAddress: normalizedAddress })
+        const existingFilter = {
+            walletAddress: normalizedAddress,
+            ...(kycType === 'individual'
+                ? { $or: [{ kycType: 'individual' }, { kycType: { $exists: false } }] }
+                : { kycType })
+        }
+
+        let existing = await TruliooSession.findOne(existingFilter)
             .sort({ createdAt: -1 })
 
         // 2️⃣ If exists, REFRESH STATUS immediately
         if (existing) {
             try {
                 const statusData = await fetchTruliooStatus(existing.sessionId)
-
                 if (statusData) {
-                    // Update DB with latest status
-                    existing.status = statusData.status || existing.status
+                    if (!existing.kycType && kycType === 'individual') {
+                        existing.kycType = 'individual'
+                    }
+                    existing.status = statusData.status
                     existing.rawStatus = statusData.raw
                     await existing.save()
                 }
 
-                // CHECK LOGIC:
-                // If Completed -> Return it (User is done)
-                // If Pending   -> Return it (User resumes flow)
-                // If Declined  -> IGNORE it and let code fall through to create NEW session
-                if (existing.status !== 'declined' && existing.status !== 'rejected' && existing.status !== 'failed') {
-                    return res.json({
-                        sessionId: existing.sessionId,
-                        flowId: existing.flowId,
-                        status: existing.status,
-                        existing: true
-                    })
-                }
-
-                // If we are here, status is 'declined'.
-                // We log it and proceed to generate a NEW session below.
-                console.log(`User ${normalizedAddress} has declined session. Generating new one...`)
+                // Always return existing session/status.
+                // This avoids duplicate-key conflicts and preserves admin-updated
+                // statuses like 'declined' for frontend visibility.
+                return res.json({
+                    sessionId: existing.sessionId,
+                    flowId: existing.flowId,
+                    status: existing.status,
+                    existing: true
+                })
             } catch (e) {
                 console.log('Error refreshing Trulioo status:', e.message)
                 // If error, safer to return existing so user doesn't lose progress if it was just a network blip
@@ -68,8 +73,8 @@ router.post('/generateSessionID', async (req, res) => {
             }
         }
 
-        // 3️⃣ Create NEW Session (Runs if no session exists OR if previous session was declined)
-        const url = `https://api.trulioo.com/wfs/interpreter-v2/test/flow/${TRULIOO_FLOW_ID}`
+        // 3️⃣ Create NEW Session (Runs only when no session exists for this wallet+kycType)
+        const url = `https://api.trulioo.com/wfs/interpreter-v2/test/flow/${flowId}`
         const resp = await axios.get(url)
         const sessionId = resp.headers['x-hf-session']
 
@@ -77,8 +82,9 @@ router.post('/generateSessionID', async (req, res) => {
 
         const record = await TruliooSession.create({
             walletAddress: normalizedAddress,
+            kycType,
             sessionId,
-            flowId: TRULIOO_FLOW_ID,
+            flowId,
             status: 'pending' // New sessions always start as pending
         })
 
@@ -90,8 +96,21 @@ router.post('/generateSessionID', async (req, res) => {
         })
     } catch (err) {
         console.error('Trulioo error:', err.response?.data || err.message)
+        if (err && err.code === 11000) {
+            return res.status(409).json({
+                error: 'Duplicate session key. Please restart server to apply Trulioo index migration (walletAddress + kycType).'
+            })
+        }
         return res.status(500).json({ error: 'Unable to generate session Id' })
     }
+}
+
+router.post('/generateSessionID', async (req, res) => {
+    return generateTruliooId(req, res, { flowId: TRULIOO_FLOW_ID, kycType: 'individual' })
+})
+
+router.post('/generateCompanyID', async (req, res) => {
+    return generateTruliooId(req, res, { flowId: TRULIOO_COMPANY_FLOW_ID, kycType: 'company' })
 })
 
 module.exports = router

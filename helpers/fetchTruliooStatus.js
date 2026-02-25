@@ -30,37 +30,31 @@ async function fetchTruliooStatus (sessionId) {
     )
 
     const exportData = exportResp.data
-
-    // 3️⃣ Derive Status
-    // Default to pending
+    console.log('exportData', exportData)
+    // 3️⃣ Use Trulioo's FINAL status directly
     let status = 'pending'
 
-    if (exportData && exportData.flowData) {
-        // A. Check for specific top-level status or decision fields often returned by Trulioo
-        // Adjust these keys based on your specific console.log(exportData) output
-        const flowStatus = (exportData.status || '').toLowerCase()
-        const executionStatus = (exportData.executionStatus || '').toLowerCase()
+    if (exportData?.status) {
+        const s = exportData.status.toLowerCase()
 
-        // 🚨 FAILURE / DECLINED CHECKS
-        if (
-            flowStatus === 'declined' ||
-            flowStatus === 'rejected' ||
-            flowStatus === 'failed' ||
-            executionStatus === 'failed'
-        ) {
+        switch (s) {
+        case 'accepted':
+            status = 'approved'
+            break
+        case 'declined':
+        case 'rejected':
+        case 'failed':
             status = 'declined'
-        } else if (
-            flowStatus === 'completed' ||
-            flowStatus === 'approved' ||
-            executionStatus === 'success'
-        ) {
+            break
+        case 'review':
+        case 'pending_review':
+            status = 'pending_review'
+            break
+        case 'completed':
             status = 'completed'
-        } else {
-            const steps = Object.values(exportData.flowData)
-            const allCompleted = steps.every((step) => step.completed === true)
-            if (allCompleted) {
-                status = 'completed'
-            }
+            break
+        default:
+            status = 'pending'
         }
     }
 
