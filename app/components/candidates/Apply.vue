@@ -588,9 +588,10 @@ export default {
                     return
                 }
 
-                const isPendingOrProgress = ['pending', 'in progress'].includes((data.status || '').toLowerCase())
-
-                if (!data.existing || isPendingOrProgress) {
+                // Only auto-open the Trulioo form for brand-new sessions.
+                // For existing sessions, just display the status — user can
+                // click "Refresh status / Open Trulioo" button to reopen.
+                if (!data.existing) {
                     window.open(
                         `https://launch-workflow.trulioo.com/test/${data.flowId}?x-hf-session=${data.sessionId}`,
                         '_blank'
