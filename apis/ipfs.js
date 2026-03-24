@@ -3,13 +3,7 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const fs = require('fs')
-const IpfsClient = require('ipfs-http-client')
-
-const xinFinClient = new IpfsClient({
-    host: 'ipfs.xinfin.network',
-    port: 443,
-    protocol: 'https'
-})
+const { addBufferToIpfs } = require('../helpers/ipfs')
 
 if (!fs.existsSync(path.join(__dirname, '../tmp/'))) {
     fs.mkdirSync(path.join(__dirname, '../tmp/'))
@@ -20,18 +14,14 @@ router.post('/addKYC', async function (req, res, next) {
     console.log('File Name : ', req.files)
     let imageFile = req.files.filename
 
-    xinFinClient.add(imageFile.data, async (err, ipfsHash) => {
-        if (err != null) {
-            // error occured, log out the error
-            console.error('Some error occured while adding KYC at /addKYC: ', err)
-            res.status(500).send(err)
-            return // need to handle this error
-        }
-        let hash = ipfsHash[0].hash
-        // all ok
+    try {
+        const hash = await addBufferToIpfs(imageFile.data)
         console.log(`Uploaded file; hash: ${hash}`)
         res.status(200).json({ 'hash': hash })
-    })
+    } catch (err) {
+        console.error('Some error occured while adding KYC at /addKYC: ', err)
+        res.status(500).send(err)
+    }
 
     // imageFile.mv(path.join(__dirname, '../tmp/', name), function (err) {
     //     if (err) {

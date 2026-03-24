@@ -416,10 +416,12 @@ export default {
             truliooStatus: null,
             truliooExisting: false,
             truliooError: null,
+            truliooDocumentLoading: false,
             companyKycLoading: false,
             companyKycStatus: null,
             companyKycExisting: false,
-            companyKycError: null
+            companyKycError: null,
+            companyKycDocumentLoading: false
         }
     },
     validations: {
@@ -543,9 +545,7 @@ export default {
                 // If status is completed, we just show toast and return.
                 // The HTML template handles hiding the button via v-if="truliooStatus !== 'completed'"
                 if (data.status && (data.status.toLowerCase() === 'completed' || data.status.toLowerCase() === 'approved')) {
-                    this.$toasted.show('KYC already completed for this wallet.', {
-                        type: 'success'
-                    })
+                    await this.processCompletedTruliooKyc('individual')
                     return
                 }
 
@@ -582,9 +582,7 @@ export default {
                 this.companyKycExisting = !!data.existing
 
                 if (data.status && (data.status.toLowerCase() === 'completed' || data.status.toLowerCase() === 'approved')) {
-                    this.$toasted.show('Company KYC already completed for this wallet.', {
-                        type: 'success'
-                    })
+                    await this.processCompletedTruliooKyc('company')
                     return
                 }
 
@@ -838,9 +836,70 @@ export default {
                 console.log('1111')
             }
         },
+        async processCompletedTruliooKyc (kycType = 'individual') {
+            const isCompany = kycType === 'company'
+            const loadingKey = isCompany ? 'companyKycDocumentLoading' : 'truliooDocumentLoading'
+
+            if (this[loadingKey]) {
+                return
+            }
+
+            if (this.KYC.status) {
+                this.$toasted.show('KYC already uploaded on-chain for this wallet.', {
+                    type: 'success'
+                })
+                return
+            }
+
+            try {
+                this[loadingKey] = true
+                this.loading = true
+
+                const { data } = await axios.post('/api/trulioo/getTransactionData', {
+                    walletAddress: this.account,
+                    kycType
+                })
+
+                await this.uploadKycHashToContract(data.hash)
+                this.KYC.status = true
+                this.$toasted.show(`${isCompany ? 'Company ' : ''}KYC completed and uploaded successfully.`, {
+                    type: 'success'
+                })
+            } catch (e) {
+                console.error(e)
+                const fallbackMessage = isCompany
+                    ? 'Unable to create/upload the company KYC document.'
+                    : 'Unable to create/upload the KYC document.'
+                const errorMessage = e?.response?.data?.error || e?.message || fallbackMessage
+
+                if (isCompany) {
+                    this.companyKycError = errorMessage
+                } else {
+                    this.truliooError = errorMessage
+                }
+
+                this.$toasted.show(errorMessage, {
+                    type: 'error'
+                })
+            } finally {
+                this[loadingKey] = false
+                this.loading = false
+            }
+        },
+        async uploadKycHashToContract (hash) {
+            const contract = this.XDCValidator
+            const account = (await this.getAccount() || '').toLowerCase()
+            const gasPrice = await this.web3.eth.getGasPrice() * 1.40
+            let txParams = {
+                from : account,
+                gasPrice: this.web3.utils.toHex(gasPrice),
+                gasLimit: this.web3.utils.toHex(3000000)
+            }
+
+            await contract.methods.uploadKYC(hash).send(txParams)
+        },
         async uploadKYC () {
             try {
-                let self = this
                 if (this.KYC && !!this.KYC.file) {
                     if (this.KYC.file.type !== 'application/pdf') {
                         this.KYC.file = null
@@ -851,22 +910,8 @@ export default {
                     const formData = new FormData()
                     formData.append('filename', this.KYC.file, this.KYC.file.name)
                     const { data } = await axios.post('/api/ipfs/addKYC', formData)
-                    let contract// = await self.getXDCValidatorInstance()
-                    contract = self.XDCValidator
-                    const gasPrice = await this.web3.eth.getGasPrice() * 1.40
-                    let txParams = {
-                        from : this.account,
-                        gasPrice: this.web3.utils.toHex(gasPrice),
-                        gasLimit: this.web3.utils.toHex(3000000)
-                    }
-                    console.log(`>>>>>>>>>>>>TxParams ${txParams}`)
                     console.log(`>>>>>>>>>>>>HASH${data.hash}`)
-                    console.log(`>>>>>>>>>>>>Before`)
-                    // console.log(`>>>>>>>>>>>>${contract.mgetCandidates()}`)
-                    await contract.methods.uploadKYC(data.hash).send(txParams)
-                    // await contract.propose(coinbase, txParams)
-                    // console.log(`>>>>>>>${rs}`)
-                    // await contract.getCandidates()
+                    await this.uploadKycHashToContract(data.hash)
                     this.KYC.status = true
                     this.loading = false
                     this.$toasted.show('KYC uploaded successfully')

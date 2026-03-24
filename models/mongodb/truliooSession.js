@@ -28,6 +28,15 @@ const truliooSessionSchema = new mongoose.Schema(
         },
         rawStatus: {
             type: mongoose.Schema.Types.Mixed
+        },
+        documentHash: {
+            type: String
+        },
+        documentName: {
+            type: String
+        },
+        documentUploadedAt: {
+            type: Date
         }
     },
     { timestamps: true }
