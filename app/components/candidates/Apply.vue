@@ -277,7 +277,7 @@
                         </div>
 
                         <!-- No status yet (first time) -->
-                        <div v-else>
+                        <div v-else-if="!truliooError">
                             <p>
                                 Click this tab to start Trulioo KYC for wallet
                                 <strong>{{ account }}</strong>.
@@ -348,7 +348,7 @@
                             </div>
                         </div>
 
-                        <div v-else>
+                        <div v-else-if="!companyKycError">
                             <p>
                                 Click this tab to start Company KYC for wallet
                                 <strong>{{ account }}</strong>.
@@ -871,6 +871,16 @@ export default {
                     ? 'Unable to create/upload the company KYC document.'
                     : 'Unable to create/upload the KYC document.'
                 const errorMessage = e?.response?.data?.error || e?.message || fallbackMessage
+                const isUserRejected = e?.code === 4001 ||
+                    /user denied|user rejected|denied transaction signature/i.test(errorMessage)
+
+                if (isUserRejected) {
+                    if (isCompany) {
+                        this.companyKycStatus = null
+                    } else {
+                        this.truliooStatus = null
+                    }
+                }
 
                 if (isCompany) {
                     this.companyKycError = errorMessage

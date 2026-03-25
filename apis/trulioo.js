@@ -1,6 +1,8 @@
 'use strict'
 const express = require('express')
 const axios = require('axios')
+const fs = require('fs/promises')
+const path = require('path')
 const router = express.Router()
 const TruliooSession = require('../models/mongodb/truliooSession')
 const { fetchTruliooStatus } = require('../helpers/fetchTruliooStatus')
@@ -9,6 +11,7 @@ const { addBufferToIpfs } = require('../helpers/ipfs')
 
 const TRULIOO_FLOW_ID = process.env.TRULIOO_FLOW_ID
 const TRULIOO_COMPANY_FLOW_ID = process.env.TRULIOO_COMPANY_FLOW_ID
+const TRULIOO_DOCUMENTS_DIR = path.join(process.cwd(), 'storage', 'trulioo-documents')
 
 // Optional: helper to normalize wallet address
 function normalizeWalletAddress (addr = '') {
@@ -65,6 +68,73 @@ function isCompletedStatus (status = '') {
 function getDocumentFileName (walletAddress, kycType) {
     const sanitizedWallet = normalizeWalletAddress(walletAddress).replace(/[^a-z0-9]/g, '')
     return `trulioo-${kycType || 'individual'}-${sanitizedWallet || 'unknown'}.pdf`
+}
+
+async function ensureTruliooDocumentsDir () {
+    await fs.mkdir(TRULIOO_DOCUMENTS_DIR, { recursive: true })
+}
+
+async function savePdfLocally ({ walletAddress, kycType, pdfBuffer }) {
+    await ensureTruliooDocumentsDir()
+
+    const fileName = getDocumentFileName(walletAddress, kycType)
+    const filePath = path.join(TRULIOO_DOCUMENTS_DIR, fileName)
+
+    await fs.writeFile(filePath, pdfBuffer)
+
+    return {
+        fileName,
+        filePath
+    }
+}
+
+async function readSavedPdf (filePath) {
+    if (!filePath) {
+        return null
+    }
+
+    try {
+        return await fs.readFile(filePath)
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            return null
+        }
+
+        throw error
+    }
+}
+
+async function createAndSaveTruliooPdf ({ walletAddress, session, kycType }) {
+    const transactionData = await getTransactionData(session.sessionId)
+    const generatedAt = new Date().toISOString()
+    const pdfBuffer = createPdfBuffer({
+        title: 'Trulioo KYC Document',
+        metadata: {
+            'Wallet Address': walletAddress,
+            'KYC Type': session.kycType || kycType,
+            'Session ID': session.sessionId,
+            'Generated At': generatedAt,
+            'Verification Status': String(transactionData.status || session.status || '').toUpperCase()
+        },
+        sections: buildKycPdfSections(transactionData)
+    })
+
+    const { fileName, filePath } = await savePdfLocally({
+        walletAddress,
+        kycType: session.kycType || kycType,
+        pdfBuffer
+    })
+
+    session.documentName = fileName
+    session.documentLocalPath = filePath
+    session.documentSavedAt = new Date()
+    session.rawStatus = transactionData
+    await session.save()
+
+    return {
+        pdfBuffer,
+        transactionData
+    }
 }
 
 function stringifyFieldValue (value) {
@@ -146,6 +216,18 @@ async function generateTruliooId (req, res, options = {}) {
                     existing.status = statusData.status
                     existing.rawStatus = statusData.raw
                     await existing.save()
+
+                    if (isCompletedStatus(existing.status) && !existing.documentLocalPath) {
+                        try {
+                            await createAndSaveTruliooPdf({
+                                walletAddress: normalizedAddress,
+                                session: existing,
+                                kycType
+                            })
+                        } catch (backupError) {
+                            console.log('Unable to save Trulioo PDF locally:', backupError.message)
+                        }
+                    }
                 }
 
                 // Always return existing session/status.
@@ -245,37 +327,39 @@ router.post('/getTransactionData', async (req, res) => {
             return res.json({
                 hash: session.documentHash,
                 fileName: session.documentName,
+                localPath: session.documentLocalPath,
                 sessionId: session.sessionId,
                 status: session.status,
                 transactionData: session.rawStatus
             })
         }
 
-        const transactionData = await getTransactionData(session.sessionId)
-        const generatedAt = new Date().toISOString()
-        const fileName = getDocumentFileName(normalizedAddress, session.kycType || kycType)
-        const pdfBuffer = createPdfBuffer({
-            title: 'Trulioo KYC Document',
-            metadata: {
-                'Wallet Address': normalizedAddress,
-                'KYC Type': session.kycType || kycType,
-                'Session ID': session.sessionId,
-                'Generated At': generatedAt,
-                'Verification Status': String(transactionData.status || session.status || '').toUpperCase()
-            },
-            sections: buildKycPdfSections(transactionData)
-        })
+        let pdfBuffer = await readSavedPdf(session.documentLocalPath)
+        let transactionData = session.rawStatus
+
+        if (!pdfBuffer) {
+            const documentData = await createAndSaveTruliooPdf({
+                walletAddress: normalizedAddress,
+                session,
+                kycType
+            })
+            pdfBuffer = documentData.pdfBuffer
+            transactionData = documentData.transactionData
+        }
+
         const hash = await addBufferToIpfs(pdfBuffer)
 
         session.documentHash = hash
-        session.documentName = fileName
+        if (!session.documentName) {
+            session.documentName = getDocumentFileName(normalizedAddress, session.kycType || kycType)
+        }
         session.documentUploadedAt = new Date()
-        session.rawStatus = transactionData
         await session.save()
 
         return res.json({
             hash,
-            fileName,
+            fileName: session.documentName,
+            localPath: session.documentLocalPath,
             sessionId: session.sessionId,
             status: session.status,
             transactionData

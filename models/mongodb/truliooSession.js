@@ -35,6 +35,12 @@ const truliooSessionSchema = new mongoose.Schema(
         documentName: {
             type: String
         },
+        documentLocalPath: {
+            type: String
+        },
+        documentSavedAt: {
+            type: Date
+        },
         documentUploadedAt: {
             type: Date
         }
