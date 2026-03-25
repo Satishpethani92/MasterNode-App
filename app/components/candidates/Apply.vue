@@ -527,31 +527,29 @@ export default {
     mounted () {
     },
     methods: {
-        async onIndividualClick () {
-            try {
-                this.truliooError = null
-                this.truliooLoading = true
+        async handleTruliooClick (kycType = 'individual') {
+            const isCompany = kycType === 'company'
+            const errorKey = isCompany ? 'companyKycError' : 'truliooError'
+            const loadingKey = isCompany ? 'companyKycLoading' : 'truliooLoading'
+            const statusKey = isCompany ? 'companyKycStatus' : 'truliooStatus'
+            const existingKey = isCompany ? 'companyKycExisting' : 'truliooExisting'
+            const url = isCompany ? '/api/trulioo/generateCompanyID' : '/api/trulioo/generateSessionID'
 
-                // 1. Call Backend
-                // If status was 'declined' before, backend now generates a NEW session with status 'pending'
-                const { data } = await axios.post('/api/trulioo/generateSessionID', {
+            try {
+                this[errorKey] = null
+                this[loadingKey] = true
+
+                const { data } = await axios.post(url, {
                     walletAddress: this.account
                 })
 
-                this.truliooStatus = data.status || null
-                this.truliooExisting = !!data.existing
+                this[statusKey] = data.status || null
+                this[existingKey] = !!data.existing
 
-                // 2. Handle Completed
-                // If status is completed, we just show toast and return.
-                // The HTML template handles hiding the button via v-if="truliooStatus !== 'completed'"
                 if (data.status && (data.status.toLowerCase() === 'completed' || data.status.toLowerCase() === 'approved')) {
-                    await this.processCompletedTruliooKyc('individual')
+                    await this.processCompletedTruliooKyc(kycType)
                     return
                 }
-
-                // 3. Handle New Flow (or Retry of Declined flow)
-                // If backend returned existing: false (which it does for new sessions after decline), open window.
-                // OR if it's an existing 'pending' session, we also want to open the window to resume.
 
                 const isPendingOrProgress = ['pending', 'in progress'].includes((data.status || '').toLowerCase())
 
@@ -563,44 +561,18 @@ export default {
                 }
             } catch (e) {
                 console.error(e)
-                this.truliooError = e?.response?.data?.error || 'Unable to start Trulioo KYC.'
+                this[errorKey] = e?.response?.data?.error ||
+                    `Unable to start ${isCompany ? 'Company ' : ''}Trulioo KYC.`
             } finally {
-                this.truliooLoading = false
+                this[loadingKey] = false
             }
+        },
+        async onIndividualClick () {
+            await this.handleTruliooClick('individual')
         },
 
         async onCompanyClick () {
-            try {
-                this.companyKycError = null
-                this.companyKycLoading = true
-
-                const { data } = await axios.post('/api/trulioo/generateCompanyID', {
-                    walletAddress: this.account
-                })
-
-                this.companyKycStatus = data.status || null
-                this.companyKycExisting = !!data.existing
-
-                if (data.status && (data.status.toLowerCase() === 'completed' || data.status.toLowerCase() === 'approved')) {
-                    await this.processCompletedTruliooKyc('company')
-                    return
-                }
-
-                // Only auto-open the Trulioo form for brand-new sessions.
-                // For existing sessions, just display the status — user can
-                // click "Refresh status / Open Trulioo" button to reopen.
-                if (!data.existing) {
-                    window.open(
-                        `https://launch-workflow.trulioo.com/test/${data.flowId}?x-hf-session=${data.sessionId}`,
-                        '_blank'
-                    )
-                }
-            } catch (e) {
-                console.error(e)
-                this.companyKycError = e?.response?.data?.error || 'Unable to start Company KYC.'
-            } finally {
-                this.companyKycLoading = false
-            }
+            await this.handleTruliooClick('company')
         },
 
         getValidationClass: function (fieldName) {
