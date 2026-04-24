@@ -4,18 +4,31 @@ const path = require('path')
 const mongoose = require('mongoose')
 const db = {}
 const config = require('config')
+const logger = require('../../helpers/logger')
 
-console.log((config.get('db.uri')))
+// Prefer an env-var connection string (supports credentials & replica sets)
+// so the deployer never has to commit a MongoDB username/password to config
+// files. Falls back to config('db.uri') for backwards compatibility.
+const mongoUri = process.env.MONGO_URI || process.env.DB_URI || config.get('db.uri')
+
+// Emit only the host portion of the URI so credentials embedded in the URI
+// never hit stdout.
+function maskedUri (uri) {
+    try { return String(uri).replace(/\/\/([^@]+)@/, '//***@') } catch (e) { return 'mongodb://***' }
+}
+logger.info('Connecting to MongoDB at %s', maskedUri(mongoUri))
 
 mongoose.Promise = global.Promise
 mongoose.set('useCreateIndex', true)
-mongoose.connect(config.get('db.uri'), {
-    useNewUrlParser: true
+mongoose.connect(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000
 },
 (err) => {
     if (err) {
-        console.error('Mongodb Connection error!!!')
-        process.exit()
+        logger.error('MongoDB connection error: %s', err.message || err)
+        process.exit(1)
     }
 })
 

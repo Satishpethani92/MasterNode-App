@@ -11,12 +11,38 @@ const BigNumber = require('bignumber.js')
 const _ = require('lodash')
 const { check, validationResult, query } = require('express-validator/check')
 const urljoin = require('url-join')
+const logger = require('../helpers/logger')
 const LRU = require('lru-cache')
 const cache = new LRU({
     max: 1000,
     maxAge: 24 * 60 * 60 * 1000 // 1 day
 })
 const ALLOWED_SORT_FIELDS = new Set(['capacityNumber', 'capacity', 'candidate', 'candidateName', 'status', 'createdAt'])
+const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+function isValidUuid (id) {
+    return typeof id === 'string' && UUID_V4_REGEX.test(id)
+}
+
+// EIP-155 chainId derivation from the v byte of a signed legacy transaction.
+// v = chainId * 2 + 35|36 for EIP-155 protected txs; v in {27,28} means NOT
+// chain-bound and MUST be rejected server-side to prevent cross-chain replay.
+function extractChainIdFromTx (tx) {
+    if (!tx || !tx.v) return null
+    try {
+        const vBuf = Buffer.isBuffer(tx.v) ? tx.v : Buffer.from(tx.v)
+        const vHex = vBuf.toString('hex')
+        if (!vHex) return null
+        const vNum = parseInt(vHex, 16)
+        if (isNaN(vNum)) return null
+        if (vNum === 27 || vNum === 28) return 0 // unprotected
+        // chainId = (v - 35) >> 1
+        const chainId = (vNum - 35) >> 1
+        return chainId > 0 ? chainId : null
+    } catch (e) {
+        return null
+    }
+}
 
 function normalizeSortField (sortBy) {
     if (!sortBy || !ALLOWED_SORT_FIELDS.has(sortBy)) {
@@ -191,28 +217,32 @@ router.post('/generateQR', [
             id
         })
     } catch (e) {
-        console.log(e)
+        logger.warn('generateQR failed: %s', e.message || e)
         res.send({
             error: {
-                message: e
+                message: e && e.message ? e.message : 'Error'
             }
         })
     }
 })
 
 router.post('/verifyTx', [
-    query('id').isLength({ min: 1 }).exists().withMessage('is is required')
-        .contains('-').withMessage('wrong id format'),
-    check('action').isLength({ min: 1 }).exists().withMessage('action is required'),
-    check('signer').isLength({ min: 1 }).exists().withMessage('signer is required'),
-    check('rawTx').isLength({ min: 1 }).exists().withMessage('rawTx is required')
+    query('id').isUUID(4).withMessage('id must be a UUID v4'),
+    check('action').isLength({ min: 1, max: 32 })
+        .isIn(['vote', 'unvote', 'resign', 'withdraw'])
+        .withMessage('action must be one of vote|unvote|resign|withdraw'),
+    check('signer').isLength({ min: 1, max: 128 }).exists().withMessage('signer is required'),
+    check('rawTx').isLength({ min: 1, max: 8192 }).exists().withMessage('rawTx is required')
 ], async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return next(errors.array())
     }
     try {
-        const id = escape(req.query.id || '')
+        const id = req.query.id
+        if (!isValidUuid(id)) {
+            throw Error('wrong id format')
+        }
         const action = req.body.action
         let signer = (req.body.signer || '').toLowerCase()
         let candidate = (req.body.candidate || '').toLowerCase()
@@ -247,7 +277,23 @@ router.post('/verifyTx', [
             throw Error(`Wrong action, ${action} in stead of ${checkId.action}`)
         }
 
-        let signedAddress = '0x' + new EthereumTx(serializedTx).getSenderAddress().toString('hex')
+        // Parse the signed transaction and enforce EIP-155 chainId binding. The
+        // previous code accepted any rawTx, including ones signed for other EVM
+        // chains (cross-chain replay risk, audit finding H-7).
+        let parsedTx
+        try {
+            parsedTx = new EthereumTx(serializedTx)
+        } catch (e) {
+            throw Error('rawTx is not a valid RLP-encoded transaction')
+        }
+
+        const expectedChainId = parseInt(config.get('blockchain.networkId'))
+        const txChainId = extractChainIdFromTx(parsedTx)
+        if (!txChainId || txChainId !== expectedChainId) {
+            throw Error(`rawTx chainId ${txChainId} does not match expected ${expectedChainId}`)
+        }
+
+        let signedAddress = '0x' + parsedTx.getSenderAddress().toString('hex')
 
         signedAddress = signedAddress.toLowerCase()
 
@@ -277,8 +323,7 @@ router.post('/verifyTx', [
                             }
                         }
                     } catch (error) {
-                        console.trace(error)
-                        console.log(error)
+                        logger.warn('verifyTx balance-check failed: %s', error.message || error)
                         return next(error)
                     }
                 } else next(error)
@@ -306,29 +351,29 @@ router.post('/verifyTx', [
                         transactionHash: hash
                     })
                 } catch (error) {
-                    console.trace(error)
-                    console.log(error)
+                    logger.warn('verifyTx post-broadcast update failed: %s', error.message || error)
                     return next(error)
                 }
             }
         })
     } catch (e) {
-        console.trace(e)
-        console.log(e)
+        logger.warn('verifyTx failed: %s', e.message || e)
         return next(e)
     }
 })
 
 router.get('/getScanningResult', [
-    query('id').isLength({ min: 1 }).exists().withMessage('id is required')
-        .contains('-').withMessage('wrong id format')
+    query('id').isUUID(4).withMessage('id must be a UUID v4')
 ], async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return next(errors.array())
     }
     try {
-        const id = escape(req.query.id || '')
+        const id = req.query.id
+        if (!isValidUuid(id)) {
+            return next(new Error('wrong id format'))
+        }
 
         const signTx = await db.SignTransaction.findOne({ signId: id })
 
@@ -352,9 +397,8 @@ router.get('/getScanningResult', [
             })
         }
     } catch (e) {
-        console.trace(e)
-        console.log(e)
-        return res.status(500).send(e)
+        logger.warn('getScanningResult failed: %s', e.message || e)
+        return res.status(500).json({ error: { message: 'Internal error' } })
     }
 })
 
