@@ -76,17 +76,32 @@ router.post('/verifyLogin', [
             throw Error('The Signature Message Verification Failed')
         }
 
-        // Store id, address, msg, signature
-        let sign = await db.Signature.findOne({ signedAddress: signedAddress })
-        if (sign && id === sign.signedId) {
+        // Single-use binding: enforce that this signedId can only be claimed by
+        // exactly one signedAddress. Looking up by signedAddress alone (the
+        // upstream behaviour) lets a second wallet overwrite the same login
+        // session — i.e. an attacker who scans the victim's QR with their own
+        // wallet hijacks the SPA polling /getLoginResult.
+        const existingForId = await db.Signature.findOne({ signedId: id })
+        if (existingForId && existingForId.signedAddress.toLowerCase() !== signedAddress) {
             throw Error('Cannot use a QR code twice')
-        } else {
-            const data = {}
-            data.signedId = id
-            data.message = message
-            data.signature = signature
+        }
+        if (existingForId && existingForId.signedAddress.toLowerCase() === signedAddress) {
+            // Idempotent retry from the same legitimate signer. Treat as success.
+            return res.send('Done')
+        }
 
-            await db.Signature.findOneAndUpdate({ signedAddress: signedAddress }, data, { upsert: true, new: true })
+        try {
+            await db.Signature.findOneAndUpdate(
+                { signedAddress: signedAddress },
+                { $set: { signedId: id, message, signature, expiredAt: new Date() } },
+                { upsert: true, new: true }
+            )
+        } catch (e) {
+            // E11000 from the unique signedId index: another wallet beat us to it.
+            if (e && e.code === 11000) {
+                throw Error('Cannot use a QR code twice')
+            }
+            throw e
         }
         return res.send('Done')
     } catch (e) {

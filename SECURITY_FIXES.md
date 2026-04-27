@@ -91,3 +91,75 @@ npm run dev
 
 Reach out to `security@` (or the audit contact) with any questions before
 merging.
+
+## Follow-up E2E pass — 2026-04-27
+
+After the initial commit, the branch was driven through a full local stack
+(Node + dockerised Mongo + headless Chromium SPA + scripted signer) and a
+production-like Docker container. The pass surfaced and fixed five additional
+issues that were not visible to a static review.
+
+| # | File(s) | Severity | Change |
+|---|---|---|---|
+| F-1 | `apis/auth.js`, `models/mongodb/signature.js` | **HIGH** (lateral-login takeover) | The original `verifyLogin` keyed the `Signature` upsert by `signedAddress`. A second wallet scanning the *same* QR could overwrite the bound `signedId`, so the SPA polling `/getLoginResult` would receive the attacker's address. Now the model has a `unique+sparse` index on `signedId`, and `verifyLogin` rejects with `Cannot use a QR code twice` whenever a different wallet tries to claim an already-bound QR session. Idempotent retries by the *same* signer return success without rewriting the row. |
+| F-2 | `app/components/Setting.vue` | MED (login UX bug) | `encodeURI(data.message)` did not escape `=`, so the new `id=<uuid>` token introduced by H-2 was being parsed as a top-level URI query key by mobile wallets, breaking login. Switched both `qrCode` and `qrCodeApp` to `encodeURIComponent`. |
+| F-3 | `app/components/candidates/Apply.vue` | HIGH (KYC flow regression) | The Vue uploader was hard-coded to the original (vulnerable) one-step KYC POST, so the new server-side two-step contract from M-9 was unreachable from the SPA. Rewrote `uploadKYC()` to (a) compute `sha256(file)` in the browser via `window.crypto.subtle.digest`, (b) request a per-account nonce from `/api/ipfs/requestKYCNonce`, (c) sign `[XDCmaster KYC <nonce>] Upload <hash> for <account>`, (d) POST file + signature to `/api/ipfs/addKYC`. |
+| F-4 | `app/app.js` | HIGH (production-only blank page) | `new Vue({ template: '<App/>' })` worked in dev but rendered an empty comment node in production. Webpack 5 + Terser was tree-shaking the runtime template compiler out of `vue.esm.js`, so the root instance could not resolve the `<App/>` placeholder. Replaced the runtime template with an explicit `render: h => h(App)` so the root mount is statically analysable and never DCE'd. |
+| F-5 | `package.json`, `package-lock.json` | LOW (Docker runtime crash) | `connect-flash` is required at runtime by `index.js` but was listed under `devDependencies`. With `npm install --omit=dev` in the Dockerfile (and especially with `npm ci`, which strictly follows the lockfile's `dev` flag) the production container crashed on boot with `MODULE_NOT_FOUND`. Moved into `dependencies` and regenerated the lockfile (`npm install --package-lock-only --legacy-peer-deps --ignore-scripts`) so `node_modules/connect-flash` no longer carries `"dev": true`. The lockfile regen also pruned 6 stale `extraneous` entries under `ethereumjs-testrpc-sc/node_modules/*` that no manifest still referenced. |
+| F-6 | `Dockerfile` | LOW (build hardening) | Added `--ignore-scripts` to both `npm install` invocations so the build no longer aborts on the legacy `sha3@1.x` native rebuild against Node 20 + node-gyp; replaced the final recursive `chown -R masternode:masternode /app` (which deadlocked on overlay filesystems with multi-million-file `node_modules`) with `COPY --chown=...` on every layer plus a small `chown` for `tmp/sslcert`. |
+
+### Verification performed
+
+- **Local full-stack E2E**: real `web3.eth.accounts.sign` signatures driven
+  against the running Node API + dockerised Mongo. Covers happy path, expired
+  QR, wrong signer, replay, bad-byte signature, lateral takeover (added after
+  F-1 was found). The audit-time scripts hard-coded test signing keys and a
+  local Mongo URI so they were not committed; `test-harness/soak.sh` is the
+  only verification asset shipped in this branch.
+- **Headless Chromium smoke** (`puppeteer-core`, system Chromium): SPA mounts,
+  router resolves to `CandidateList`, no critical console errors. Verified the
+  fix for F-4. The pre-existing recoverable `latestSignedBlock` warning in
+  `CandidateList.vue:29` is non-security and not regressed.
+- **`verifyTx` E2E**: generated real `ethereumjs-tx` v1 transactions with
+  chainId ∈ {50 ✅, 51 ❌, unprotected v=27 ❌}; H-7 enforcement passes on all
+  three.
+- **Docker build & run**: `docker build .` succeeds; `docker run` boots cleanly
+  against an authenticated Mongo URI, serves `/api/config` (200), CSP/HSTS/
+  X-Frame-Options/X-Content-Type/Referrer-Policy all present, `RateLimit-*`
+  and `Retry-After` headers emitted by every limiter.
+- **5-minute soak** (`test-harness/soak.sh`, 8 workers, ~600 req/s sustained):
+  182 576 requests, **0 5xx**, container memory stable (84 MiB → 268 MiB peak →
+  185 MiB final), 11 PIDs throughout. Rate-limit 429s delivered as designed.
+  The script is parametrised (`BASE`, `DURATION`, `WORKERS`, `CONTAINER`,
+  `RESULTS_DIR`) so it can be re-run against any environment.
+- **Truffle `npm test`**: still fails on Node 20 with the upstream
+  `truffle-core/lib/testing/testrunner.js:68 Cannot read properties of
+  undefined (reading 'type')` error. **Confirmed pre-existing**: `git diff
+  HEAD -- contracts/ test/ truffle-config.js` against the upstream commit
+  `89709cb` is empty. Tracked under "Known remaining work".
+
+### Pre-deploy migration note for ops (Signature collection)
+
+F-1 adds a `unique+sparse` index on `Signature.signedId`. Mongoose builds it
+automatically on app boot (`autoIndex` is on). On a populated production
+collection there is a small but non-zero chance the build fails if duplicate
+`signedId` values already exist (the failure mode this PR is closing). Run
+the following against the live DB **before** rolling the new app image, and
+abort the deploy if any duplicate is reported:
+
+```js
+// duplicate audit
+db.signatures.aggregate([
+  { $match: { signedId: { $type: 'string' } } },
+  { $group: { _id: '$signedId', n: { $sum: 1 }, addrs: { $addToSet: '$signedAddress' } } },
+  { $match: { n: { $gt: 1 } } }
+])
+
+// drop the old (non-unique) index so mongoose rebuilds it as unique+sparse
+db.signatures.dropIndex('signedId_1')
+```
+
+If the dedupe query returns rows, treat it as a likely past lateral-takeover
+event: investigate the affected `signedAddress` set, invalidate the offending
+documents (`db.signatures.deleteMany({ signedId: '<id>' })`), then proceed.
+
