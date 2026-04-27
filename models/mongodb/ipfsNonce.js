@@ -10,8 +10,13 @@ const Schema = mongoose.Schema
  * 5 minutes after creation, giving us a hard replay-window upper bound that
  * survives process restarts.
  */
+// `unique: true` already creates the index, so the extra `index: true` on
+// `nonce` is a duplicate-index warning at startup. `nonce` should also be
+// required: a document missing this field would silently match the
+// findOneAndUpdate({ nonce: undefined, ... }) probe and let any caller that
+// omits the field consume "the empty nonce" (CodeRabbit #49).
 const IpfsNonce = new Schema({
-    nonce: { type: String, unique: true, index: true },
+    nonce: { type: String, required: true, unique: true },
     account: { type: String, required: true, index: true },
     consumed: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now, expires: 300 }

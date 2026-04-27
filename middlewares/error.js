@@ -36,11 +36,33 @@ module.exports = function (err, req, res, next) {
     })
 }
 
-// Strip filesystem paths and stack frames from client-facing error messages.
+// Strip filesystem paths and stack frames from client-facing error messages,
+// then run an allowlist over the result. The previous regex-only approach
+// missed several stack-frame shapes (native frames, "at module.func ...",
+// Windows backslash paths, anonymous closures) — anything we didn't
+// explicitly recognise was forwarded verbatim (CodeRabbit #49). Now any
+// production message that contains characters outside the allowlist is
+// replaced wholesale with the generic "Error".
+//
+// Allowlist: alphanumerics, whitespace, basic punctuation, and the
+// separators we actually use in validator messages (`|`, `=`, `+`).
+// Specifically excludes `/` (path separator), `\`, shell metacharacters,
+// angle brackets, braces, quotes and backticks so a leaked stack frame,
+// JSON dump, file path or HTML payload can't slip through.
+const SAFE_MESSAGE_RE = /^[A-Za-z0-9 ,.'!?:;()\-_|=+]{1,200}$/
 function sanitizeForClient (msg) {
     if (typeof msg !== 'string') return 'Error'
-    return msg
-        .replace(/\/[^\s'"`]+\.(js|ts|vue)(:\d+:\d+)?/g, '')
-        .replace(/\s+at\s+[^\s]+\s+\([^)]*\)/g, '')
-        .trim() || 'Error'
+    const stripped = msg
+        // Windows-style absolute paths
+        .replace(/[A-Za-z]:\\[^\s'"`]+/g, '')
+        // Unix-style multi-segment paths (anything that looks like /a/b...)
+        .replace(/(?:\/[^\s'"`/]+){2,}/g, '')
+        // Common stack-frame shapes ("at func (path:line:col)")
+        .replace(/\s+at\s+[^\s]+(\s+\([^)]*\))?/g, '')
+        // Trailing or stray "at" left dangling after a path strip
+        .replace(/(^|\s)at(\s+|$)/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+    if (!stripped) return 'Error'
+    return SAFE_MESSAGE_RE.test(stripped) ? stripped : 'Error'
 }

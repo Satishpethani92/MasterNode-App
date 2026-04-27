@@ -24,26 +24,6 @@ function isValidUuid (id) {
     return typeof id === 'string' && UUID_V4_REGEX.test(id)
 }
 
-// EIP-155 chainId derivation from the v byte of a signed legacy transaction.
-// v = chainId * 2 + 35|36 for EIP-155 protected txs; v in {27,28} means NOT
-// chain-bound and MUST be rejected server-side to prevent cross-chain replay.
-function extractChainIdFromTx (tx) {
-    if (!tx || !tx.v) return null
-    try {
-        const vBuf = Buffer.isBuffer(tx.v) ? tx.v : Buffer.from(tx.v)
-        const vHex = vBuf.toString('hex')
-        if (!vHex) return null
-        const vNum = parseInt(vHex, 16)
-        if (isNaN(vNum)) return null
-        if (vNum === 27 || vNum === 28) return 0 // unprotected
-        // chainId = (v - 35) >> 1
-        const chainId = (vNum - 35) >> 1
-        return chainId > 0 ? chainId : null
-    } catch (e) {
-        return null
-    }
-}
-
 function normalizeSortField (sortBy) {
     if (!sortBy || !ALLOWED_SORT_FIELDS.has(sortBy)) {
         return 'capacityNumber'
@@ -217,12 +197,12 @@ router.post('/generateQR', [
             id
         })
     } catch (e) {
+        // Route through the centralized error middleware so error messages
+        // get sanitized before they hit the client (CodeRabbit #49). The
+        // previous res.send shape leaked raw e.message and bypassed the
+        // M-4 path/stack scrubber.
         logger.warn('generateQR failed: %s', e.message || e)
-        res.send({
-            error: {
-                message: e && e.message ? e.message : 'Error'
-            }
-        })
+        return next(e)
     }
 })
 
@@ -287,8 +267,14 @@ router.post('/verifyTx', [
             throw Error('rawTx is not a valid RLP-encoded transaction')
         }
 
+        // ethereumjs-tx@1's Transaction.prototype.getChainId() implements the
+        // exact EIP-155 derivation (v = chainId * 2 + 35|36) and returns 0 for
+        // legacy/unprotected (v=27|28) and missing-v transactions, which is
+        // the same fail-secure shape our previous hand-rolled extractor
+        // returned. Reusing it avoids duplicating the parsing logic
+        // (CodeRabbit #49).
         const expectedChainId = parseInt(config.get('blockchain.networkId'))
-        const txChainId = extractChainIdFromTx(parsedTx)
+        const txChainId = parsedTx.getChainId()
         if (!txChainId || txChainId !== expectedChainId) {
             throw Error(`rawTx chainId ${txChainId} does not match expected ${expectedChainId}`)
         }

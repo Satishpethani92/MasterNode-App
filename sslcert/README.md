@@ -8,7 +8,7 @@ to anyone who cloned the repository.
 To run the app with HTTPS (`npm run dev-https`), generate or install your own
 certificate and key locally:
 
-```
+```bash
 openssl req -x509 -newkey rsa:4096 -nodes -keyout server.key -out server.crt \
   -days 365 -subj "/CN=localhost"
 ```

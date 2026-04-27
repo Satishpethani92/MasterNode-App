@@ -82,10 +82,13 @@ app.use(helmet({
 }))
 
 // CORS with explicit allowlist (request origins not in config.cors are rejected).
-// The verbose request logging from the upstream commit was moved behind a
-// NODE_ENV !== 'production' guard and routed through winston so we don't leak
-// every client IP/origin/referer into production stdout (audit M-4).
-const DEBUG_REQUESTS = process.env.NODE_ENV !== 'production' && process.env.REQUEST_TRACE !== '0'
+// The verbose request logging from the upstream commit is gated behind the
+// same fail-secure IS_PRODUCTION check we use everywhere else in this file.
+// Going off `process.env.NODE_ENV !== 'production'` (CodeRabbit #49) treated
+// our own deployments — which run with NODE_ENV=mainnet|testnet|devnet — as
+// non-production and re-introduced the M-4 leakage. REQUEST_TRACE is an
+// explicit opt-in: only "1" enables it, everything else disables it.
+const DEBUG_REQUESTS = !IS_PRODUCTION && process.env.REQUEST_TRACE === '1'
 
 if (DEBUG_REQUESTS) {
     app.use((req, res, next) => {
@@ -175,12 +178,12 @@ app.use(require('./middlewares/sitemap'))
 app.use(require('./middlewares/error'))
 
 app.get('*', function (req, res) {
-    let p
-    if (process.env.NODE_ENV === 'development') {
-        p = path.resolve(__dirname, 'index.html')
-    } else {
-        p = path.resolve(__dirname, './build', 'index.html')
-    }
+    // Use the same fail-secure check as the rest of the file — anything
+    // that isn't a recognised dev/local NODE_ENV serves the production
+    // bundle from build/.
+    const p = !IS_PRODUCTION
+        ? path.resolve(__dirname, 'index.html')
+        : path.resolve(__dirname, './build', 'index.html')
     return res.sendFile(p)
 })
 

@@ -17,7 +17,7 @@ that the Vue front-end and any external consumers continue to work.
 | 6 | `apis/candidates.js` | HIGH (H-1) + MED | `/search` escapes regex metacharacters via `lodash.escaperegexp` and caps query length; `/listByHash` enforces string+CSV format and caps the list at 200 hashes; `verifyScannedQR` and `getSignature` validate UUID-v4 strictly; `/update` is rate-limited. |
 | 7 | `apis/ipfs.js` | **CRITICAL** (M-9 promoted) | Two-step KYC upload. Client must (a) `POST /api/ipfs/requestKYCNonce` to get a server-issued per-account nonce, (b) sign `[XDCmaster KYC <nonce>] Upload <sha256(file)> for <account>`, (c) submit file + signature to `/addKYC`. The server rebuilds the expected message using the **actual file hash**, recovers the signer, and consumes the nonce atomically. Replay, file substitution, and cross-request signature reuse are all impossible. |
 | 8 | `models/mongodb/ipfsNonce.js` | — | New MongoDB model backing the nonce. 5-minute TTL index auto-evicts unused nonces. |
-| 9 | `apis/voters.js` | HIGH (H-7) | `/verifyTx` now parses the `rawTx`, extracts the EIP-155 chainId from the `v` byte, and rejects any transaction that is either unprotected (`v=27|28`) or signed for a different chain. Action is restricted to an allowlist (`vote / unvote / resign / withdraw`). `escape()` and `console.trace(e)` calls removed. |
+| 9 | `apis/voters.js` | HIGH (H-7) | `/verifyTx` now parses the `rawTx`, extracts the EIP-155 chainId from the `v` byte, and rejects any transaction that is either unprotected (`v=27` or `v=28`) or signed for a different chain. Action is restricted to an allowlist (`vote` / `unvote` / `resign` / `withdraw`). `escape()` and `console.trace(e)` calls removed. |
 | 10 | `middlewares/error.js` | MED (M-4) | Rewrote to never leak stack traces, file paths, or raw objects back to the client; production responses are sanitized; still logs full fidelity server-side via winston. |
 | 11 | `models/mongodb/index.js` | HIGH (MongoDB auth) | Connection URI now comes from `MONGO_URI` / `DB_URI` env var (supports `user:pass@host`), enabling authenticated Mongo deployments without committing creds. Logs only a masked URI. |
 | 12 | `package.json` | CRIT (C-5), MED | `xdc3` pinned from `"latest"` → `"1.3.13416"`. `lodash` bumped to `^4.17.21` (prototype pollution). `express-fileupload` moved to runtime deps. New runtime deps: `express-rate-limit`, `express-basic-auth`, `lodash.escaperegexp`. |
@@ -162,4 +162,31 @@ db.signatures.dropIndex('signedId_1')
 If the dedupe query returns rows, treat it as a likely past lateral-takeover
 event: investigate the affected `signedAddress` set, invalidate the offending
 documents (`db.signatures.deleteMany({ signedId: '<id>' })`), then proceed.
+
+## Code-review follow-ups — 2026-04-27 (CodeRabbit pass on PR #49)
+
+A second pass over the PR turned up a handful of regressions and robustness
+issues introduced (or left intact) by the earlier security work. Each is
+fixed in this commit; the table below maps the finding to the change.
+
+| Severity | File | Issue | Fix |
+|---|---|---|---|
+| Critical | `apis/ipfs.js` | `xinFinClient.add(buf, cb)` is callback-style but `ipfs-http-client@40+` is Promise-only — KYC uploads silently hang and waste the nonce. | Switched to `await xinFinClient.add(buf)`, normalised the v40 / v50 result shapes, and **deferred** the atomic nonce consume until after the IPFS pin succeeds so transient pinning failures no longer burn the user's single-use nonce. |
+| Major | `apis/ipfs.js` | `req.query.account / signedMessage / nonce` accepted as fallbacks — credentials leak into nginx access logs, browser history and Referer headers. | Removed the `req.query` fallbacks; only `req.body` and `x-kyc-*` headers are honoured. |
+| Major | `apis/auth.js` | TTL was bypassable by signing a message that omitted the `[XDCmaster …]` prefix. | Now requires the canonical `^\[XDCmaster <iso>\] Login id=<uuid>$` shape and rejects any message whose timestamp is missing or unparseable. |
+| Major | `index.js` | `DEBUG_REQUESTS` keyed off `NODE_ENV !== 'production'`, so our own `mainnet|testnet|devnet` deployments re-enabled verbose request logging (M-4 leakage). `REQUEST_TRACE` was opt-out. | Now keyed off the file-wide `IS_PRODUCTION` fail-secure check and `REQUEST_TRACE === '1'` (explicit opt-in). The SPA static-file fallback uses the same check. |
+| Correctness | `apis/voters.js` | `generateQR` catch block sent `e.message` directly, bypassing `sanitizeForClient`. | Now calls `next(e)` so the central error middleware sanitises before responding. |
+| Correctness | `apis/voters.js` | Hand-rolled `extractChainIdFromTx` duplicated `ethereumjs-tx`'s built-in `Transaction.prototype.getChainId()`. | Replaced with `parsedTx.getChainId()`. Verified semantically identical (returns 0 for `v=27|28` and missing `v`, the protected chainId otherwise). |
+| Correctness | `app/components/candidates/Apply.vue` | `window.crypto.subtle` is undefined in non-secure contexts (plain HTTP) — KYC threw an opaque `TypeError`. | Explicit availability check; surfaces a readable toast + `Error('… requires a secure context …')` if absent. |
+| Correctness | `models/mongodb/index.js` | Callback-style `mongoose.connect(uri, opts, cb)` — stale on mongoose@5+, connection failures didn't surface. | Promise-style `connect().catch(...)` plus a `connection.on('error', ...)` listener for post-connect blips. |
+| Correctness | `models/mongodb/signature.js` | `unique: true, index: true` on the same field produces a duplicate-index warning at startup. | Dropped the redundant `index: true`. |
+| Correctness | `models/mongodb/ipfsNonce.js` | `nonce` was not `required` (a missing-field document could have matched the consume CAS) and `index: true` was redundant alongside `unique: true`. | `required: true` added; redundant `index: true` removed. |
+| Nit | `.env.example` | `NODE_ENV=production` as the example value tripped Swagger gating, sanitised errors, etc. when copied verbatim by a developer. | Defaults to `development` with a comment flagging that production deployments must override it. |
+| Nit | `helpers/rateLimiters.js` | `authLimiter` had a `message:` field that the custom `handler` overrode and never sent. | Removed the dead field; comment explains all limiters share the `handler`-controlled response. |
+| Nit | `Dockerfile` | `npm install` ran as root and was followed by `chown -R masternode:masternode node_modules`, contradicting the comment that the `COPY --chown` pattern avoided exactly that recursive chown. | Moved `USER masternode` and `chown masternode:masternode /app` ahead of `npm install`; everything from that point on runs unprivileged. |
+| Nit | `apis/candidates.js` | Doubled UUID validation (`isUUID(4)` + `isValidUuid()`). | Kept both as defense-in-depth, with an inline comment explaining the rationale. |
+| Nit | `middlewares/error.js` | The path/stack-frame regex strip missed several stack-frame shapes (native frames, Windows backslash paths, anonymous closures). | Tightened the strips (Windows paths, multi-segment Unix paths, dangling `at` tokens) and gated the result through an explicit allowlist regex. Anything outside the allowlist falls back to the generic `"Error"`. Verified against 31 real validator/throw messages (all pass verbatim) and 8 dangerous shapes (all neutralised). |
+| Nit | `SECURITY_FIXES.md` | Inline code span `v=27|28` had an unescaped pipe inside a markdown table, breaking the row. | Reformatted to `v=27` or `v=28`. |
+| Nit | `test-harness/soak.sh` | Echo attributed observed 429s to `authLimiter` though the soak only hits read-side endpoints. | Corrected to `readLimiter on /api/candidates etc. trips at 240 req/min/IP`. |
+| Nit | `sslcert/README.md`, `LIVE_EXPOSURE_REPORT.md` | Markdownlint MD040 — unlabelled fenced code blocks. | Added language identifiers (`bash`, `http`, `text`) on every fence. |
 

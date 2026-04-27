@@ -949,6 +949,12 @@ router.post('/verifyScannedQR', [
         const message = req.body.message
         const signature = req.body.signature
         const id = req.query.id
+        // Defense in depth: express-validator's isUUID(4) above already
+        // rejected non-UUIDv4 ids, but we re-check with the same regex
+        // (UUID_V4_REGEX) before it reaches the DB so that a future change
+        // to the validator chain (or a misconfiguration that drops the
+        // check from the pipeline) cannot reintroduce arbitrary-string
+        // querying against the Signature collection (CodeRabbit #49).
         if (!isValidUuid(id)) {
             throw Error('wrong id format')
         }
@@ -994,6 +1000,7 @@ router.get('/:candidate/getSignature', [
     }
     try {
         const messId = req.query.id
+        // Defense in depth — see comment in /verifyScannedQR above.
         if (!isValidUuid(messId)) {
             return next(new Error('wrong id format'))
         }

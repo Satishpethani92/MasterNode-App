@@ -62,7 +62,7 @@ for f in "$RESULTS_DIR"/worker-*.tsv; do
 done
 echo "total requests: $total"
 echo "  200          : $ok"
-echo "  429          : $limited (expected — authLimiter hit on /api/transactions etc. if applicable)"
+echo "  429          : $limited (expected — readLimiter on /api/candidates etc. trips at 240 req/min/IP)"
 echo "  5xx/4xx-other: $bad"
 echo "  conn errors  : $conn_err"
 echo

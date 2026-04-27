@@ -56,18 +56,19 @@ router.post('/verifyLogin', [
         }
         const signer = String(req.body.signer).toLowerCase()
 
-        // Bind the signed message to this login id to prevent cross-id replay.
-        if (message.indexOf(`id=${id}`) === -1) {
-            throw Error('message does not reference this login id')
+        // Require the canonical "[XDCmaster <iso>] Login id=<uuid>" shape.
+        // The earlier two-step (substring + optional regex) check let an
+        // attacker strip the "[XDCmaster ...]" prefix to skip the TTL window
+        // entirely while still matching the id=<uuid> substring (CodeRabbit
+        // #49). Anchoring the regex and rejecting unparseable timestamps
+        // makes both checks fail-secure.
+        const tsMatch = message.match(/^\[XDCmaster ([^\]]+)\] Login id=([^\s]+)$/)
+        if (!tsMatch || tsMatch[2] !== id) {
+            throw Error('message does not match expected login format')
         }
-
-        // Reject messages whose embedded timestamp is outside the TTL window.
-        const tsMatch = message.match(/\[XDCmaster ([^\]]+)\]/)
-        if (tsMatch) {
-            const signedAt = Date.parse(tsMatch[1])
-            if (!isNaN(signedAt) && Math.abs(Date.now() - signedAt) > LOGIN_SIGNATURE_TTL_MS) {
-                throw Error('login signature expired')
-            }
+        const signedAt = Date.parse(tsMatch[1])
+        if (isNaN(signedAt) || Math.abs(Date.now() - signedAt) > LOGIN_SIGNATURE_TTL_MS) {
+            throw Error('login signature expired')
         }
 
         const signedAddress = (ecRecover(message, signature) || '').toLowerCase()

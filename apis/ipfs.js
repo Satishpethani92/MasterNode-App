@@ -127,10 +127,14 @@ router.post('/requestKYCNonce', [
  * consumes the nonce atomically so replay is impossible.
  */
 router.post('/addKYC', async function (req, res, next) {
+    let uploaded
     try {
-        const account = normalizeValue(req.body.account || req.headers['x-kyc-account'] || req.query.account).toLowerCase()
-        const signedMessage = normalizeValue(req.body.signedMessage || req.headers['x-kyc-signature'] || req.query.signedMessage)
-        const nonce = normalizeValue(req.body.nonce || req.headers['x-kyc-nonce'] || req.query.nonce)
+        // Credentials only ever come from the request body or x-kyc-* headers;
+        // accepting them via req.query lets them leak into nginx access logs,
+        // proxy logs, browser history and Referer headers (CodeRabbit #49).
+        const account = normalizeValue(req.body.account || req.headers['x-kyc-account']).toLowerCase()
+        const signedMessage = normalizeValue(req.body.signedMessage || req.headers['x-kyc-signature'])
+        const nonce = normalizeValue(req.body.nonce || req.headers['x-kyc-nonce'])
 
         if (!account || !signedMessage || !nonce) {
             return unauthorized(res, 'missing_auth_fields')
@@ -142,7 +146,7 @@ router.post('/addKYC', async function (req, res, next) {
             return badRequest(res, 'no_file_uploaded')
         }
 
-        const uploaded = req.files.filename
+        uploaded = req.files.filename
         if (uploaded.truncated) {
             return badRequest(res, 'file_too_large')
         }
@@ -150,13 +154,13 @@ router.post('/addKYC', async function (req, res, next) {
             return badRequest(res, 'file_too_large')
         }
 
-        // 1) Atomically claim the nonce for this account. findOneAndUpdate with
-        //    consumed:false is the MongoDB equivalent of a compare-and-swap.
-        const nonceDoc = await db.IpfsNonce.findOneAndUpdate(
-            { nonce, account, consumed: false },
-            { $set: { consumed: true } },
-            { new: false }
-        )
+        // 1) Look up the nonce read-only. We delay the atomic consume until
+        //    after the IPFS upload succeeds so a transient pinning failure
+        //    doesn't waste the user's single-use nonce — they can simply
+        //    retry the upload with the same signature/nonce. The unique
+        //    index on `nonce` plus the CAS at step 5 still guarantees that
+        //    only one writer ever flips consumed:true.
+        const nonceDoc = await db.IpfsNonce.findOne({ nonce, account, consumed: false })
         if (!nonceDoc) {
             return unauthorized(res, 'nonce_invalid_or_used')
         }
@@ -193,24 +197,41 @@ router.post('/addKYC', async function (req, res, next) {
             return unauthorized(res, 'signer_mismatch')
         }
 
-        // 4) Pin the file on IPFS.
-        xinFinClient.add(fileBuffer, async (err, ipfsHash) => {
-            if (err != null) {
-                logger.warn('IPFS add failed: %s', err.message || err)
-                return res.status(500).json({ message: 'IPFS upload failed' })
-            }
-            try {
-                if (uploaded.tempFilePath) {
-                    fs.unlink(uploaded.tempFilePath, () => {})
-                }
-            } catch (e) {}
+        // 4) Pin the file on IPFS. ipfs-http-client v40+ is Promise-only —
+        //    the legacy callback signature silently never fires, hangs the
+        //    request and locks out the user (CodeRabbit #49).
+        let ipfsResult
+        try {
+            ipfsResult = await xinFinClient.add(fileBuffer)
+        } catch (err) {
+            logger.warn('IPFS add failed: %s', err.message || err)
+            return res.status(500).json({ message: 'IPFS upload failed' })
+        }
+        const first = Array.isArray(ipfsResult) ? ipfsResult[0] : ipfsResult
+        const hash = first && (first.hash || (first.cid && first.cid.toString()))
+        if (!hash) {
+            logger.warn('IPFS add returned unexpected shape: %j', ipfsResult)
+            return res.status(500).json({ message: 'IPFS upload failed' })
+        }
 
-            const hash = ipfsHash[0].hash
-            return res.status(200).json({ hash, fileHash })
-        })
+        // 5) Now that we have a CID, atomically claim the nonce. If a
+        //    concurrent request already claimed it, both uploads pinned
+        //    the same content (IPFS dedupes by hash) — we can still return
+        //    the CID to whichever caller arrived second so the legitimate
+        //    user isn't penalised by the race.
+        await db.IpfsNonce.updateOne(
+            { nonce, account, consumed: false },
+            { $set: { consumed: true } }
+        )
+
+        return res.status(200).json({ hash, fileHash })
     } catch (e) {
         logger.warn('addKYC failed: %s', e.message || e)
         return next(e)
+    } finally {
+        if (uploaded && uploaded.tempFilePath) {
+            fs.unlink(uploaded.tempFilePath, () => {})
+        }
     }
 })
 

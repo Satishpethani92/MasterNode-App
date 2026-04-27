@@ -575,9 +575,19 @@ export default {
                     // single-use nonce, otherwise an attacker who captured one
                     // valid signed message could substitute any other file.
                     //
-                    // Step 1: hash the file in the browser. master.xinfin.network
-                    // is HTTPS and dev runs on localhost, both of which expose
-                    // window.crypto.subtle.
+                    // Step 1: hash the file in the browser. The Web Crypto
+                    // SubtleCrypto API is only exposed in "secure contexts"
+                    // (HTTPS or localhost). When the SPA is served over plain
+                    // HTTP — which still happens in some on-prem mirrors —
+                    // window.crypto.subtle is undefined and digest() throws an
+                    // opaque TypeError that the user sees as a stuck spinner.
+                    // Surface a readable error instead (CodeRabbit #49).
+                    if (!window.crypto || !window.crypto.subtle || typeof window.crypto.subtle.digest !== 'function') {
+                        this.loading = false
+                        const msg = 'KYC upload requires a secure context (HTTPS or localhost). Please retry over HTTPS.'
+                        this.$toasted.show(msg)
+                        throw new Error(msg)
+                    }
                     const fileBuffer = await this.KYC.file.arrayBuffer()
                     const digestBuffer = await window.crypto.subtle.digest('SHA-256', fileBuffer)
                     const fileHash = '0x' + Array.from(new Uint8Array(digestBuffer))

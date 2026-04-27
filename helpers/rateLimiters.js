@@ -33,8 +33,10 @@ function buildLimiter (options) {
 // QR-phishing mass-generation and brute force on signature verification.
 const authLimiter = buildLimiter({
     windowMs: WINDOW_15_MIN,
-    max: 60,
-    message: 'Too many authentication attempts.'
+    max: 60
+    // Note: a custom `handler` in buildLimiter() already controls the 429
+    // response shape, so a top-level `message` here would be silently
+    // ignored (CodeRabbit #49). All limiters share the same response body.
 })
 
 // Transaction-broadcast endpoints that hit the blockchain RPC. These are

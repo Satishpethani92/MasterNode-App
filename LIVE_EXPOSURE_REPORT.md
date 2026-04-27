@@ -189,7 +189,7 @@ bounded by the other controls (or missing controls) discussed in §3.1.
 
 ### 4.1 H-8 — Weak CSP (live response headers)
 
-```
+```http
 content-security-policy: default-src 'self';
   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com https://www.googletagmanager.com;
   style-src 'self' 'unsafe-inline';
@@ -207,7 +207,7 @@ adds `upgradeInsecureRequests: true`.
 
 25 back-to-back requests to `/api/auth/generateLoginQR` from a single IP:
 
-```
+```text
 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200 200
 ```
 
@@ -215,7 +215,7 @@ All 200s. Further 35 requests: 0 × `retry-after` header, 0 × `ratelimit-*` hea
 
 ### 4.3 M-4 — Internal detail leak
 
-```
+```http
 POST /api/auth/verifyLogin?id=…  body={invalid
   → HTTP 400 {"status":400,"error":{"message":"Unexpected token i in JSON at position 1"}}
 
@@ -231,7 +231,7 @@ return a generic `"Error"` message and only log the full detail server-side.
 `GET /api-docs/` returns the Swagger UI HTML. `GET /api-docs/swagger-ui-init.js` returns
 the full OpenAPI 2.0 spec, with every route documented:
 
-```
+```text
 /api/config
 /api/candidates
 /api/candidates/{candidate}
@@ -259,7 +259,7 @@ production.
 
 ### 4.5 Reverse-proxy fingerprint
 
-```
+```http
 x-powered-by: ARR/3.0
 x-powered-by: ASP.NET
 server: cloudflare
