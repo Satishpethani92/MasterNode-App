@@ -19,7 +19,7 @@ function maskedUri (uri) {
 logger.info('Connecting to MongoDB at %s', maskedUri(mongoUri))
 
 mongoose.Promise = global.Promise
-mongoose.set('useCreateIndex', true)
+mongoose.set('strictQuery', true)
 
 // mongoose@5+ deprecated the (uri, opts, cb) signature; stale callbacks no
 // longer fire reliably and the process kept running on a bad URI without ever
@@ -27,8 +27,6 @@ mongoose.set('useCreateIndex', true)
 // is logged and the container exits with a non-zero status, letting the
 // orchestrator restart it with the correct config.
 mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000
 }).catch((err) => {
     logger.error('MongoDB connection error: %s', err.message || err)

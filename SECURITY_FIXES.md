@@ -190,3 +190,21 @@ fixed in this commit; the table below maps the finding to the change.
 | Nit | `test-harness/soak.sh` | Echo attributed observed 429s to `authLimiter` though the soak only hits read-side endpoints. | Corrected to `readLimiter on /api/candidates etc. trips at 240 req/min/IP`. |
 | Nit | `sslcert/README.md`, `LIVE_EXPOSURE_REPORT.md` | Markdownlint MD040 — unlabelled fenced code blocks. | Added language identifiers (`bash`, `http`, `text`) on every fence. |
 
+## Final Security Hardening — 2026-05-06
+
+This final pass addresses the remaining high-severity and critical architectural findings from the re-audit that were previously out of scope.
+
+| # | File(s) | Severity addressed | Change |
+|---|---|---|---|
+| 16 | `app/components/Setting.vue` | **CRITICAL** (C-1) | Commented out the `PrivateKey/MNEMONIC` login path in the UI and logic. Users are now forced to use secure external providers (XDCPay, WalletConnect, Ledger, Trezor). |
+| 17 | `helpers.js` | **CRITICAL** (C-3) | Added security warnings to `HDWalletProvider` regarding memory exposure of sensitive material. |
+| 18 | `contracts/*.sol` | **CRITICAL** (C-4) | Upgraded `XDCValidator`, `XDCRandomize`, `BlockSigner`, and `Migrations` to Solidity `0.8.x`. Removed `SafeMath` library as it is built-in; updated constructor syntax and visibility. |
+| 19 | `truffle-config.js`, `package.json` | MED (M-5) | Upgraded Truffle to `^5.11.0` to support the Solidity `0.8.x` compiler. |
+| 20 | `package.json` | HIGH (H-4) | Upgraded `js-yaml` to `^4.1.0` to fix prototype pollution; upgraded `axios` and `mongoose` to secure versions. |
+| 21 | `config/default.json` | LOW (L-2, H-6) | Cleared Twitter API placeholders; added documentation for `MONGO_URI` authenticated connections. |
+
+### Verification performed
+
+- **Contract Compilation**: All contracts compiled successfully using `solc 0.8.19` (via Truffle 5).
+- **UI Verification**: Verified that the "PrivateKey/MNEMONIC" option is no longer available in the Settings menu.
+- **Dependency Audit**: `npm audit` vulnerabilities reduced after updating core dependencies.

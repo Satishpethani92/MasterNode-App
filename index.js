@@ -1,5 +1,6 @@
 'use strict'
 
+require('dotenv').config()
 const express = require('express')
 const config = require('config')
 const bodyParser = require('body-parser')
@@ -43,10 +44,10 @@ if (trustProxyEnv === 'true' || trustProxyEnv === 'false') {
 const IS_PRODUCTION = !['development', 'dev', 'test', 'local'].includes(String(process.env.NODE_ENV || '').toLowerCase())
 
 // helmet / CSP
-// NOTE: script-src deliberately omits 'unsafe-eval'. Inline scripts are kept with
-// 'unsafe-inline' only as a temporary transition; the long-term target is nonce-based
-// CSP once the Vue/webpack build emits a nonce per render.
-const cspScriptSrc = ["'self'", "'unsafe-inline'", 'https://www.google-analytics.com', 'https://www.googletagmanager.com']
+// Production builds emit only external <script src=...> tags in build/index.html,
+// so we can enforce a strict script-src without 'unsafe-inline'. Dev keeps
+// 'unsafe-eval' only for webpack HMR; production does not.
+const cspScriptSrc = ["'self'", 'https://www.google-analytics.com', 'https://www.googletagmanager.com']
 const cspConnectSrc = ["'self'", 'https:', 'wss:', 'https://www.google-analytics.com']
 const cspImgSrc = ["'self'", 'data:', 'https:', 'https://www.google-analytics.com']
 if (!IS_PRODUCTION) {
