@@ -817,7 +817,7 @@ export default {
                 this.hdPath = "m/44'/60'/0'/0"
                 break
             case 'ledger':
-                this.hdPath = "m/44'/550'/0'/0"
+                this.hdPath = store.get('hdDerivationPath') || this.hdPath
                 break
             default:
                 if (this.interval) {
