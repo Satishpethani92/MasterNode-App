@@ -28,7 +28,6 @@ import localStorage from 'store'
 // On Ubuntu/Debian: sudo apt-get install build-essential libudev-dev
 // import Transport from '@ledgerhq/hw-transport-node-hid'
 
-// import Transport from '@ledgerhq/hw-transport-u2f' // for browser
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import openApp from '@ledgerhq/live-common/lib/hw/openApp'

@@ -40,7 +40,6 @@
     "@chenfengyuan/vue-qrcode": "^1.0.0",
     "@ledgerhq/cryptoassets": "^9.8.0",
     "@ledgerhq/hw-app-eth": "6.33.7",
-    "@ledgerhq/hw-transport-u2f": "4.24.0",
     "@ledgerhq/hw-transport-webusb": "^6.27.16",
     "@ledgerhq/live-common": "^27.7.0",
     "@truffle/hdwallet-provider": "^1.2.0",
