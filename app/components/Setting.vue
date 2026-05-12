@@ -122,6 +122,9 @@
                                         @click="changePath(`m/44'/60'/0'`)">m/44'/60'/0'</code> or
                                     <code
                                         class="hd-path"
+                                        @click="changePath(`m/44'/550'/0'/0`)">m/44'/550'/0'/0</code> or
+                                    <code
+                                        class="hd-path"
                                         @click="changePath(`m/44'/551'/0'/0`)">m/44'/551'/0'/0</code></small>
                             </b-form-group>
 
