@@ -22,6 +22,7 @@ import VueClipboards from 'vue-clipboards'
 import Vuex from 'vuex'
 // import HDWalletProvider from 'truffle-hdwallet-provider'
 import { HDWalletProvider } from '../helpers.js'
+import { createLedgerWeb3Provider } from '../helpers/ledgerWeb3Provider.js'
 import localStorage from 'store'
 // Libusb is included as a submodule.
 // On Linux, you'll need libudev to build libusb.
@@ -85,6 +86,14 @@ const toRpcAddress = (address) => {
         return '0x' + normalized
     }
     return normalized
+}
+
+const toHexBuffer = (value) => {
+    if (Buffer.isBuffer(value)) {
+        return value
+    }
+    const hex = String(value).trim()
+    return ethUtils.toBuffer(hex.startsWith('0x') ? hex : '0x' + hex)
 }
 
 const formatAddressByHdPath = (address, path) => {
@@ -656,7 +665,10 @@ Vue.prototype.detectNetwork = async function (provider) {
         const config = localStorage.get('configMaster') || await getConfig()
         const chainConfig = config.blockchain
         const hardwareProviders = ['ledger', 'trezor', 'XDCwallet', 'custom']
+        const ledgerNeedsProvider = provider === 'ledger' &&
+            (!this.web3 || !this.web3.currentProvider || !this.web3.currentProvider.isLedgerProvider)
         const needsReinit = !this.web3 ||
+            ledgerNeedsProvider ||
             (hardwareProviders.includes(provider) && Vue.prototype.NetworkProvider !== provider)
 
         if (!needsReinit && this.web3) {
@@ -710,9 +722,31 @@ Vue.prototype.detectNetwork = async function (provider) {
                 chainConfig.rpc, 0, 1, true))
             break
         case 'trezor':
-        case 'ledger':
             wjs = new Web3(new Web3.providers.HttpProvider(chainConfig.rpc))
             break
+        case 'ledger': {
+            const rpcProvider = new Web3.providers.HttpProvider(chainConfig.rpc)
+            const ledgerProvider = createLedgerWeb3Provider(rpcProvider, {
+                getAccounts: async () => {
+                    const account = await Vue.prototype.getAccount()
+                    return account ? [account] : []
+                },
+                signPersonalMessage: (message) => Vue.prototype.signMessage(message),
+                prepareTransaction: async (tx) => {
+                    if (!tx.chainId) {
+                        tx.chainId = chainConfig.networkId
+                    }
+                    if (!tx.gas && tx.gasLimit) {
+                        tx.gas = tx.gasLimit
+                    }
+                },
+                signTransaction: (tx) => Vue.prototype.signTransaction(tx),
+                sendSignedTransaction: (tx, signature) =>
+                    Vue.prototype.sendSignedTransaction(tx, signature)
+            })
+            wjs = new Web3(ledgerProvider)
+            break
+        }
         default:
             break
         }
@@ -787,11 +821,12 @@ Vue.prototype.signTransaction = async function (txParams) {
 Vue.prototype.sendSignedTransaction = function (txParams, signature) {
     return new Promise((resolve, reject) => {
         try {
-            // "hexify" the keys
-            Object.keys(signature).map((key, _) => {
-                if (signature[key].startsWith('0x')) {
-                    return signature[key]
-                } else signature[key] = '0x' + signature[key]
+            // "hexify" the keys (Ledger returns r/s without 0x prefix)
+            Object.keys(signature).forEach((key) => {
+                const val = signature[key]
+                if (typeof val === 'string' && !val.startsWith('0x')) {
+                    signature[key] = '0x' + val
+                }
             })
             let txObj = Object.assign({}, txParams, signature)
             let tx = new Transaction(txObj)
@@ -821,12 +856,16 @@ Vue.prototype.signMessage = async function (message) {
                 path,
                 Buffer.from(message).toString('hex')
             )
-            let v = signature['v'] - 27
-            v = v.toString(16)
-            if (v.length < 2) {
-                v = '0' + v
+            const r = toHexBuffer(signature.r)
+            const s = toHexBuffer(signature.s)
+            let v = signature.v
+            if (typeof v === 'string') {
+                v = parseInt(v, 16)
             }
-            result = '0x' + signature['r'] + signature['s'] + v
+            if (v < 27) {
+                v += 27
+            }
+            result = ethUtils.toRpcSig(v, r, s)
             break
         case 'trezor':
             const sig = await TrezorConnect.ethereumSignMessage({
