@@ -1,6 +1,6 @@
 'use strict'
 
-const { toWalletError } = require('./walletError')
+import { toWalletError } from './walletError.js'
 
 /**
  * Wraps HTTP RPC so Ledger can use the same web3.eth.personal.sign / contract.send
