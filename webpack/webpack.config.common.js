@@ -54,11 +54,12 @@ const webpackConfig = {
                     {
                         loader: 'postcss-loader',
                         options: {
-                            ident: 'postcss',
-                            plugins: [
-                                require('stylelint')(),
-                                require('autoprefixer')()
-                            ]
+                            postcssOptions: {
+                                plugins: [
+                                    require('stylelint')(),
+                                    require('autoprefixer')()
+                                ]
+                            }
                         }
                     }
                 ]
